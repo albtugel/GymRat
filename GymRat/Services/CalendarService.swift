@@ -1,18 +1,17 @@
-//
-//  CalendarService.swift
-//  GymRat
-//
-//  Created by Alik on 1/11/26.
-//
-
 import EventKit
 
 class CalendarService {
     let store = EKEventStore()
 
     func requestAccess(completion: @escaping (Bool) -> Void) {
-        store.requestAccess(to: .event) { granted, _ in
-            completion(granted)
+        if #available(iOS 17, *) {
+            store.requestFullAccessToEvents { granted, _ in
+                completion(granted)
+            }
+        } else {
+            store.requestAccess(to: .event) { granted, _ in
+                completion(granted)
+            }
         }
     }
 

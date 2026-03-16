@@ -3,63 +3,68 @@ import SwiftData
 
 struct ProgramCustomizeSheetView: View {
 
-    let mode: ProgramCustomizeMode
-    let context: ModelContext?
-    let baseProgram: ProgramModel
+    let mode: ProgramCustomizeMode // .create или .edit
+    @State var programManager = ProgramManager.shared
+    @Environment(\.modelContext) var context
+    @Environment(\.dismiss) var dismiss
 
-    @Environment(\.dismiss) private var dismiss
-    @EnvironmentObject var programManager: ProgramManager
+    @State var program: ProgramModel
+    @State var selectedExercises: [ProgramExercise] = []
+    @State var selectedWeekdays: Set<ProgramWeekDay> = []
+    @State var programName: String = ""
+    @FocusState var nameFieldIsFocused: Bool
+    @State var isSaving = false
 
-    @State private var name: String
-    @State private var details: String
-    @State private var programType: ProgramType
-    @State private var selectedExercises: Set<ExerciseModel>
-
-    @Query private var allExercises: [ExerciseModel]
-
-    init(
-        mode: ProgramCustomizeMode,
-        context: ModelContext? = nil,
-        baseProgram: ProgramModel
-    ) {
-        self.mode = mode
-        self.context = context
-        self.baseProgram = baseProgram
-
-        _name = State(initialValue: baseProgram.name)
-        _details = State(initialValue: baseProgram.details)
-        _programType = State(initialValue: baseProgram.type)
-        _selectedExercises = State(initialValue: Set(baseProgram.exercises))
+    private var filteredExerciseSeeds: [ExerciseStore.ExerciseSeed] {
+        ExerciseStore.shared.seeds.filter { program.type.allows($0.category) }
     }
 
     var body: some View {
-        ProgramCustomizeContentView(
-            baseProgram: .constant(baseProgram),
-            name: $name,
-            details: $details,
-            weekdays: .constant([]), // UI не меняем
-            programType: $programType,
-            selectedExercises: $selectedExercises,
-            filteredExercises: filteredExercises,
-            mode: mode,
-            saveAction: save
-        )
-    }
+        NavigationStack {
+            VStack(spacing: 0) {
+                Form {
+                    ProgramCustomizeInfoSectionView(
+                        programName: $programName,
+                        nameFieldIsFocused: $nameFieldIsFocused
+                    )
 
-    private var filteredExercises: [ExerciseModel] {
-        allExercises.filter { programType.allows($0) }
-    }
+                    ProgramCustomizeDaysSectionView(selectedWeekdays: $selectedWeekdays)
 
-    private func save() {
-        baseProgram.name = name
-        baseProgram.details = details
-        baseProgram.type = programType
-        baseProgram.exercises = Array(selectedExercises)
+                    ProgramCustomizeExercisesSectionView(
+                        exerciseSeeds: filteredExerciseSeeds,
+                        selectedExercises: $selectedExercises,
+                        isEditing: mode == .edit,
+                        onToggle: toggleExercise
+                    )
+                }
+                .toolbar {
+                    ToolbarItemGroup(placement: .keyboard) {
+                        Spacer()
+                        Button("ok_button") { nameFieldIsFocused = false }
+                    }
+                }
 
-        if mode == .create {
-            context?.insert(baseProgram)
+                // --- Save Button ---
+                Button(action: saveProgram) {
+                    Text("save_button")
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(Color.accentColor)
+                        .foregroundColor(.white)
+                        .cornerRadius(12)
+                        .contentShape(Rectangle())
+                }
+                .buttonStyle(.plain)
+                .padding()
+            }
+            .ignoresSafeArea(.keyboard, edges: .bottom)
         }
-
-        dismiss()
+        .navigationTitle(program.type.title)
+        .onAppear {
+            ExerciseSeeder.seedIfNeeded(context: context)
+            programName = program.name
+            selectedExercises = program.exercises
+            selectedWeekdays = program.weekdays
+        }
     }
 }

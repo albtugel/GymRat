@@ -1,10 +1,3 @@
-//
-//  TimelineItemView.swift
-//  GymRat
-//
-//  Created by Alik on 1/11/26.
-//
-
 import SwiftUI
 
 struct TimelineItemView: View {

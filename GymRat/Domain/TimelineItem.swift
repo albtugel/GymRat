@@ -1,10 +1,3 @@
-//
-//  TimelineItem.swift
-//  GymRat
-//
-//  Created by Alik on 1/11/26.
-//
-
 import Foundation
 import SwiftData
 

@@ -48,9 +48,27 @@ extension ProgramTableExerciseRowView {
         Binding(
             get: { index < weightsBySetText.count ? weightsBySetText[index] : "" },
             set: { newValue in
-                let sanitized = sanitizeDecimalInput(newValue, maxFractionDigits: 2)
+                let sanitized = isCardio
+                    ? sanitizeIntegerInput(newValue, allowDash: false)
+                    : sanitizeDecimalInput(newValue, maxFractionDigits: 2)
                 if index < weightsBySetText.count {
                     weightsBySetText[index] = sanitized
+                }
+                isDirty = true
+                if editSessionDate == nil {
+                    editSessionDate = dataDate
+                }
+            }
+        )
+    }
+
+    func durationBinding(index: Int) -> Binding<String> {
+        Binding(
+            get: { index < durationsBySetText.count ? durationsBySetText[index] : "" },
+            set: { newValue in
+                let sanitized = sanitizeIntegerInput(newValue, allowDash: false)
+                if index < durationsBySetText.count {
+                    durationsBySetText[index] = sanitized
                 }
                 isDirty = true
                 if editSessionDate == nil {

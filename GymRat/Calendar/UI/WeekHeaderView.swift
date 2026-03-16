@@ -2,86 +2,86 @@ import SwiftUI
 
 struct WeekHeaderView: View {
 
-    @Binding var currentWeekStart: Date
-    @EnvironmentObject var themeManager: ThemeManager
+    @Binding var weekStartDate: Date
+    @Binding var selectedDate: Date
 
-    private let calendar = Calendar.current
+    @EnvironmentObject private var themeManager: ThemeManager
+
+    let onMonthTap: () -> Void
 
     var body: some View {
-        VStack {
-            // Месяц по центру
-            Text(monthString(for: currentWeekStart))
-                .font(.title2)
-                .bold()
-                .padding(.bottom, 4)
+        VStack(spacing: 8) {
 
-            HStack {
-                // Стрелка назад
+            Button(action: onMonthTap) {
+                Text(monthTitle)
+                    .font(.title2)
+                    .bold()
+            }
+
+            HStack(spacing: 0) {
+
+                // ⬅️ Назад
                 Button {
                     moveWeek(by: -1)
                 } label: {
                     Image(systemName: "chevron.left")
                         .font(.title2)
-                        .foregroundColor(themeManager.accentColor) // ✅ убрали .color
-                        .padding(.horizontal, 8)
+                        .frame(width: 44, height: 44)
+                        .background(
+                            RoundedRectangle(cornerRadius: 10)
+                                .stroke(themeManager.accentColor, lineWidth: 2)
+                        )
                 }
+                .foregroundColor(themeManager.accentColor)
 
                 Spacer()
 
-                // Дни недели с числами
-                HStack(spacing: 12) {
-                    ForEach(0..<7) { index in
-                        let day = calendar.date(byAdding: .day, value: index, to: currentWeekStart)!
-                        VStack {
-                            Text(dayNumber(for: day))
-                                .font(.subheadline)
-                                .bold()
-                            Text(shortWeekday(for: day))
+                // Дни недели
+                HStack(spacing: 6) {
+                    ForEach(0..<7, id: \.self) { index in
+                        let day = calendar.date(byAdding: .day, value: index, to: weekStartDate)!
+
+                        VStack(spacing: 4) {
+                            Text(dayNumber(day))
+                                .font(.headline)
+                            Text(weekday(day))
                                 .font(.caption)
                         }
-                        .frame(minWidth: 30)
+                        .frame(width: 44, height: 44)
+                        .foregroundColor(
+                            calendar.isDateInToday(day) ? themeManager.accentColor :
+                            .primary
+                        )
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 10)
+                                .stroke(
+                                    calendar.isDate(day, inSameDayAs: selectedDate) ? themeManager.accentColor : .clear,
+                                    lineWidth: 2
+                                )
+                        )
+                        .onTapGesture {
+                            selectedDate = day
+                        }
                     }
                 }
 
                 Spacer()
 
-                // Стрелка вперед
+                // ➡️ Вперёд
                 Button {
                     moveWeek(by: 1)
                 } label: {
                     Image(systemName: "chevron.right")
                         .font(.title2)
-                        .foregroundColor(themeManager.accentColor) // ✅ убрали .color
-                        .padding(.horizontal, 8)
+                        .frame(width: 44, height: 44)
+                        .background(
+                            RoundedRectangle(cornerRadius: 10)
+                                .stroke(themeManager.accentColor, lineWidth: 2)
+                        )
                 }
+                .foregroundColor(themeManager.accentColor)
             }
-        }
-        .padding(.vertical, 8)
-    }
-
-    // MARK: - Helpers
-
-    private func dayNumber(for date: Date) -> String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "d"
-        return formatter.string(from: date)
-    }
-
-    private func shortWeekday(for date: Date) -> String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "E"
-        return formatter.string(from: date)
-    }
-
-    private func monthString(for date: Date) -> String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "LLLL yyyy"
-        return formatter.string(from: date)
-    }
-
-    private func moveWeek(by weeks: Int) {
-        if let newDate = calendar.date(byAdding: .weekOfYear, value: weeks, to: currentWeekStart) {
-            currentWeekStart = newDate
+            .padding(.horizontal, 16)
         }
     }
 }

@@ -1,7 +1,6 @@
-//
-//  ProgramCusomizeMode.swift
-//  GymRat
-//
-//  Created by Alik on 1/30/26.
-//
+import Foundation
 
+enum ProgramCustomizeMode {
+    case create
+    case edit
+}

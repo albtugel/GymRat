@@ -14,7 +14,8 @@ extension ProgramTableExerciseRowView {
 
         let reps = repsBySetText.map { Int($0.trimmingCharacters(in: .whitespacesAndNewlines)) ?? 0 }
         let weights = weightsBySetText.map { parseWeight($0) ?? 0 }
-        let hasValues = reps.contains { $0 > 0 } || weights.contains { $0 > 0 }
+        let durations = durationsBySetText.map { Int($0.trimmingCharacters(in: .whitespacesAndNewlines)) ?? 0 }
+        let hasValues = reps.contains { $0 > 0 } || weights.contains { $0 > 0 } || durations.contains { $0 > 0 }
         let day = date.startOfDay
         let dayStamp = ProgramExerciseLog.makeDayStamp(for: day)
         let logForDay = fetchLog(for: dayStamp)
@@ -26,6 +27,7 @@ extension ProgramTableExerciseRowView {
                 log.exerciseName = programExercise.exercise.name
                 log.repsBySet = reps
                 log.weightsBySet = weights
+                log.durationsBySet = durations
             } else {
                 context.delete(log)
             }
@@ -36,7 +38,8 @@ extension ProgramTableExerciseRowView {
                 program: program,
                 date: day,
                 repsBySet: reps,
-                weightsBySet: weights
+                weightsBySet: weights,
+                durationsBySet: durations
             )
             context.insert(newLog)
         }
@@ -63,8 +66,10 @@ extension ProgramTableExerciseRowView {
     func normalizeArrays() {
         repsBySetText = normalize(repsBySetText, fill: "")
         weightsBySetText = normalize(weightsBySetText, fill: "")
+        durationsBySetText = normalize(durationsBySetText, fill: "")
         previousRepsBySetText = normalize(previousRepsBySetText, fill: "")
         previousWeightsBySetText = normalize(previousWeightsBySetText, fill: "")
+        previousDurationsBySetText = normalize(previousDurationsBySetText, fill: "")
     }
 
     func normalize(_ array: [String], fill: String) -> [String] {

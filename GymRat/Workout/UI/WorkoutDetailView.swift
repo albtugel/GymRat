@@ -1,14 +1,7 @@
-//
-//  WorkoutDetailView.swift
-//  GymRat
-//
-//  Created by Alik on 1/11/26.
-//
-
 import SwiftUI
 
 struct WorkoutDetailView: View {
-    @ObservedObject var session: WorkoutSession
+    var session: WorkoutSession
 
     var body: some View {
         List {
@@ -16,6 +9,6 @@ struct WorkoutDetailView: View {
                 ExerciseRowView(exercise: session.exercises[index])
             }
         }
-        .navigationTitle("Тренировка")
+        .navigationTitle("workout_title")
     }
 }

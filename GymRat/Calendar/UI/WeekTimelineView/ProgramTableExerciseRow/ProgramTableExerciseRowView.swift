@@ -12,8 +12,10 @@ struct ProgramTableExerciseRowView: View {
     @Environment(\.modelContext) var context
     @State var repsBySetText: [String] = []
     @State var weightsBySetText: [String] = []
+    @State var durationsBySetText: [String] = []
     @State var previousRepsBySetText: [String] = []
     @State var previousWeightsBySetText: [String] = []
+    @State var previousDurationsBySetText: [String] = []
     @State var setsCountText: String = ""
     @State var currentLog: ProgramExerciseLog?
     @State var setsEditedForDay: Bool = false
@@ -23,8 +25,8 @@ struct ProgramTableExerciseRowView: View {
     @State var editSessionDate: Date?
     @State var isLoadingLog: Bool = false
     @State var isDirty: Bool = false
-    private let columnSpacing: CGFloat = 8
-    private let rowSpacing: CGFloat = 6
+    let columnSpacing: CGFloat = 8
+    let rowSpacing: CGFloat = 6
 
     init(
         programExercise: ProgramExercise,
@@ -45,5 +47,45 @@ struct ProgramTableExerciseRowView: View {
     var setsCount: Int {
         let parsed = Int(setsCountText.trimmingCharacters(in: .whitespacesAndNewlines)) ?? programExercise.sets
         return min(10, max(1, parsed))
+    }
+
+    var isCardio: Bool {
+        programExercise.exercise.category == .cardio
+    }
+
+    var weightPlaceholder: String {
+        String(localized: "kg_lb_label")
+    }
+
+    var weightKeyboard: UIKeyboardType {
+        isCardio ? .numberPad : .decimalPad
+    }
+
+    var showsDuration: Bool {
+        isCardio
+    }
+
+    var durationPlaceholder: String {
+        String(localized: "dur_label")
+    }
+
+    var durationKeyboard: UIKeyboardType {
+        .numberPad
+    }
+
+    var durationFont: Font {
+        isCardio ? .caption2 : .subheadline
+    }
+
+    var statBoxWidth: CGFloat {
+        60
+    }
+
+    var repsPlaceholder: String {
+        String(localized: "reps_label")
+    }
+
+    var setsTitle: String {
+        isCardio ? String(localized: "rounds_label") : String(localized: "sets_label")
     }
 }

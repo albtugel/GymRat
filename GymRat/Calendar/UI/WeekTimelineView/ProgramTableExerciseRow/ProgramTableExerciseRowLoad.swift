@@ -30,10 +30,10 @@ extension ProgramTableExerciseRowView {
             .first
 
         if let log = currentLog {
-            let currentCount = max(log.repsBySet.count, log.weightsBySet.count)
+            let currentCount = max(log.repsBySet.count, max(log.weightsBySet.count, log.durationsBySet.count))
             setsCountText = String(max(1, currentCount))
         } else if let prev = previousLog {
-            let prevCount = max(prev.repsBySet.count, prev.weightsBySet.count)
+            let prevCount = max(prev.repsBySet.count, max(prev.weightsBySet.count, prev.durationsBySet.count))
             setsCountText = String(max(1, prevCount))
         } else {
             setsCountText = String(max(1, programExercise.sets))
@@ -43,17 +43,21 @@ extension ProgramTableExerciseRowView {
         if let log = currentLog {
             repsBySetText = log.repsBySet.map { $0 == 0 ? "" : String($0) }
             weightsBySetText = log.weightsBySet.map { $0 == 0 ? "" : formatWeight($0) }
+            durationsBySetText = log.durationsBySet.map { $0 == 0 ? "" : String($0) }
         } else {
             repsBySetText = Array(repeating: "", count: setsCount)
             weightsBySetText = Array(repeating: "", count: setsCount)
+            durationsBySetText = Array(repeating: "", count: setsCount)
         }
 
         if let log = previousLog {
             previousRepsBySetText = log.repsBySet.map { $0 == 0 ? "" : String($0) }
             previousWeightsBySetText = log.weightsBySet.map { $0 == 0 ? "" : formatWeight($0) }
+            previousDurationsBySetText = log.durationsBySet.map { $0 == 0 ? "" : String($0) }
         } else {
             previousRepsBySetText = Array(repeating: "", count: setsCount)
             previousWeightsBySetText = Array(repeating: "", count: setsCount)
+            previousDurationsBySetText = Array(repeating: "", count: setsCount)
         }
 
         normalizeArrays()

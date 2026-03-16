@@ -1,16 +1,13 @@
-//
-//  TimeGridView.swift
-//  GymRat
-//
-//  Created by Alik on 1/11/26.
-//
-
 import SwiftUI
 
 struct TimeGridView: View {
+    let hourHeight: CGFloat
+    let minHour: Int
+    let maxHour: Int
+
     var body: some View {
         VStack(spacing: 0) {
-            ForEach(0..<24) { hour in
+            ForEach(minHour...maxHour, id: \.self) { hour in
                 Rectangle()
                     .fill(Color.gray.opacity(0.2))
                     .frame(height: hourHeight)

@@ -21,11 +21,7 @@ struct GymRatApp: App {
             ProgramExerciseLog.self,
             ProgramAssignment.self,
             DayProgramModel.self,
-            Exercise.self,
-            ExerciseLog.self,
-            WorkoutSession.self,
-            TimelineItem.self,
-            ChatMessage.self
+            TimelineItem.self
         ])
         let config = ModelConfiguration(schema: schema, url: storeURL)
 

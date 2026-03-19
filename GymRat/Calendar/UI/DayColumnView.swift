@@ -5,7 +5,6 @@ struct DayColumnView: View {
     let items: [TimelineItem]
 
     var body: some View {
-        // Берем только уникальные времена событий
         let times: [Date] = items.flatMap { [$0.startDate, $0.endDate] }
         let uniqueTimes = Array(Set(times)).sorted()
 
@@ -14,12 +13,8 @@ struct DayColumnView: View {
                 HStack(spacing: 2) {
                     ForEach(items.filter { Calendar.current.isDate($0.startDate, equalTo: time, toGranularity: .minute) }) { item in
                         NavigationLink {
-                            if let session = item.workoutSession {
-                                WorkoutDetailView(session: session)
-                            } else {
-                                Text(item.title)
-                                    .padding()
-                            }
+                            Text(item.title)
+                                .padding()
                         } label: {
                             TimelineItemView(item: item)
                         }

@@ -5,23 +5,18 @@ struct SettingsView: View {
     @EnvironmentObject var themeManager: ThemeManager
     @EnvironmentObject var programManager: ProgramManager
     @Environment(\.modelContext) private var context
-
+    
     @State private var selectedProgram: ProgramModel?
     @State private var showResetAlert = false
+    @State private var showProgramSheet = false
+    
+    @ObservedObject var unitsManager = UnitsManager.shared
 
     var body: some View {
         List {
             Section("appearance_section") {
                 ThemeToggleView(selectedTheme: $themeManager.selectedTheme)
                 AccentColorPickerView(selectedColor: $themeManager.accentColor)
-            }
-
-            Section("ai_section") {
-                NavigationLink {
-                    AIChatView()
-                } label: {
-                    Text("ai_chat_title")
-                }
             }
 
             Section("programs_title") {
@@ -45,6 +40,31 @@ struct SettingsView: View {
                     }
                     .onDelete(perform: deleteProgram)
                 }
+                Button {
+                    showProgramSheet = true
+                } label: {
+                    HStack {
+                        Image(systemName: "plus.circle.fill")
+                        Text("add_program_button")
+                    }
+                    .foregroundColor(.accentColor)
+                }
+            }
+
+            Section("units_section") {
+                Picker("weight_unit_label", selection: $unitsManager.weightUnit) {
+                    ForEach(WeightUnit.allCases, id: \.rawValue) { unit in
+                        Text(unit.label).tag(unit.rawValue)
+                    }
+                }
+                .pickerStyle(.segmented)
+                
+                Picker("distance_unit_label", selection: $unitsManager.distanceUnit) {
+                    ForEach(DistanceUnit.allCases, id: \.rawValue) { unit in
+                        Text(unit.label).tag(unit.rawValue)
+                    }
+                }
+                .pickerStyle(.segmented)
             }
 
             Section("data_section") {
@@ -72,6 +92,10 @@ struct SettingsView: View {
         } message: {
             Text("reset_all_data_message")
         }
+        .sheet(isPresented: $showProgramSheet) {
+            ProgramSelectionView(selectedDate: .constant(Date()))
+                .environmentObject(programManager)
+        }
     }
 
     private func deleteProgram(at offsets: IndexSet) {
@@ -86,7 +110,6 @@ struct SettingsView: View {
         deleteAll(ProgramAssignment.self)
         deleteAll(DayProgramModel.self)
         deleteAll(ProgramModel.self)
-        deleteAll(ChatMessage.self)
 
         if context.hasChanges {
             try? context.save()

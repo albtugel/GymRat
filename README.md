@@ -1,7 +1,8 @@
 # GymRat
+<<<<<<< HEAD
 
 GymRat is a SwiftUI iOS app for planning gym programs and logging workouts.  
-It includes a weekly timeline, program builder, exercise logs, and a stub AI chat for future analytics.
+It includes a weekly timeline, program builder, and exercise logs.
 
 ## Features
 - Weekly timeline with day selection
@@ -10,7 +11,6 @@ It includes a weekly timeline, program builder, exercise logs, and a stub AI cha
 - Cardio support with rounds + duration
 - Exercise drag & drop ordering
 - Local data persistence (SwiftData)
-- AI chat screen with saved history (stubbed for now)
 - Full localization (EN/RU/DE)
 
 ## Tech Stack
@@ -24,7 +24,6 @@ It includes a weekly timeline, program builder, exercise logs, and a stub AI cha
 - `GymRat/Program` — program models, manager, and UI
 - `GymRat/Workout` — workout logging UI
 - `GymRat/Settings` — app settings UI
-- `GymRat/AIChat` — AI chat models, data, use cases, and UI
 
 ## Getting Started
 1. Open `GymRat.xcodeproj` in Xcode.
@@ -58,12 +57,6 @@ To add new text:
 Exercise names are localized via `ExerciseStore` using `String(localized:)`.  
 If you add exercises, add keys like `exercise_new_name` in `Localizable.xcstrings`.
 
-## AI Chat (Stub)
-The chat uses a stubbed AI client and saved message history.
-Integration points:
-- `AIClient` protocol
-- `GenerateAIReplyUseCase`
-- `ApplyProgramChangesUseCase` (for confirmed changes)
 
 ## Notes
 - Cardio exercises use **Rounds** instead of **Sets** and include a **Dur** field.
@@ -71,3 +64,6 @@ Integration points:
 
 ## Tests
 No automated tests yet.
+=======
+GymRat is a minimalist workout tracker. Log your progress, create training programs, and track your results. No unnecessary features - just what you need at the gym.
+>>>>>>> 824fc88e70cfa158794301ef0597e6b870386f72

@@ -64,9 +64,33 @@ extension ProgramTableExerciseRowView {
 
     func durationBinding(index: Int) -> Binding<String> {
         Binding(
-            get: { index < durationsBySetText.count ? durationsBySetText[index] : "" },
+            get: {
+                guard index < durationsBySetText.count else { return "" }
+                let raw = durationsBySetText[index]
+          
+                if raw.contains(":") { return raw }
+      
+                if let totalSeconds = Int(raw), !raw.isEmpty {
+                    let mins = totalSeconds / 60
+                    let secs = totalSeconds % 60
+                    return String(format: "%d:%02d", mins, secs)
+                }
+                return raw
+            },
             set: { newValue in
-                let sanitized = sanitizeIntegerInput(newValue, allowDash: false)
+                var sanitized = newValue
+                    .filter { $0.isNumber || $0 == ":" }
+                
+       
+                let parts = sanitized.split(separator: ":", maxSplits: 1)
+                if parts.count == 2 {
+                    let mins = String(parts[0].prefix(2))
+                    let secs = String(parts[1].prefix(2))
+                    sanitized = "\(mins):\(secs)"
+                } else {
+                    sanitized = String(sanitized.prefix(2))
+                }
+                
                 if index < durationsBySetText.count {
                     durationsBySetText[index] = sanitized
                 }

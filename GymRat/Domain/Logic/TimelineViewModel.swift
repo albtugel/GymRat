@@ -21,15 +21,13 @@ final class TimelineViewModel: ObservableObject {
 
     func addWorkout(title: String, date: Date) {
         guard let context else { return }
-        let session = WorkoutSession(date: date)
         let item = TimelineItem(
             title: title,
             startDate: date,
             endDate: date.addingTimeInterval(3600),
             type: .workout,
-            workoutSession: session
+            program: nil
         )
-        context.insert(session)
         context.insert(item)
         items.append(item)
     }

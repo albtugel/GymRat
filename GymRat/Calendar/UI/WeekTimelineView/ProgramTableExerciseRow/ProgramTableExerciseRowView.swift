@@ -10,6 +10,7 @@ struct ProgramTableExerciseRowView: View {
     @FocusState.Binding var focusedField: ProgramTableFocusField?
 
     @Environment(\.modelContext) var context
+    @ObservedObject var unitsManager = UnitsManager.shared
     @State var repsBySetText: [String] = []
     @State var weightsBySetText: [String] = []
     @State var durationsBySetText: [String] = []
@@ -54,7 +55,7 @@ struct ProgramTableExerciseRowView: View {
     }
 
     var weightPlaceholder: String {
-        String(localized: "kg_lb_label")
+        unitsManager.currentWeightUnit.label
     }
 
     var weightKeyboard: UIKeyboardType {
@@ -70,7 +71,7 @@ struct ProgramTableExerciseRowView: View {
     }
 
     var durationKeyboard: UIKeyboardType {
-        .numberPad
+        isCardio ? .numbersAndPunctuation : .numberPad
     }
 
     var durationFont: Font {
@@ -82,7 +83,7 @@ struct ProgramTableExerciseRowView: View {
     }
 
     var repsPlaceholder: String {
-        String(localized: "reps_label")
+        isCardio ? unitsManager.currentDistanceUnit.label : String(localized: "reps_label")
     }
 
     var setsTitle: String {

@@ -7,9 +7,38 @@ struct ProgramCustomizeExercisesSectionView: View {
     let isEditing: Bool
     let onToggle: (ExerciseStore.ExerciseSeed) -> Void
 
+    @State private var searchText: String = ""
+
+    var filteredSeeds: [ExerciseStore.ExerciseSeed] {
+        if searchText.isEmpty {
+            return exerciseSeeds
+        }
+        let query = searchText.folding(options: [.caseInsensitive, .diacriticInsensitive], locale: .current)
+        return exerciseSeeds.filter {
+            let name = $0.name.folding(options: [.caseInsensitive, .diacriticInsensitive], locale: .current)
+            return name.contains(query)
+        }
+    }
+
     var body: some View {
         Section("exercises_section") {
-            ForEach(exerciseSeeds, id: \.name) { seed in
+            HStack {
+                Image(systemName: "magnifyingglass")
+                    .foregroundColor(.secondary)
+                TextField("search_exercises_placeholder", text: $searchText)
+                    .autocorrectionDisabled()
+                if !searchText.isEmpty {
+                    Button {
+                        searchText = ""
+                    } label: {
+                        Image(systemName: "xmark.circle.fill")
+                            .foregroundColor(.secondary)
+                    }
+                    .buttonStyle(.plain)
+                }
+            }
+
+            ForEach(filteredSeeds, id: \.name) { seed in
                 let selectedIndex = selectedExercises.firstIndex(where: { $0.exercise.name == seed.name })
                 let selected = selectedIndex.map { selectedExercises[$0] }
 

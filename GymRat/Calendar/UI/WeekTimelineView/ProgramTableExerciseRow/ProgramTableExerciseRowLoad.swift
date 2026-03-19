@@ -41,9 +41,26 @@ extension ProgramTableExerciseRowView {
         setsEditedForDay = false
 
         if let log = currentLog {
-            repsBySetText = log.repsBySet.map { $0 == 0 ? "" : String($0) }
-            weightsBySetText = log.weightsBySet.map { $0 == 0 ? "" : formatWeight($0) }
-            durationsBySetText = log.durationsBySet.map { $0 == 0 ? "" : String($0) }
+            repsBySetText = log.repsBySet.map { value -> String in
+                guard value > 0 else { return "" }
+                if isCardio {
+                    let displayed = unitsManager.displayDistance(value)
+                    return displayed.truncatingRemainder(dividingBy: 1) == 0
+                        ? String(Int(displayed))
+                        : String(format: "%.2f", displayed)
+                }
+                return String(value)
+            }
+            weightsBySetText = log.weightsBySet.map { value -> String in
+                guard value > 0 else { return "" }
+                return isCardio ? formatWeight(value) : formatWeight(unitsManager.displayWeight(value))
+            }
+            durationsBySetText = log.durationsBySet.map { seconds in
+                guard seconds > 0 else { return "" }
+                let mins = seconds / 60
+                let secs = seconds % 60
+                return String(format: "%d:%02d", mins, secs)
+            }
         } else {
             repsBySetText = Array(repeating: "", count: setsCount)
             weightsBySetText = Array(repeating: "", count: setsCount)
@@ -51,9 +68,26 @@ extension ProgramTableExerciseRowView {
         }
 
         if let log = previousLog {
-            previousRepsBySetText = log.repsBySet.map { $0 == 0 ? "" : String($0) }
-            previousWeightsBySetText = log.weightsBySet.map { $0 == 0 ? "" : formatWeight($0) }
-            previousDurationsBySetText = log.durationsBySet.map { $0 == 0 ? "" : String($0) }
+            previousRepsBySetText = log.repsBySet.map { value -> String in
+                guard value > 0 else { return "" }
+                if isCardio {
+                    let displayed = unitsManager.displayDistance(value)
+                    return displayed.truncatingRemainder(dividingBy: 1) == 0
+                        ? String(Int(displayed))
+                        : String(format: "%.2f", displayed)
+                }
+                return String(value)
+            }
+            previousWeightsBySetText = log.weightsBySet.map { value -> String in
+                guard value > 0 else { return "" }
+                return isCardio ? formatWeight(value) : formatWeight(unitsManager.displayWeight(value))
+            }
+            previousDurationsBySetText = log.durationsBySet.map { seconds in
+                guard seconds > 0 else { return "" }
+                let mins = seconds / 60
+                let secs = seconds % 60
+                return String(format: "%d:%02d", mins, secs)
+            }
         } else {
             previousRepsBySetText = Array(repeating: "", count: setsCount)
             previousWeightsBySetText = Array(repeating: "", count: setsCount)

@@ -12,9 +12,26 @@ extension ProgramTableExerciseRowView {
     func saveCurrentLog(for date: Date) {
         normalizeArrays()
 
-        let reps = repsBySetText.map { Int($0.trimmingCharacters(in: .whitespacesAndNewlines)) ?? 0 }
-        let weights = weightsBySetText.map { parseWeight($0) ?? 0 }
-        let durations = durationsBySetText.map { Int($0.trimmingCharacters(in: .whitespacesAndNewlines)) ?? 0 }
+        let reps = repsBySetText.map { text -> Int in
+            let t = text.trimmingCharacters(in: .whitespacesAndNewlines)
+            if isCardio {
+                let value = Double(t) ?? 0
+                return unitsManager.storeDistance(value)
+            }
+            return Int(t) ?? 0
+        }
+        let weights = weightsBySetText.map { text -> Double in
+            let value = parseWeight(text) ?? 0
+            return isCardio ? value : unitsManager.storeWeight(value)
+        }
+        let durations = durationsBySetText.map { text -> Int in
+            let t = text.trimmingCharacters(in: .whitespacesAndNewlines)
+            let parts = t.split(separator: ":")
+            if parts.count == 2, let mins = Int(parts[0]), let secs = Int(parts[1]) {
+                return mins * 60 + secs
+            }
+            return Int(t) ?? 0
+        }
         let hasValues = reps.contains { $0 > 0 } || weights.contains { $0 > 0 } || durations.contains { $0 > 0 }
         let day = date.startOfDay
         let dayStamp = ProgramExerciseLog.makeDayStamp(for: day)

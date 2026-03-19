@@ -38,6 +38,7 @@ extension Date {
         f.calendar = AppCalendar.calendar
         f.locale = .current
         f.dateFormat = "LLLL yyyy"
-        return f.string(from: self)
+        let raw = f.string(from: self)
+        return raw.capitalized(with: .current)
     }
 }

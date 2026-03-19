@@ -11,13 +11,13 @@ final class TimelineItem {
     var startDate: Date
     var endDate: Date
     var type: TimelineItemType
-    var workoutSession: WorkoutSession?
+    var program: ProgramModel?
 
-    init(title: String, startDate: Date, endDate: Date, type: TimelineItemType, workoutSession: WorkoutSession? = nil) {
+    init(title: String, startDate: Date, endDate: Date, type: TimelineItemType, program: ProgramModel? = nil) {
         self.title = title
         self.startDate = startDate
         self.endDate = endDate
         self.type = type
-        self.workoutSession = workoutSession
+        self.program = program
     }
 }

@@ -44,7 +44,7 @@ extension ProgramTableExerciseRowView {
                                 weightPlaceholder: weightPlaceholder,
                                 weightKeyboard: weightKeyboard,
                                 durationPlaceholder: durationPlaceholder,
-                                durationKeyboard: durationKeyboard,
+                                durationKeyboard: .default,
                                 durationFont: durationFont,
                                 showsDuration: showsDuration,
                                 showsWeight: !isCardio,

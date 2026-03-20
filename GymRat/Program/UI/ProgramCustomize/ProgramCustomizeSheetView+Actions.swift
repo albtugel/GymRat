@@ -51,6 +51,7 @@ extension ProgramCustomizeSheetView {
         isSaving = true
 
         program.name = programName.isEmpty ? program.type.title : programName
+        program.colorHex = programColor.toHex()
 
         if mode == .edit {
             var ordered: [ProgramExercise] = []

@@ -2,6 +2,7 @@ import SwiftUI
 
 struct ProgramCustomizeInfoSectionView: View {
     @Binding var programName: String
+    @Binding var programColor: Color
     @FocusState.Binding var nameFieldIsFocused: Bool
     @State private var didClearOnFocus = false
 
@@ -22,6 +23,8 @@ struct ProgramCustomizeInfoSectionView: View {
                     didClearOnFocus = true
                 }
             }
+
+            ColorPicker("program_color_label", selection: $programColor, supportsOpacity: false)
         }
     }
 }

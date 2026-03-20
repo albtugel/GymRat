@@ -39,7 +39,7 @@ class ThemeManager: ObservableObject {
            let uiColor = try? NSKeyedUnarchiver.unarchivedObject(ofClass: UIColor.self, from: colorData) {
             accentColor = Color(uiColor)
         } else {
-            accentColor = .blue // ✅ первый запуск — синий
+            accentColor = .blue
         }
     }
 

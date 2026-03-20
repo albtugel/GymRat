@@ -185,25 +185,7 @@ private struct ProgramCustomizeExerciseRowView: View {
                 }
             }
 
-            if let exercise = selectedExercise {
-                Toggle(
-                    "shared_history_toggle_title",
-                    isOn: Binding(
-                        get: { exercise.sharedHistory },
-                        set: { newValue in
-                            exercise.sharedHistory = newValue
-                            if context.hasChanges {
-                                try? context.save()
-                            }
-                        }
-                    )
-                )
-                .toggleStyle(SwitchToggleStyle(tint: .accentColor))
-
-                Text("shared_history_toggle_hint")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-            }
+            // Shared history toggle removed (alert-only selection).
         }
     }
 

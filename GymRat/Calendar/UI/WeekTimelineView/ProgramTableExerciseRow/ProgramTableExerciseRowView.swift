@@ -10,6 +10,7 @@ struct ProgramTableExerciseRowView: View {
     @FocusState.Binding var focusedField: ProgramTableFocusField?
 
     @Environment(\.modelContext) var context
+    @EnvironmentObject var themeManager: ThemeManager
     @ObservedObject var unitsManager = UnitsManager.shared
     @State var repsBySetText: [String] = []
     @State var weightsBySetText: [String] = []

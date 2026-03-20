@@ -14,7 +14,7 @@ extension ProgramTableExerciseRowView {
                 if programExercise.selectionIndex > 0 {
                     ZStack {
                         Circle()
-                            .fill(Color.accentColor)
+                            .fill(themeManager.accentColor)
                         Text("\(programExercise.selectionIndex)")
                             .font(.caption2)
                             .bold()

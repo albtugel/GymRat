@@ -4243,50 +4243,6 @@
         }
       }
     },
-    "shared_history_toggle_title": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Shared history for all programs"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Общая история для всех программ"
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Gemeinsame Historie für alle Programme"
-          }
-        }
-      }
-    },
-    "shared_history_toggle_hint": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Enable if you want to see one progress across all programs with this exercise"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Включите, если хотите видеть один прогресс во всех программах с этим упражнением"
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Aktivieren, wenn Sie einen gemeinsamen Fortschritt in allen Programmen mit dieser Übung sehen möchten"
-          }
-        }
-      }
-    },
     "shared_history_alert_title": {
       "localizations": {
         "en": {
@@ -4371,6 +4327,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "Separate Historie"
+          }
+        }
+      }
+    },
+    "program_color_label": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Program color"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Цвет программы"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Programmfarbe"
           }
         }
       }

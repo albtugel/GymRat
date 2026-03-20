@@ -2,8 +2,6 @@ import SwiftUI
 import SwiftData
 
 struct ProgramCustomizeSheetView: View {
-    @EnvironmentObject var themeManager: ThemeManager
-
     let mode: ProgramCustomizeMode
     @State var programManager = ProgramManager.shared
     @Environment(\.modelContext) var context
@@ -13,12 +11,14 @@ struct ProgramCustomizeSheetView: View {
     @State var selectedExercises: [ProgramExercise] = []
     @State var selectedWeekdays: Set<ProgramWeekDay> = []
     @State var programName: String = ""
+    @State var programColor: Color = .accentColor
     @FocusState var nameFieldIsFocused: Bool
     @State var isSaving = false
     @State var showSharedHistoryAlert = false
     @State var pendingSeed: ExerciseStore.ExerciseSeed?
 
     @Query private var customExercises: [ExerciseModel]
+    @EnvironmentObject var themeManager: ThemeManager
     @Query var allPrograms: [ProgramModel]
 
     private var filteredExerciseSeeds: [ExerciseStore.ExerciseSeed] {
@@ -34,6 +34,7 @@ struct ProgramCustomizeSheetView: View {
             Form {
                 ProgramCustomizeInfoSectionView(
                     programName: $programName,
+                    programColor: $programColor,
                     nameFieldIsFocused: $nameFieldIsFocused
                 )
 
@@ -82,6 +83,11 @@ struct ProgramCustomizeSheetView: View {
         .onAppear {
             ExerciseSeeder.seedIfNeeded(context: context)
             programName = program.name
+            if let hex = program.colorHex, !hex.isEmpty {
+                programColor = Color(hex: hex) ?? themeManager.accentColor
+            } else {
+                programColor = themeManager.accentColor
+            }
             selectedExercises = program.exercises
             selectedWeekdays = program.weekdays
         }

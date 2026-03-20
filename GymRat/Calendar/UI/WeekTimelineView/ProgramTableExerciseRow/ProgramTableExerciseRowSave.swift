@@ -40,7 +40,7 @@ extension ProgramTableExerciseRowView {
             if hasValues || setsEditedForDay {
                 log.date = day
                 log.dayStamp = dayStamp
-                log.program = program
+                log.programExercise = programExercise
                 log.exerciseName = programExercise.exercise.name
                 log.repsBySet = reps
                 log.weightsBySet = weights
@@ -49,10 +49,8 @@ extension ProgramTableExerciseRowView {
                 context.delete(log)
             }
         } else if hasValues || setsEditedForDay {
-            let exercise = fetchOrCreateExerciseInContext()
             let newLog = ProgramExerciseLog(
-                exercise: exercise,
-                program: program,
+                programExercise: programExercise,
                 date: day,
                 repsBySet: reps,
                 weightsBySet: weights,

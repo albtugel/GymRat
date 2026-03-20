@@ -82,6 +82,8 @@ struct SettingsView: View {
                 program: program
             )
             .environmentObject(programManager)
+            .environmentObject(themeManager)
+            .accentColor(themeManager.accentColor)
             .environment(\.modelContext, context)
         }
         .alert("reset_all_data_title", isPresented: $showResetAlert) {
@@ -95,6 +97,8 @@ struct SettingsView: View {
         .sheet(isPresented: $showProgramSheet) {
             ProgramSelectionView(selectedDate: .constant(Date()))
                 .environmentObject(programManager)
+                .environmentObject(themeManager)
+                .accentColor(themeManager.accentColor)
         }
     }
 
@@ -120,6 +124,13 @@ struct SettingsView: View {
         programManager.dayPrograms = [:]
     }
 
+    private func deleteCustomExercises() {
+        let predicate = #Predicate<ExerciseModel> { $0.isCustom == true }
+        let descriptor = FetchDescriptor<ExerciseModel>(predicate: predicate)
+        let items = (try? context.fetch(descriptor)) ?? []
+        items.forEach { context.delete($0) }
+    }
+    
     private func deleteAll<T: PersistentModel>(_ type: T.Type) {
         let descriptor = FetchDescriptor<T>()
         let items = (try? context.fetch(descriptor)) ?? []

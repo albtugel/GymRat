@@ -4,8 +4,8 @@ import UniformTypeIdentifiers
 
 struct ProgramTableExerciseRowView: View {
     let programExercise: ProgramExercise
-    let selectedDate: Date
     let program: ProgramModel
+    let selectedDate: Date
     @Binding var draggingExercise: ProgramExercise?
     @FocusState.Binding var focusedField: ProgramTableFocusField?
 
@@ -31,14 +31,14 @@ struct ProgramTableExerciseRowView: View {
 
     init(
         programExercise: ProgramExercise,
-        selectedDate: Date,
         program: ProgramModel,
+        selectedDate: Date,
         draggingExercise: Binding<ProgramExercise?>,
         focusedField: FocusState<ProgramTableFocusField?>.Binding
     ) {
         self.programExercise = programExercise
+        self.program = program 
         self.selectedDate = selectedDate
-        self.program = program
         self._draggingExercise = draggingExercise
         self._focusedField = focusedField
         _setsCountText = State(initialValue: String(max(1, programExercise.sets)))

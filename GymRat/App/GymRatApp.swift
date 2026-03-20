@@ -43,7 +43,7 @@ struct GymRatApp: App {
                 .environmentObject(themeManager)
                 .environmentObject(programManager)
                 .preferredColorScheme(themeManager.selectedTheme.colorScheme)
-                .accentColor(themeManager.accentColor)
+                .tint(themeManager.accentColor)
         }
         .modelContainer(container)
     }

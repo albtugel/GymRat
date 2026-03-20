@@ -5,9 +5,7 @@ import SwiftData
 final class ProgramExerciseLog: Identifiable {
     @Attribute(.unique) var id: UUID
     @Relationship(deleteRule: .noAction)
-    var exercise: ExerciseModel
-    @Relationship(deleteRule: .cascade)
-    var program: ProgramModel
+    var programExercise: ProgramExercise
     var exerciseName: String?
     var date: Date
     var dayStamp: Int = 0
@@ -16,17 +14,15 @@ final class ProgramExerciseLog: Identifiable {
     var durationsBySet: [Int] = []
 
     init(
-        exercise: ExerciseModel,
-        program: ProgramModel,
+        programExercise: ProgramExercise,
         date: Date,
         repsBySet: [Int],
         weightsBySet: [Double],
         durationsBySet: [Int] = []
     ) {
         self.id = UUID()
-        self.exercise = exercise
-        self.program = program
-        self.exerciseName = exercise.name
+        self.programExercise = programExercise
+        self.exerciseName = programExercise.exercise.name
         let day = AppCalendar.calendar.startOfDay(for: date)
         self.date = day
         self.dayStamp = ProgramExerciseLog.makeDayStamp(for: day)

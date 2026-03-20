@@ -7,6 +7,14 @@ enum ExerciseCategory: String, CaseIterable, Identifiable, Codable {
     case crossfit
 
     var id: String { rawValue }
+
+    var localizedLabel: String {
+        switch self {
+        case .strength: return String(localized: "program_type_strength")
+        case .cardio: return String(localized: "program_type_cardio")
+        case .crossfit: return String(localized: "program_type_crossfit")
+        }
+    }
 }
 
 @Model
@@ -14,9 +22,11 @@ final class ExerciseModel: Identifiable {
     @Attribute(.unique) var id: UUID = UUID()
     var name: String
     var category: ExerciseCategory
+    var isCustom: Bool = false
 
-    init(name: String, category: ExerciseCategory) {
+    init(name: String, category: ExerciseCategory, isCustom: Bool = false) {
         self.name = name
         self.category = category
+        self.isCustom = isCustom
     }
 }

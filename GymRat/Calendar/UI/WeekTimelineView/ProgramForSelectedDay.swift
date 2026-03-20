@@ -5,6 +5,7 @@ struct ProgramForSelectedDayView: View {
     let selectedDate: Date
 
     @EnvironmentObject private var programManager: ProgramManager
+    @EnvironmentObject private var themeManager: ThemeManager
     let onAddProgramTap: () -> Void
 
     var body: some View {
@@ -25,7 +26,7 @@ struct ProgramForSelectedDayView: View {
                             Image(systemName: "plus.circle.fill")
                             Text("add_program_button")
                         }
-                        .foregroundColor(.accentColor)
+                        .foregroundColor(themeManager.accentColor)
                     }
                     Spacer()
                 }

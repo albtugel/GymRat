@@ -15,8 +15,8 @@ struct ProgramTableView: View {
             ForEach(program.exercises) { exercise in
                 ProgramTableExerciseRowView(
                     programExercise: exercise,
-                    selectedDate: selectedDate,
                     program: program,
+                    selectedDate: selectedDate,
                     draggingExercise: $draggingExercise,
                     focusedField: $focusedField
                 )

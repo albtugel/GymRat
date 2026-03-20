@@ -9,7 +9,17 @@ extension ProgramCustomizeSheetView {
         }
 
         let exercise = fetchOrCreateExercise(seed)
-        selectedExercises.append(ProgramExercise(exercise: exercise))
+        let existsInOtherPrograms = allPrograms
+            .filter { $0.id != program.id }
+            .flatMap { $0.exercises }
+            .contains { $0.exercise.id == exercise.id }
+
+        if existsInOtherPrograms {
+            pendingSeed = seed
+            showSharedHistoryAlert = true
+        } else {
+            selectedExercises.append(ProgramExercise(exercise: exercise, sharedHistory: false))
+        }
     }
 
     func fetchOrCreateExercise(_ seed: ExerciseStore.ExerciseSeed) -> ExerciseModel {
@@ -23,6 +33,17 @@ extension ProgramCustomizeSheetView {
         context.insert(newExercise)
         try? context.save()
         return newExercise
+    }
+
+    func addPendingExercise(sharedHistory: Bool) {
+        guard let seed = pendingSeed else { return }
+        let exercise = fetchOrCreateExercise(seed)
+        if selectedExercises.contains(where: { $0.exercise.id == exercise.id }) {
+            pendingSeed = nil
+            return
+        }
+        selectedExercises.append(ProgramExercise(exercise: exercise, sharedHistory: sharedHistory))
+        pendingSeed = nil
     }
 
     func saveProgram() {

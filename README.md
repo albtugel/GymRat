@@ -1,7 +1,6 @@
 # GymRat
-<<<<<<< HEAD
 
-GymRat is a SwiftUI iOS app for planning gym programs and logging workouts.  
+GymRat is a SwiftUI iOS app for planning gym programs and logging workouts.
 It includes a weekly timeline, program builder, and exercise logs.
 
 ## Features
@@ -18,7 +17,7 @@ It includes a weekly timeline, program builder, and exercise logs.
 - SwiftData
 - iOS 17+
 
-## Project Structure (high level)
+## Project Structure
 - `GymRat/App` — app entry point
 - `GymRat/Calendar` — week timeline UI
 - `GymRat/Program` — program models, manager, and UI
@@ -35,28 +34,8 @@ It includes a weekly timeline, program builder, and exercise logs.
 - If the store is corrupted, the app auto-resets and recreates it.
 
 ## Localization
-Localizations are in:
-- `GymRat/Localizable.xcstrings`
-
-Supported languages:
-- English (default)
-- Russian
-- German
-
-All user-facing strings use snake_case keys.  
-To add new text:
-1. Add a key to `Localizable.xcstrings` for all three languages.
-2. Use it in SwiftUI, e.g.:
-   ```swift
-   Text("save_button")
-   .navigationTitle("settings_title")
-   TextField("program_name_placeholder", text: $name)
-   ```
-
-### Exercise Names
-Exercise names are localized via `ExerciseStore` using `String(localized:)`.  
-If you add exercises, add keys like `exercise_new_name` in `Localizable.xcstrings`.
-
+Supported languages: English (default), Russian, German.
+All user-facing strings use snake_case keys in `GymRat/Localizable.xcstrings`.
 
 ## Notes
 - Cardio exercises use **Rounds** instead of **Sets** and include a **Dur** field.
@@ -64,6 +43,3 @@ If you add exercises, add keys like `exercise_new_name` in `Localizable.xcstring
 
 ## Tests
 No automated tests yet.
-=======
-GymRat is a minimalist workout tracker. Log your progress, create training programs, and track your results. No unnecessary features - just what you need at the gym.
->>>>>>> 824fc88e70cfa158794301ef0597e6b870386f72

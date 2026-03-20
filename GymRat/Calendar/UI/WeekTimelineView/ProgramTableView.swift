@@ -7,6 +7,14 @@ struct ProgramTableView: View {
 
     @State private var draggingExercise: ProgramExercise?
     @FocusState private var focusedField: ProgramTableFocusField?
+    @EnvironmentObject var themeManager: ThemeManager
+
+    var programColor: Color {
+        if let hex = program.colorHex, !hex.isEmpty {
+            return Color(hex: hex) ?? themeManager.accentColor
+        }
+        return themeManager.accentColor
+    }
 
     var body: some View {
         VStack(spacing: 8) {
@@ -22,6 +30,10 @@ struct ProgramTableView: View {
                 )
             }
         }
+        .overlay(
+            RoundedRectangle(cornerRadius: 12)
+                .stroke(programColor, lineWidth: 2)
+        )
         .frame(maxWidth: .infinity, alignment: .leading)
     }
 }

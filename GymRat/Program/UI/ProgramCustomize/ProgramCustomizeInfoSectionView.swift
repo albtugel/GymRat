@@ -10,6 +10,8 @@ struct ProgramCustomizeInfoSectionView: View {
             HStack {
                 TextField("program_name_placeholder", text: $programName)
                     .focused($nameFieldIsFocused)
+                    .submitLabel(.done)
+                    .onSubmit { nameFieldIsFocused = false }
                 Spacer()
             }
             .contentShape(Rectangle())

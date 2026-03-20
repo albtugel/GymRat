@@ -10,13 +10,15 @@ final class ProgramExercise: Identifiable, Hashable {
     var sets: Int
     var reps: Int
     var selectionIndex: Int
+    var sharedHistory: Bool = false
 
-    init(exercise: ExerciseModel, sets: Int = 3, reps: Int = 0, selectionIndex: Int = 0) {
+    init(exercise: ExerciseModel, sets: Int = 3, reps: Int = 0, selectionIndex: Int = 0, sharedHistory: Bool = false) {
         self.id = UUID()
         self.exercise = exercise
         self.sets = sets
         self.reps = reps
         self.selectionIndex = selectionIndex
+        self.sharedHistory = sharedHistory
     }
 
     static func == (lhs: ProgramExercise, rhs: ProgramExercise) -> Bool {

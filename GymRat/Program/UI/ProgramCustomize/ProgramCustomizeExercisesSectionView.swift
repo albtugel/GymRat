@@ -6,27 +6,44 @@ struct ProgramCustomizeExercisesSectionView: View {
     @Binding var selectedExercises: [ProgramExercise]
     let isEditing: Bool
     let onToggle: (ExerciseStore.ExerciseSeed) -> Void
+    let onCreateCustom: (String, ExerciseCategory) -> Void
 
     @State private var searchText: String = ""
+    @State private var selectedMuscles: Set<MuscleGroup> = []
+    @State private var showCreateAlert = false
+    @State private var newExerciseName = ""
+    @State private var newExerciseCategory: ExerciseCategory = .strength
 
     var filteredSeeds: [ExerciseStore.ExerciseSeed] {
-        if searchText.isEmpty {
-            return exerciseSeeds
+        var seeds = exerciseSeeds
+
+        if !selectedMuscles.isEmpty {
+            seeds = seeds.filter { seed in
+                !selectedMuscles.isDisjoint(with: seed.muscles)
+            }
         }
-        let query = searchText.folding(options: [.caseInsensitive, .diacriticInsensitive], locale: .current)
-        return exerciseSeeds.filter {
-            let name = $0.name.folding(options: [.caseInsensitive, .diacriticInsensitive], locale: .current)
-            return name.contains(query)
+
+        if !searchText.isEmpty {
+            let query = searchText.folding(options: [.caseInsensitive, .diacriticInsensitive], locale: .current)
+            seeds = seeds.filter {
+                let name = $0.name.folding(options: [.caseInsensitive, .diacriticInsensitive], locale: .current)
+                return name.contains(query)
+            }
         }
+
+        return seeds
     }
 
     var body: some View {
         Section("exercises_section") {
+            // Search bar
             HStack {
                 Image(systemName: "magnifyingglass")
                     .foregroundColor(.secondary)
                 TextField("search_exercises_placeholder", text: $searchText)
                     .autocorrectionDisabled()
+                    .submitLabel(.done)
+                    .onSubmit { searchText = searchText }
                 if !searchText.isEmpty {
                     Button {
                         searchText = ""
@@ -37,6 +54,34 @@ struct ProgramCustomizeExercisesSectionView: View {
                     .buttonStyle(.plain)
                 }
             }
+
+            // Muscle group filter
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 8) {
+                    ForEach(MuscleGroup.allCases) { muscle in
+                        Button {
+                            withAnimation {
+                                if selectedMuscles.contains(muscle) {
+                                    selectedMuscles.remove(muscle)
+                                } else {
+                                    selectedMuscles.insert(muscle)
+                                }
+                            }
+                        } label: {
+                            Text(muscle.localizedLabel)
+                                .font(.caption)
+                                .padding(.horizontal, 12)
+                                .padding(.vertical, 6)
+                                .background(selectedMuscles.contains(muscle) ? Color.accentColor : Color(.systemGray5))
+                                .foregroundColor(selectedMuscles.contains(muscle) ? .white : .primary)
+                                .cornerRadius(20)
+                        }
+                        .buttonStyle(.plain)
+                    }
+                }
+                .padding(.vertical, 4)
+            }
+            .listRowInsets(EdgeInsets(top: 4, leading: 16, bottom: 4, trailing: 16))
 
             ForEach(filteredSeeds, id: \.name) { seed in
                 let selectedIndex = selectedExercises.firstIndex(where: { $0.exercise.name == seed.name })
@@ -49,6 +94,38 @@ struct ProgramCustomizeExercisesSectionView: View {
                     isEditing: isEditing,
                     onToggle: onToggle
                 )
+            }
+
+            // Create custom exercise button
+            Button {
+                showCreateAlert = true
+            } label: {
+                HStack {
+                    Image(systemName: "plus.circle.fill")
+                    Text("create_exercise_button")
+                }
+                .foregroundColor(.accentColor)
+            }
+            .alert("create_exercise_title", isPresented: $showCreateAlert) {
+                TextField("exercise_name_placeholder", text: $newExerciseName)
+                    .autocorrectionDisabled()
+                Picker("", selection: $newExerciseCategory) {
+                    ForEach(ExerciseCategory.allCases) { cat in
+                        Text(cat.localizedLabel).tag(cat)
+                    }
+                }
+                Button("save_button") {
+                    let trimmed = newExerciseName.trimmingCharacters(in: .whitespacesAndNewlines)
+                    if !trimmed.isEmpty {
+                        onCreateCustom(trimmed, newExerciseCategory)
+                        newExerciseName = ""
+                    }
+                }
+                Button("cancel_button", role: .cancel) {
+                    newExerciseName = ""
+                }
+            } message: {
+                Text("create_exercise_message")
             }
         }
         .animation(.easeInOut(duration: 0.25), value: selectedExercises.map(\.id))
@@ -64,54 +141,84 @@ private struct ProgramCustomizeExerciseRowView: View {
     @Environment(\.modelContext) private var context
 
     var body: some View {
-        HStack(spacing: 8) {
-            Button {
-                withAnimation(.easeInOut(duration: 0.25)) {
-                    onToggle(seed)
-                }
-            } label: {
-                HStack {
-                    Text(seed.name)
-                    Spacer()
-                    if let number = selectionNumber {
-                        ZStack {
-                            Circle()
-                                .fill(Color.accentColor)
-                            Text("\(number)")
-                                .font(.caption2)
-                                .bold()
-                                .foregroundColor(.white)
-                        }
-                        .frame(width: 22, height: 22)
-                    } else if selectedExercise != nil {
-                        Image(systemName: "checkmark.circle.fill")
-                            .foregroundColor(.accentColor)
-                    }
-                }
-                .contentShape(Rectangle())
-            }
-            .buttonStyle(.plain)
-            .frame(maxWidth: .infinity, alignment: .leading)
-
-            if isEditing {
+        VStack(alignment: .leading, spacing: 6) {
+            HStack(spacing: 8) {
                 Button {
-                    clearHistory()
+                    withAnimation(.easeInOut(duration: 0.25)) {
+                        onToggle(seed)
+                    }
                 } label: {
-                    Image(systemName: "trash")
-                        .font(.caption)
-                        .padding(6)
+                    HStack {
+                        Text(seed.name)
+                        Spacer()
+                        if let number = selectionNumber {
+                            ZStack {
+                                Circle()
+                                    .fill(Color.accentColor)
+                                Text("\(number)")
+                                    .font(.caption2)
+                                    .bold()
+                                    .foregroundColor(.white)
+                            }
+                            .frame(width: 22, height: 22)
+                        } else if selectedExercise != nil {
+                            Image(systemName: "checkmark.circle.fill")
+                                .foregroundColor(.accentColor)
+                        }
+                    }
+                    .contentShape(Rectangle())
                 }
-                .buttonStyle(.borderless)
-                .foregroundColor(.secondary)
-                .accessibilityLabel(Text("clear_exercise_history"))
+                .buttonStyle(.plain)
+                .frame(maxWidth: .infinity, alignment: .leading)
+
+                if isEditing, let exercise = selectedExercise {
+                    Button {
+                        clearHistory(for: exercise)
+                    } label: {
+                        Image(systemName: "trash")
+                            .font(.caption)
+                            .padding(6)
+                    }
+                    .buttonStyle(.borderless)
+                    .foregroundColor(.secondary)
+                    .accessibilityLabel(Text("clear_exercise_history"))
+                }
+            }
+
+            if let exercise = selectedExercise {
+                Toggle(
+                    "shared_history_toggle_title",
+                    isOn: Binding(
+                        get: { exercise.sharedHistory },
+                        set: { newValue in
+                            exercise.sharedHistory = newValue
+                            if context.hasChanges {
+                                try? context.save()
+                            }
+                        }
+                    )
+                )
+                .toggleStyle(SwitchToggleStyle(tint: .accentColor))
+
+                Text("shared_history_toggle_hint")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
             }
         }
     }
 
-    private func clearHistory() {
-        let name = seed.name
-        let predicate = #Predicate<ProgramExerciseLog> { log in
-            log.exerciseName == name
+    private func clearHistory(for exercise: ProgramExercise) {
+        let predicate: Predicate<ProgramExerciseLog>
+        if exercise.sharedHistory {
+            let exerciseId = exercise.exercise.id
+            predicate = #Predicate<ProgramExerciseLog> { log in
+                log.programExercise.exercise.id == exerciseId
+            }
+        } else {
+            let programExerciseId = exercise.id
+            predicate = #Predicate<ProgramExerciseLog> { log in
+                log.programExercise.id == programExerciseId
+            }
         }
         let descriptor = FetchDescriptor<ProgramExerciseLog>(predicate: predicate)
         let logs = (try? context.fetch(descriptor)) ?? []

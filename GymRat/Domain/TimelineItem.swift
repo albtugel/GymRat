@@ -7,17 +7,23 @@ enum TimelineItemType: String, Codable {
 
 @Model
 final class TimelineItem {
+    @Attribute(.unique) var id: UUID = UUID()
     var title: String
     var startDate: Date
     var endDate: Date
-    var type: TimelineItemType
+    var typeRaw: String
     var program: ProgramModel?
+
+    var type: TimelineItemType {
+        get { TimelineItemType(rawValue: typeRaw) ?? .workout }
+        set { typeRaw = newValue.rawValue }
+    }
 
     init(title: String, startDate: Date, endDate: Date, type: TimelineItemType, program: ProgramModel? = nil) {
         self.title = title
         self.startDate = startDate
         self.endDate = endDate
-        self.type = type
+        self.typeRaw = type.rawValue
         self.program = program
     }
 }

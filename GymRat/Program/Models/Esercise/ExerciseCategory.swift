@@ -21,12 +21,17 @@ enum ExerciseCategory: String, CaseIterable, Identifiable, Codable {
 final class ExerciseModel: Identifiable {
     @Attribute(.unique) var id: UUID = UUID()
     var name: String
-    var category: ExerciseCategory
+    var categoryRaw: String
     var isCustom: Bool = false
+
+    var category: ExerciseCategory {
+        get { ExerciseCategory(rawValue: categoryRaw) ?? .strength }
+        set { categoryRaw = newValue.rawValue }
+    }
 
     init(name: String, category: ExerciseCategory, isCustom: Bool = false) {
         self.name = name
-        self.category = category
+        self.categoryRaw = category.rawValue  
         self.isCustom = isCustom
     }
 }

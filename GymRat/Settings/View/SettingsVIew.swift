@@ -11,6 +11,7 @@ struct SettingsView: View {
     @State private var showProgramSheet = false
     
     @ObservedObject var unitsManager = UnitsManager.shared
+    @Query private var programs: [ProgramModel]
 
     var body: some View {
         List {
@@ -20,11 +21,11 @@ struct SettingsView: View {
             }
 
             Section("programs_title") {
-                if programManager.customPrograms.isEmpty {
+                if programs.isEmpty {
                     Text("no_programs_yet")
                         .foregroundColor(.secondary)
                 } else {
-                    ForEach(programManager.customPrograms) { program in
+                    ForEach(programs) { program in
                         Button {
                             selectedProgram = program
                         } label: {
@@ -67,6 +68,58 @@ struct SettingsView: View {
                 .pickerStyle(.segmented)
             }
 
+            Section("about_section") {
+                HStack {
+                    Text("app_version_label")
+                    Spacer()
+                    Text(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0")
+                        .foregroundColor(.secondary)
+                }
+
+                HStack {
+                    Text("developer_label")
+                    Spacer()
+                    Text("@albtugel")
+                        .foregroundColor(.secondary)
+                }
+
+                Link(destination: URL(string: "mailto:al.tugel02@gmail.com")!) {
+                    HStack {
+                        Text("support_email_label")
+                        Spacer()
+                        Text("@email_support")
+                            .foregroundColor(.secondary)
+                    }
+                }
+
+                Link(destination: URL(string: "https://albtugel.github.io/GymRat/privacy-policy")!) {
+                    HStack {
+                        Text("privacy_policy_label")
+                        Spacer()
+                        Image(systemName: "arrow.up.right")
+                            .foregroundColor(.secondary)
+                    }
+                }
+
+                Link(destination: URL(string: "https://github.com/albtugel/GymRat")!) {
+                    HStack {
+                        Text("github_label")
+                        Spacer()
+                        Image(systemName: "arrow.up.right")
+                            .foregroundColor(.secondary)
+                    }
+                }
+
+                Link(destination: URL(string: "https://github.com/yuhonas/free-exercise-db")!) {
+                    HStack {
+                        Text("exercise_images_source_label")
+                        Spacer()
+                        Image(systemName: "arrow.up.right")
+                            .foregroundColor(.secondary)
+                    }
+                }
+            }
+
             Section("data_section") {
                 Button(role: .destructive) {
                     showResetAlert = true
@@ -86,13 +139,13 @@ struct SettingsView: View {
             .accentColor(themeManager.accentColor)
             .environment(\.modelContext, context)
         }
-        .alert("reset_all_data_title", isPresented: $showResetAlert) {
+        .alert(LocalizedStringKey(AppAlerts.ResetData.title), isPresented: $showResetAlert) {
             Button("reset_button", role: .destructive) {
                 resetAllData()
             }
             Button("cancel_button", role: .cancel) { }
         } message: {
-            Text("reset_all_data_message")
+            Text(LocalizedStringKey(AppAlerts.ResetData.message))
         }
         .sheet(isPresented: $showProgramSheet) {
             ProgramSelectionView(selectedDate: .constant(Date()))
@@ -104,24 +157,27 @@ struct SettingsView: View {
 
     private func deleteProgram(at offsets: IndexSet) {
         offsets.forEach { idx in
-            let program = programManager.customPrograms[idx]
+            let program = programs[idx]
             programManager.deleteProgram(program, context: context)
         }
     }
 
     private func resetAllData() {
+        programManager.programs = []
+        programManager.customPrograms = []
+        programManager.dayPrograms = [:]
+        selectedProgram = nil
+
         deleteAll(ProgramExerciseLog.self)
         deleteAll(ProgramAssignment.self)
         deleteAll(DayProgramModel.self)
+        deleteAll(TimelineItem.self)
+        deleteAll(ProgramExercise.self)
         deleteAll(ProgramModel.self)
 
         if context.hasChanges {
             try? context.save()
         }
-
-        programManager.programs = []
-        programManager.customPrograms = []
-        programManager.dayPrograms = [:]
     }
 
     private func deleteCustomExercises() {

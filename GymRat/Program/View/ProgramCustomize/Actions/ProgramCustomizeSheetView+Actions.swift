@@ -43,10 +43,27 @@ extension ProgramCustomizeSheetView {
             return
         }
         selectedExercises.append(ProgramExercise(exercise: exercise, sharedHistory: sharedHistory))
+        
+        if sharedHistory {
+            allPrograms
+                .filter { $0.id != program.id }
+                .flatMap { $0.exercises }
+                .filter { $0.exercise.id == exercise.id }
+                .forEach { $0.sharedHistory = true }
+            
+            if context.hasChanges {
+                try? context.save()
+            }
+        }
+        
         pendingSeed = nil
     }
 
     func saveProgram() {
+        if mode == .create && selectedWeekdays.isEmpty {
+            showWeekdaysRequiredAlert = true
+            return
+        }
         guard !isSaving else { return }
         isSaving = true
 

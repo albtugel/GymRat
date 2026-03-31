@@ -9,6 +9,12 @@ extension ProgramTableExerciseRowView {
                 Text(programExercise.exercise.name)
                     .font(.headline)
 
+                if programExercise.sharedHistory {
+                    Image(systemName: "link.circle.fill")
+                        .foregroundColor(themeManager.accentColor)
+                        .font(.system(size: 16))
+                }
+
                 Spacer()
 
                 if programExercise.selectionIndex > 0 {
@@ -16,11 +22,15 @@ extension ProgramTableExerciseRowView {
                         Circle()
                             .fill(themeManager.accentColor)
                         Text("\(programExercise.selectionIndex)")
-                            .font(.caption2)
-                            .bold()
+                            .font(.system(size: 16))
+                            .fontWeight(.semibold)
                             .foregroundColor(.white)
                     }
                     .frame(width: 22, height: 22)
+                }
+
+                if let seed, seed.exerciseDBKey != nil {
+                    ExerciseTechniqueButton(seed: seed)
                 }
             }
 
@@ -47,7 +57,7 @@ extension ProgramTableExerciseRowView {
                                 durationKeyboard: .default,
                                 durationFont: durationFont,
                                 showsDuration: showsDuration,
-                                showsWeight: !isCardio,
+                                showsWeight: showsWeight,
                                 boxWidth: statBoxWidth,
                                 currentReps: repsBinding(index: index),
                                 currentWeight: weightBinding(index: index),

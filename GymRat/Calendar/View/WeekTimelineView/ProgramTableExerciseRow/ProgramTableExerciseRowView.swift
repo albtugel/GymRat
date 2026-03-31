@@ -51,8 +51,28 @@ struct ProgramTableExerciseRowView: View {
         return min(10, max(1, parsed))
     }
 
+    var seed: ExerciseStore.ExerciseSeed? {
+        ExerciseStore.shared.seeds.first { $0.name == programExercise.exercise.name }
+    }
+
+    var inputType: ExerciseInputType {
+        seed?.inputType ?? (isCardio ? .cardioDistance : .strength)
+    }
+
     var isCardio: Bool {
         programExercise.exercise.category == .cardio
+    }
+
+    var showsDuration: Bool {
+        inputType == .cardioDistance || inputType == .cardioJump || inputType == .timed
+    }
+
+    var showsWeight: Bool {
+        inputType == .strength || inputType == .timed
+    }
+
+    var showsReps: Bool {
+        inputType != .timed
     }
 
     var weightPlaceholder: String {
@@ -60,11 +80,7 @@ struct ProgramTableExerciseRowView: View {
     }
 
     var weightKeyboard: UIKeyboardType {
-        isCardio ? .numberPad : .decimalPad
-    }
-
-    var showsDuration: Bool {
-        isCardio
+        inputType == .strength ? .decimalPad : .numberPad
     }
 
     var durationPlaceholder: String {
@@ -72,11 +88,11 @@ struct ProgramTableExerciseRowView: View {
     }
 
     var durationKeyboard: UIKeyboardType {
-        isCardio ? .numbersAndPunctuation : .numberPad
+        .numbersAndPunctuation
     }
 
     var durationFont: Font {
-        isCardio ? .caption2 : .subheadline
+        inputType == .strength ? .subheadline : .caption2
     }
 
     var statBoxWidth: CGFloat {
@@ -84,10 +100,18 @@ struct ProgramTableExerciseRowView: View {
     }
 
     var repsPlaceholder: String {
-        isCardio ? unitsManager.currentDistanceUnit.label : String(localized: "reps_label")
+        switch inputType {
+        case .strength: return String(localized: "reps_label")
+        case .cardioDistance: return unitsManager.currentDistanceUnit.label
+        case .cardioJump: return String(localized: "jumps_label")
+        case .timed: return String(localized: "reps_label")
+        }
     }
 
     var setsTitle: String {
-        isCardio ? String(localized: "rounds_label") : String(localized: "sets_label")
+        switch inputType {
+        case .strength, .timed: return String(localized: "sets_label")
+        case .cardioDistance, .cardioJump: return String(localized: "rounds_label")
+        }
     }
 }

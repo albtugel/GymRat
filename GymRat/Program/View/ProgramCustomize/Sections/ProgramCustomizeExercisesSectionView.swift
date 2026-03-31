@@ -3,6 +3,7 @@ import SwiftData
 
 struct ProgramCustomizeExercisesSectionView: View {
     let exerciseSeeds: [ExerciseStore.ExerciseSeed]
+    let programType: ProgramType
     @Binding var selectedExercises: [ProgramExercise]
     let isEditing: Bool
     let onToggle: (ExerciseStore.ExerciseSeed) -> Void
@@ -14,10 +15,19 @@ struct ProgramCustomizeExercisesSectionView: View {
     @State private var newExerciseName = ""
     @State private var newExerciseCategory: ExerciseCategory = .strength
 
+    private var showsMuscleFilter: Bool {
+        switch programType {
+        case .strength, .crossfit:
+            return true
+        case .cardio:
+            return false
+        }
+    }
+
     var filteredSeeds: [ExerciseStore.ExerciseSeed] {
         var seeds = exerciseSeeds
 
-        if !selectedMuscles.isEmpty {
+        if showsMuscleFilter, !selectedMuscles.isEmpty {
             seeds = seeds.filter { seed in
                 !selectedMuscles.isDisjoint(with: seed.muscles)
             }
@@ -55,33 +65,35 @@ struct ProgramCustomizeExercisesSectionView: View {
                 }
             }
 
-            // Muscle group filter
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 8) {
-                    ForEach(MuscleGroup.allCases) { muscle in
-                        Button {
-                            withAnimation {
-                                if selectedMuscles.contains(muscle) {
-                                    selectedMuscles.remove(muscle)
-                                } else {
-                                    selectedMuscles.insert(muscle)
+            // Muscle group filter (hidden for cardio)
+            if showsMuscleFilter {
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(spacing: 8) {
+                        ForEach(MuscleGroup.allCases) { muscle in
+                            Button {
+                                withAnimation {
+                                    if selectedMuscles.contains(muscle) {
+                                        selectedMuscles.remove(muscle)
+                                    } else {
+                                        selectedMuscles.insert(muscle)
+                                    }
                                 }
+                            } label: {
+                                Text(muscle.localizedLabel)
+                                    .font(.caption)
+                                    .padding(.horizontal, 12)
+                                    .padding(.vertical, 6)
+                                    .background(selectedMuscles.contains(muscle) ? Color.accentColor : Color(.systemGray5))
+                                    .foregroundColor(selectedMuscles.contains(muscle) ? .white : .primary)
+                                    .cornerRadius(20)
                             }
-                        } label: {
-                            Text(muscle.localizedLabel)
-                                .font(.caption)
-                                .padding(.horizontal, 12)
-                                .padding(.vertical, 6)
-                                .background(selectedMuscles.contains(muscle) ? Color.accentColor : Color(.systemGray5))
-                                .foregroundColor(selectedMuscles.contains(muscle) ? .white : .primary)
-                                .cornerRadius(20)
+                            .buttonStyle(.plain)
                         }
-                        .buttonStyle(.plain)
                     }
+                    .padding(.vertical, 4)
                 }
-                .padding(.vertical, 4)
+                .listRowInsets(EdgeInsets(top: 4, leading: 16, bottom: 4, trailing: 16))
             }
-            .listRowInsets(EdgeInsets(top: 4, leading: 16, bottom: 4, trailing: 16))
 
             ForEach(filteredSeeds, id: \.name) { seed in
                 let selectedIndex = selectedExercises.firstIndex(where: { $0.exercise.name == seed.name })
@@ -106,7 +118,7 @@ struct ProgramCustomizeExercisesSectionView: View {
                 }
                 .foregroundColor(.accentColor)
             }
-            .alert("create_exercise_title", isPresented: $showCreateAlert) {
+            .alert(LocalizedStringKey(AppAlerts.CreateExercise.title), isPresented: $showCreateAlert) {
                 TextField("exercise_name_placeholder", text: $newExerciseName)
                     .autocorrectionDisabled()
                 Picker("", selection: $newExerciseCategory) {
@@ -125,7 +137,7 @@ struct ProgramCustomizeExercisesSectionView: View {
                     newExerciseName = ""
                 }
             } message: {
-                Text("create_exercise_message")
+                Text(LocalizedStringKey(AppAlerts.CreateExercise.message))
             }
         }
         .animation(.easeInOut(duration: 0.25), value: selectedExercises.map(\.id))

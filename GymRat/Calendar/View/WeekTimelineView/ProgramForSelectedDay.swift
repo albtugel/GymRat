@@ -14,6 +14,14 @@ struct ProgramForSelectedDayView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 12) {
+                HStack(spacing: 6) {
+                    Text(selectedDate.dayShortName)
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                    Text(selectedDate.dayNumberString)
+                        .font(.headline)
+                }
+
                 ForEach(dayPrograms) { program in
                     ProgramTableView(program: program, selectedDate: selectedDate)
                         .onDrag {
@@ -46,7 +54,16 @@ struct ProgramForSelectedDayView: View {
                 }
                 .padding(.top, 8)
             }
-            .padding(.vertical, 2)
+            .padding(12)
+            .background(
+                RoundedRectangle(cornerRadius: 16)
+                    .fill(Color(.secondarySystemBackground))
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: 16)
+                    .stroke(themeManager.accentColor, lineWidth: 1.5)
+            )
+            .padding(.vertical, 8)
             .padding(.horizontal, 16)
             .frame(maxWidth: .infinity, alignment: .leading)
         }

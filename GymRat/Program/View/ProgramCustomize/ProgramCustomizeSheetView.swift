@@ -68,7 +68,7 @@ struct ProgramCustomizeSheetView: View {
                     onCreateCustom: createCustomExercise
                 )
             }
-            .safeAreaPadding(.bottom, 90)
+            .safeAreaPadding(.bottom, 50)
             .navigationTitle(program.type.title)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {

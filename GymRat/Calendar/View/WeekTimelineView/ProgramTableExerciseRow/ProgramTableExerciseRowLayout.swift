@@ -22,7 +22,7 @@ extension ProgramTableExerciseRowView {
                         Circle()
                             .fill(themeManager.accentColor)
                         Text("\(programExercise.selectionIndex)")
-                            .font(.system(size: 16))
+                            .font(.system(size: 14))
                             .fontWeight(.semibold)
                             .foregroundColor(.white)
                     }

@@ -7,23 +7,21 @@ struct ProgramForSelectedDayView: View {
 
     @EnvironmentObject private var programManager: ProgramManager
     @EnvironmentObject private var themeManager: ThemeManager
+    @Environment(\.modelContext) private var context
     let onAddProgramTap: () -> Void
     @State private var dayPrograms: [ProgramModel] = []
     @State private var draggingProgram: ProgramModel?
+    @State private var editingProgram: ProgramModel?
 
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 12) {
-                HStack(spacing: 6) {
-                    Text(selectedDate.dayShortName)
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                    Text(selectedDate.dayNumberString)
-                        .font(.headline)
-                }
-
                 ForEach(dayPrograms) { program in
-                    ProgramTableView(program: program, selectedDate: selectedDate)
+                    ProgramTableView(
+                        program: program,
+                        selectedDate: selectedDate,
+                        onEdit: { editingProgram = $0 }
+                    )
                         .onDrag {
                             draggingProgram = program
                             return NSItemProvider(item: Data() as NSData, typeIdentifier: UTType.data.identifier)
@@ -52,23 +50,36 @@ struct ProgramForSelectedDayView: View {
                     }
                     Spacer()
                 }
-                .padding(.top, 8)
             }
-            .padding(12)
-            .background(
-                RoundedRectangle(cornerRadius: 16)
-                    .fill(Color(.secondarySystemBackground))
-            )
-            .overlay(
-                RoundedRectangle(cornerRadius: 16)
-                    .stroke(themeManager.accentColor, lineWidth: 1.5)
-            )
-            .padding(.vertical, 8)
+            .padding(.vertical, dayPrograms.isEmpty ? 10 : 12)
             .padding(.horizontal, 16)
             .frame(maxWidth: .infinity, alignment: .leading)
+            .background(Color(.secondarySystemBackground))
+            .overlay(
+                VStack(spacing: 0) {
+                    Rectangle()
+                        .fill(themeManager.accentColor)
+                        .frame(height: 2)
+                    Spacer()
+                    Rectangle()
+                        .fill(themeManager.accentColor)
+                        .frame(height: 2)
+                }
+            )
+            .padding(.vertical, 8)
         }
         .scrollIndicators(.hidden)
         .frame(maxWidth: .infinity)
+        .sheet(item: $editingProgram) { program in
+            ProgramCustomizeSheetView(
+                mode: .edit,
+                program: program
+            )
+            .environmentObject(programManager)
+            .environmentObject(themeManager)
+            .accentColor(themeManager.accentColor)
+            .environment(\.modelContext, context)
+        }
         .onAppear(perform: reloadPrograms)
         .onChange(of: selectedDate) { _, _ in
             reloadPrograms()

@@ -4,6 +4,7 @@ import UniformTypeIdentifiers
 struct ProgramTableView: View {
     let program: ProgramModel
     let selectedDate: Date
+    let onEdit: ((ProgramModel) -> Void)?
 
     @State private var draggingExercise: ProgramExercise?
     @FocusState private var focusedField: ProgramTableFocusField?
@@ -18,7 +19,9 @@ struct ProgramTableView: View {
 
     var body: some View {
         VStack(spacing: 8) {
-            ProgramTableTitleCard(name: program.name)
+            ProgramTableTitleCard(name: program.name, onEdit: {
+                onEdit?(program)
+            })
 
             ForEach(program.exercises) { exercise in
                 ProgramTableExerciseRowView(

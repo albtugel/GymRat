@@ -1,10 +1,3 @@
-//
-//  AppTheme.swift
-//  GymRat
-//
-//  Created by Alik on 1/11/26.
-//
-
 import SwiftUI
 
 enum AppTheme: String, CaseIterable, Identifiable {

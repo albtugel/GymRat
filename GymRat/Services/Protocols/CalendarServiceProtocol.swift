@@ -1,5 +1,6 @@
 import Foundation
 
+@MainActor
 protocol CalendarServiceProtocol {
     func requestAccess() async throws -> Bool
     func fetchEvents(start: Date, end: Date) async throws -> [TimelineItem]

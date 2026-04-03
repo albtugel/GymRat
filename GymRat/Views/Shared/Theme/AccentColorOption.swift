@@ -1,10 +1,3 @@
-//
-//  AccentColor.swift
-//  GymRat
-//
-//  Created by Alik on 1/11/26.
-//
-
 import SwiftUI
 
 enum AccentColorOption: String, CaseIterable, Identifiable {
@@ -23,5 +16,4 @@ enum AccentColorOption: String, CaseIterable, Identifiable {
 
     var title: String { rawValue.capitalized }
 }
-
 

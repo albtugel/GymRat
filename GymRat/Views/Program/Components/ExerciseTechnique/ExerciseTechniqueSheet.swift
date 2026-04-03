@@ -1,87 +1,24 @@
-//
-//  ExerciseTechniqueSheet.swift
-//  GymRat
-//
-//  Created by Alik on 3/29/26.
-//
-
 import SwiftUI
 
 struct ExerciseTechniqueSheet: View {
-    let seed: ExerciseStore.ExerciseSeed
-    @Environment(\.dismiss) var dismiss
+    @Environment(\.dismiss) private var dismiss
+    @State private var viewModel: ExerciseTechniqueViewModel
 
-    private func imageURL(_ index: Int) -> URL? {
-        guard let key = seed.exerciseDBKey else { return nil }
-        let base = "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises"
-        return URL(string: "\(base)/\(key)/\(index).jpg")
+    init(seed: ExerciseStore.ExerciseSeed) {
+        _viewModel = State(initialValue: ExerciseTechniqueViewModel(seed: seed))
     }
 
     var body: some View {
         NavigationStack {
             ScrollView {
-                VStack(spacing: 20) {
-                    if seed.exerciseDBKey != nil {
-                        // Две картинки
-                        VStack(spacing: 12) {
-                            AsyncImage(url: imageURL(0)) { image in
-                                image
-                                    .resizable()
-                                    .scaledToFit()
-                                    .cornerRadius(12)
-                            } placeholder: {
-                                RoundedRectangle(cornerRadius: 12)
-                                    .fill(Color(.systemGray5))
-                                    .overlay(ProgressView())
-                            }
-
-                            AsyncImage(url: imageURL(1)) { image in
-                                image
-                                    .resizable()
-                                    .scaledToFit()
-                                    .cornerRadius(12)
-                            } placeholder: {
-                                RoundedRectangle(cornerRadius: 12)
-                                    .fill(Color(.systemGray5))
-                                    .overlay(ProgressView())
-                            }
-                        }
-                        .padding(.horizontal)
-                    } else {
-                        // Нет картинок — показываем иконку
-                        RoundedRectangle(cornerRadius: 12)
-                            .fill(Color(.systemGray5))
-                            .frame(height: 200)
-                            .overlay(
-                                Image(systemName: "figure.run")
-                                    .font(.system(size: 60))
-                                    .foregroundColor(.secondary)
-                            )
-                            .padding(.horizontal)
-                    }
-
-                    // Мышцы
-                    VStack(alignment: .leading, spacing: 8) {
-                        Text("muscles_section")
-                            .font(.headline)
-                        HStack(spacing: 8) {
-                            ForEach(seed.muscles, id: \.self) { muscle in
-                                Text(MuscleGroupDisplay.localizedLabel(for: muscle))
-                                    .font(.caption)
-                                    .padding(.horizontal, 12)
-                                    .padding(.vertical, 6)
-                                    .background(Color.accentColor.opacity(0.15))
-                                    .foregroundColor(.accentColor)
-                                    .cornerRadius(20)
-                            }
-                        }
-                    }
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(.horizontal)
-                }
-                .padding(.vertical)
+                ExerciseTechniqueContentView(
+                    imageURLs: viewModel.imageURLs,
+                    placeholderSystemName: viewModel.placeholderSystemName,
+                    musclesTitle: viewModel.musclesTitle,
+                    muscleLabels: viewModel.muscleLabels
+                )
             }
-            .navigationTitle(seed.name)
+            .navigationTitle(viewModel.title)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {

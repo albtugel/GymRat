@@ -1,10 +1,3 @@
-//
-//  ExerciseTechniqueButton.swift
-//  GymRat
-//
-//  Created by Alik on 3/29/26.
-//
-
 import SwiftUI
 
 struct ExerciseTechniqueButton: View {

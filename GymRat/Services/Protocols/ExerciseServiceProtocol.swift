@@ -1,5 +1,6 @@
 import Foundation
 
+@MainActor
 protocol ExerciseServiceProtocol {
     func fetchExercises() async throws -> [ExerciseModel]
     func fetchExercise(named name: String) async throws -> ExerciseModel?

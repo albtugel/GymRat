@@ -17,7 +17,9 @@ final class ExerciseService: ExerciseServiceProtocol {
     }
 
     func fetchExercise(named name: String) async throws -> ExerciseModel? {
-        let descriptor = FetchDescriptor<ExerciseModel>(predicate: #Predicate<ExerciseModel> { $0.name == name })
+        let descriptor = FetchDescriptor<ExerciseModel>(
+            predicate: #Predicate<ExerciseModel> { $0.name == name }
+        )
         return try modelContext.fetch(descriptor).first
     }
 
@@ -45,7 +47,9 @@ final class ExerciseService: ExerciseServiceProtocol {
     }
 
     func deleteCustomExercises() async throws {
-        let descriptor = FetchDescriptor<ExerciseModel>(predicate: #Predicate<ExerciseModel> { $0.isCustom == true })
+        let descriptor = FetchDescriptor<ExerciseModel>(
+            predicate: #Predicate<ExerciseModel> { $0.isCustom == true }
+        )
         let items = try modelContext.fetch(descriptor)
         items.forEach { modelContext.delete($0) }
         if modelContext.hasChanges {

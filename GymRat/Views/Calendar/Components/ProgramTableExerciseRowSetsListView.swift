@@ -33,6 +33,7 @@ struct ProgramTableExerciseRowSetsListView: View {
             VStack(spacing: rowSpacing) {
                 ForEach(0..<viewModel.setsCount, id: \.self) { index in
                     SetRowView(
+                        columns: viewModel.setRowColumns,
                         index: index,
                         previousReps: viewModel.previousRepsText(at: index),
                         previousWeight: viewModel.previousWeightText(at: index),
@@ -43,8 +44,6 @@ struct ProgramTableExerciseRowSetsListView: View {
                         durationPlaceholder: viewModel.durationPlaceholder,
                         durationKeyboard: durationKeyboard,
                         durationFont: durationFont,
-                        showsDuration: viewModel.showsDuration,
-                        showsWeight: viewModel.showsWeight,
                         boxWidth: statBoxWidth,
                         currentReps: repsBinding(index: index),
                         currentWeight: weightBinding(index: index),

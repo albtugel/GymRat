@@ -94,6 +94,10 @@ final class AppDependencies {
         )
     }
 
+    func makeSettingsViewModel() -> SettingsViewModel {
+        SettingsViewModel(dataResetService: dataResetService)
+    }
+
     private static func makeStoreURL() -> URL {
         let fileManager = FileManager.default
         guard let appSupport = fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask).first else {

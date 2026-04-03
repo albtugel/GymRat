@@ -1,5 +1,6 @@
 import Foundation
 
+@MainActor
 protocol ProgramAssignmentServiceProtocol {
     func fetchAssignments() async throws -> [ProgramAssignment]
     func insertAssignments(_ assignments: [ProgramAssignment]) async throws

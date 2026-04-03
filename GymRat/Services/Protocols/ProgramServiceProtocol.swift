@@ -1,5 +1,6 @@
 import Foundation
 
+@MainActor
 protocol ProgramServiceProtocol {
     func fetchPrograms() async throws -> [Program]
     func saveProgram(_ program: Program) async throws

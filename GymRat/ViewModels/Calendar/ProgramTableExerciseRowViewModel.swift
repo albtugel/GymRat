@@ -90,6 +90,35 @@ final class ProgramTableExerciseRowViewModel {
         inputType != .timed
     }
 
+    enum SetRowColumn: String, Identifiable {
+        case previousReps
+        case previousWeight
+        case previousDuration
+        case currentReps
+        case currentWeight
+        case currentDuration
+
+        var id: String { rawValue }
+    }
+
+    var setRowColumns: [SetRowColumn] {
+        var columns: [SetRowColumn] = [.previousReps]
+        if showsWeight {
+            columns.append(.previousWeight)
+        }
+        if showsDuration {
+            columns.append(.previousDuration)
+        }
+        columns.append(.currentReps)
+        if showsWeight {
+            columns.append(.currentWeight)
+        }
+        if showsDuration {
+            columns.append(.currentDuration)
+        }
+        return columns
+    }
+
     var weightPlaceholder: String {
         unitsManager.currentWeightUnit.label
     }

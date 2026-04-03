@@ -43,6 +43,17 @@ final class TimelineViewModel {
     }
 
     // MARK: - Helpers
+    static func makeItemColor(for item: TimelineItem) -> TimelineItemColor {
+        switch TimelineItemMapper.type(for: item) {
+        case .workout:
+            return .workout
+        case .personal:
+            return .personal
+        case .externalCalendar:
+            return .externalCalendar
+        }
+    }
+
     private func insertItem(_ item: TimelineItem) async {
         do {
             try await timelineService.insertItem(item)

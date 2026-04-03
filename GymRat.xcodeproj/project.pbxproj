@@ -30,11 +30,10 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		44DE8F222F0E6CEC008AC986 /* Exceptions for "GymRat" folder in "GymRat" target */ = {
+		445DF4012F7F8C8A0002750A /* Exceptions for "GymRat" folder in "GymRat" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				Info.plist,
-				"Preview Content/Preview Assets.xcassets",
+				Resources/Info.plist,
 			);
 			target = 44DE8EFB2F0E6CEB008AC986 /* GymRat */;
 		};
@@ -44,7 +43,7 @@
 		44DE8EFE2F0E6CEB008AC986 /* GymRat */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				44DE8F222F0E6CEC008AC986 /* Exceptions for "GymRat" folder in "GymRat" target */,
+				445DF4012F7F8C8A0002750A /* Exceptions for "GymRat" folder in "GymRat" target */,
 			);
 			path = GymRat;
 			sourceTree = "<group>";
@@ -296,12 +295,12 @@
 				CODE_SIGN_ENTITLEMENTS = GymRat/GymRat.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"GymRat/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"GymRat/Resources/Preview Content\"";
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = GymRat/Info.plist;
+				INFOPLIST_FILE = GymRat/Resources/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = GymRat;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.sports";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -331,12 +330,12 @@
 				CODE_SIGN_ENTITLEMENTS = GymRat/GymRat.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"GymRat/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"GymRat/Resources/Preview Content\"";
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = GymRat/Info.plist;
+				INFOPLIST_FILE = GymRat/Resources/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = GymRat;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.sports";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;

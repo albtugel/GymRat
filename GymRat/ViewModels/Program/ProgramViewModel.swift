@@ -113,14 +113,15 @@ final class ProgramViewModel {
 
     func deleteProgram(_ program: Program) async {
         do {
+            let programID = program.id
             try await programService.deleteProgram(program)
-            programs.removeAll { $0.id == program.id }
-            customPrograms.removeAll { $0.id == program.id }
+            programs.removeAll { $0.id == programID }
+            customPrograms.removeAll { $0.id == programID }
 
-            try await assignmentService.deleteAssignments(forProgramId: program.id)
+            try await assignmentService.deleteAssignments(forProgramId: programID)
 
             for key in dayPrograms.keys {
-                dayPrograms[key]?.removeAll { $0.id == program.id }
+                dayPrograms[key]?.removeAll { $0.id == programID }
             }
         } catch {
             errorMessage = error.localizedDescription

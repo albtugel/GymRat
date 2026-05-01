@@ -24,6 +24,9 @@ struct GymRatApp: App {
                 .environment(programViewModel)
                 .preferredColorScheme(themeManager.selectedTheme.colorScheme)
                 .tint(themeManager.accentColor)
+                .task {
+                    ExerciseStore.shared.prefetchAllIcons()
+                }
         }
         .modelContainer(dependencies.modelContainer)
     }

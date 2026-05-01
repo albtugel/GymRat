@@ -17,13 +17,9 @@ final class ExerciseTechniqueViewModel {
         self.title = seed.name
         self.musclesTitle = String(localized: "muscles_section")
         self.placeholderSystemName = "figure.run"
-        self.imageURLs = ExerciseTechniqueViewModel.makeImageURLs(for: seed)
+        
+        self.imageURLs = seed.imageURLs
+        
         self.muscleLabels = seed.muscles.map { MuscleGroupDisplay.localizedLabel(for: $0) }
-    }
-
-    private static func makeImageURLs(for seed: ExerciseStore.ExerciseSeed) -> [URL] {
-        guard let key = seed.exerciseDBKey else { return [] }
-        let base = "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises"
-        return [0, 1].compactMap { URL(string: "\(base)/\(key)/\($0).jpg") }
     }
 }

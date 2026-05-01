@@ -1,4 +1,5 @@
 import Foundation
+import Kingfisher
 
 final class ExerciseStore {
     static let shared = ExerciseStore()
@@ -9,7 +10,21 @@ final class ExerciseStore {
         let muscles: [MuscleGroup]
         let exerciseDBKey: String?
         let inputType: ExerciseInputType
-    }
+        
+        private static let baseImageURL = "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises"
+
+                var imageURLs: [URL] {
+                    guard let key = exerciseDBKey else { return [] }
+
+                    return ["0", "1"].compactMap {
+                        URL(string: "\(Self.baseImageURL)/\(key)/\($0).jpg")
+                    }
+                }
+
+                var iconURL: URL? {
+                    imageURLs.first
+                }
+            }
 
     let seeds: [ExerciseSeed] = [
 
@@ -33,7 +48,7 @@ final class ExerciseStore {
         ExerciseSeed(name: String(localized: "exercise_cable_pull_through"), category: .strength, muscles: [.glutes, .legs], exerciseDBKey: "Cable_Pull_Through", inputType: .strength),
 
         // MARK: - Strength / Chest
-        ExerciseSeed(name: String(localized: "exercise_bench_press"), category: .strength, muscles: [.chest, .triceps, .shoulders], exerciseDBKey: "Barbell_Bench_Press", inputType: .strength),
+        ExerciseSeed(name: String(localized: "exercise_bench_press"), category: .strength, muscles: [.chest, .triceps, .shoulders], exerciseDBKey: "Barbell_Guillotine_Bench_Press", inputType: .strength),
         ExerciseSeed(name: String(localized: "exercise_incline_bench_press"), category: .strength, muscles: [.chest, .shoulders, .triceps], exerciseDBKey: "Barbell_Incline_Bench_Press", inputType: .strength),
         ExerciseSeed(name: String(localized: "exercise_decline_bench_press"), category: .strength, muscles: [.chest, .triceps], exerciseDBKey: "Barbell_Decline_Bench_Press", inputType: .strength),
         ExerciseSeed(name: String(localized: "exercise_dumbbell_bench_press"), category: .strength, muscles: [.chest, .triceps, .shoulders], exerciseDBKey: "Dumbbell_Bench_Press", inputType: .strength),
@@ -96,4 +111,10 @@ final class ExerciseStore {
         ExerciseSeed(name: String(localized: "exercise_elliptical"), category: .cardio, muscles: [.legs, .glutes], exerciseDBKey: nil, inputType: .cardioDistance),
         ExerciseSeed(name: String(localized: "exercise_stair_climber"), category: .cardio, muscles: [.legs, .glutes, .calves], exerciseDBKey: nil, inputType: .cardioDistance),
     ]
+    
+    func prefetchAllIcons() {
+            let urls = seeds.compactMap { $0.iconURL }
+            let prefetcher = ImagePrefetcher(resources: urls)
+            prefetcher.start()
+        }
 }

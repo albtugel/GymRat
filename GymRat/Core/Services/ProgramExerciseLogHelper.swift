@@ -1,6 +1,6 @@
 import Foundation
 
-enum ProgramExerciseLogHelper {
+enum ExerciseLogHelper {
     static func startOfDay(for date: Date) -> Date {
         AppCalendar.calendar.startOfDay(for: date)
     }

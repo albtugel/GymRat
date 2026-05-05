@@ -1,11 +1,11 @@
 import SwiftUI
 
 struct SettingsView: View {
-    @Environment(ThemeManager.self) private var themeManager
+    @Environment(ThemeStore.self) private var themeStore
     @Environment(ProgramViewModel.self) private var programViewModel
-    @Environment(UnitsManager.self) private var unitsManager
+    @Environment(Units.self) private var units
     @State private var viewModel: SettingsViewModel
-    @State private var selectedProgram: ProgramModel?
+    @State private var selectedProgram: Program?
     @State private var showResetAlert = false
     @State private var showProgramSheet = false
     init(viewModel: SettingsViewModel) {
@@ -13,15 +13,15 @@ struct SettingsView: View {
     }
 
     var body: some View {
-        @Bindable var themeManager = themeManager
-        @Bindable var unitsManager = unitsManager
+        @Bindable var themeStore = themeStore
+        @Bindable var units = units
         List {
-            SettingsAppearanceSectionView(
-                selectedTheme: $themeManager.selectedTheme,
-                accentColor: $themeManager.accentColor
+            AppearanceSection(
+                selectedTheme: $themeStore.selectedTheme,
+                accentColor: $themeStore.accentColor
             )
 
-            SettingsProgramsSectionView(
+            ProgramsSection(
                 programs: programViewModel.customPrograms,
                 hasPrograms: programViewModel.hasCustomPrograms,
                 onSelect: { selectedProgram = $0 },
@@ -33,12 +33,12 @@ struct SettingsView: View {
                 onAdd: { showProgramSheet = true }
             )
 
-            SettingsUnitsSectionView(
-                weightUnit: $unitsManager.weightUnit,
-                distanceUnit: $unitsManager.distanceUnit
+            UnitsSection(
+                weightUnit: $units.weightUnit,
+                distanceUnit: $units.distanceUnit
             )
 
-            SettingsAboutSectionView(
+            AboutSection(
                 appVersion: viewModel.appVersion,
                 developerHandle: viewModel.developerHandle,
                 supportEmailURL: viewModel.supportEmailURL,
@@ -47,34 +47,34 @@ struct SettingsView: View {
                 exerciseDBURL: viewModel.exerciseDBURL
             )
 
-            SettingsDataSectionView(onReset: { showResetAlert = true })
+            DataSection(onReset: { showResetAlert = true })
         }
         .navigationTitle("settings_title")
         .sheet(item: $selectedProgram) { program in
-            ProgramCustomizeSheetView(
-                viewModel: ProgramCustomizeViewModelFactory.make(
+            ProgramEditorView(
+                viewModel: ProgramEditorFactory.make(
                     mode: .edit,
                     program: program,
                     programViewModel: programViewModel
                 )
             )
-            .environment(themeManager)
-            .accentColor(themeManager.accentColor)
+            .environment(themeStore)
+            .accentColor(themeStore.accentColor)
         }
-        .alert(LocalizedStringKey(AppAlerts.ResetData.title), isPresented: $showResetAlert) {
+        .alert(LocalizedStringKey(Alerts.ResetData.title), isPresented: $showResetAlert) {
             Button("reset_button", role: .destructive) {
                 Task { await viewModel.resetAllData(programViewModel: programViewModel) }
                 selectedProgram = nil
             }
             Button("cancel_button", role: .cancel) { }
         } message: {
-            Text(LocalizedStringKey(AppAlerts.ResetData.message))
+            Text(LocalizedStringKey(Alerts.ResetData.message))
         }
         .sheet(isPresented: $showProgramSheet) {
-            ProgramSelectionView(selectedDate: .constant(Date()))
+            ProgramPickerView(selectedDate: .constant(Date()))
                 .environment(programViewModel)
-                .environment(themeManager)
-                .accentColor(themeManager.accentColor)
+                .environment(themeStore)
+                .accentColor(themeStore.accentColor)
         }
     }
 }

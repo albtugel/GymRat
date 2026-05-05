@@ -1,7 +1,7 @@
 import Foundation
 
-enum ProgramWeekDayHelper {
-    static func calendarNumber(for day: ProgramWeekDay) -> Int {
+enum ProgramWeekdayHelper {
+    static func calendarNumber(for day: ProgramWeekday) -> Int {
         switch day {
         case .monday: return 1
         case .tuesday: return 2
@@ -13,11 +13,11 @@ enum ProgramWeekDayHelper {
         }
     }
 
-    static func systemWeekdayNumber(for day: ProgramWeekDay) -> Int {
+    static func systemWeekdayNumber(for day: ProgramWeekday) -> Int {
         (calendarNumber(for: day) % 7) + 1
     }
 
-    static func from(calendarNumber: Int) -> ProgramWeekDay? {
+    static func from(calendarNumber: Int) -> ProgramWeekday? {
         switch calendarNumber {
         case 1: return .monday
         case 2: return .tuesday
@@ -30,13 +30,13 @@ enum ProgramWeekDayHelper {
         }
     }
 
-    static func from(date: Date) -> ProgramWeekDay? {
+    static func from(date: Date) -> ProgramWeekday? {
         let weekday = AppCalendar.calendar.component(.weekday, from: date)
         let internalNumber = weekday == 1 ? 7 : weekday - 1
         return from(calendarNumber: internalNumber)
     }
 
-    static func localizedTitle(for day: ProgramWeekDay) -> String {
+    static func localizedTitle(for day: ProgramWeekday) -> String {
         switch day {
         case .monday: return String(localized: "weekday_monday")
         case .tuesday: return String(localized: "weekday_tuesday")
@@ -48,7 +48,7 @@ enum ProgramWeekDayHelper {
         }
     }
 
-    static func localizedShortTitle(for day: ProgramWeekDay) -> String {
+    static func localizedShortTitle(for day: ProgramWeekday) -> String {
         switch day {
         case .monday: return String(localized: "weekday_mon_short")
         case .tuesday: return String(localized: "weekday_tue_short")

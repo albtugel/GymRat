@@ -2,7 +2,7 @@ import Foundation
 import SwiftData
 
 @MainActor
-final class DataResetService: DataResetServiceProtocol {
+final class DataResetService: DataResetServiceType {
     private let modelContext: ModelContext
 
     init(modelContext: ModelContext) {
@@ -10,12 +10,12 @@ final class DataResetService: DataResetServiceProtocol {
     }
 
     func resetAllData() async throws {
-        try deleteAll(ProgramExerciseLog.self)
-        try deleteAll(ProgramAssignment.self)
-        try deleteAll(DayProgramModel.self)
-        try deleteAll(TimelineItem.self)
-        try deleteAll(ProgramExercise.self)
-        try deleteAll(ProgramModel.self)
+        try deleteAll(ExerciseLog.self)
+        try deleteAll(ScheduleItem.self)
+        try deleteAll(DayProgram.self)
+        try deleteAll(Event.self)
+        try deleteAll(WorkoutExercise.self)
+        try deleteAll(Program.self)
 
         if modelContext.hasChanges {
             try modelContext.save()

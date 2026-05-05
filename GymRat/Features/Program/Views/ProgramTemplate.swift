@@ -13,15 +13,15 @@ struct ProgramTemplate: Identifiable {
 
     static let templates: [ProgramTemplate] = [
         ProgramTemplate(
-            name: ProgramTypeDisplay.title(for: .strength),
+            name: ProgramTypeText.title(for: .strength),
             typeRaw: ProgramType.strength.rawValue
         ),
         ProgramTemplate(
-            name: ProgramTypeDisplay.title(for: .cardio),
+            name: ProgramTypeText.title(for: .cardio),
             typeRaw: ProgramType.cardio.rawValue
         ),
         ProgramTemplate(
-            name: ProgramTypeDisplay.title(for: .crossfit),
+            name: ProgramTypeText.title(for: .crossfit),
             typeRaw: ProgramType.crossfit.rawValue
         )
     ]

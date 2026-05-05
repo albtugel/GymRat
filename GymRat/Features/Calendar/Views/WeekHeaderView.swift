@@ -1,11 +1,11 @@
 import SwiftUI
 
 struct WeekHeaderView: View {
-    @Environment(ThemeManager.self) private var themeManager
-    private let viewModel: WeekTimelineViewModel
+    @Environment(ThemeStore.self) private var themeStore
+    private let viewModel: WeekViewModel
     private let onMonthTap: () -> Void
 
-    init(viewModel: WeekTimelineViewModel, onMonthTap: @escaping () -> Void) {
+    init(viewModel: WeekViewModel, onMonthTap: @escaping () -> Void) {
         self.viewModel = viewModel
         self.onMonthTap = onMonthTap
     }
@@ -13,16 +13,16 @@ struct WeekHeaderView: View {
     // MARK: - Body
     var body: some View {
         VStack(spacing: 8) {
-            WeekHeaderMonthButtonView(
+            MonthButton(
                 title: viewModel.weekHeaderTitle,
                 onTap: onMonthTap
             )
 
-            WeekHeaderDaysRowView(
+            WeekDaysRow(
                 days: viewModel.weekDays,
-                accentColor: themeManager.accentColor,
+                accentColor: themeStore.accentColor,
                 onSelect: { viewModel.selectDate($0) },
-                onChangeWeek: { viewModel.changeWeek(by: $0) }
+                onChangeWeek: { viewModel.moveWeek(by: $0) }
             )
         }
     }

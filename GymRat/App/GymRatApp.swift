@@ -4,28 +4,28 @@ import SwiftData
 @main
 struct GymRatApp: App {
 
-    @State private var themeManager: ThemeManager
+    @State private var themeStore: ThemeStore
     @State private var programViewModel: ProgramViewModel
-    @State private var unitsManager: UnitsManager
-    private let dependencies: AppDependencies
+    @State private var units: Units
+    private let dependencies: Dependencies
 
     init() {
-        dependencies = AppDependencies.shared
-        _themeManager = State(initialValue: dependencies.themeManager)
-        _unitsManager = State(initialValue: dependencies.unitsManager)
+        dependencies = Dependencies.shared
+        _themeStore = State(initialValue: dependencies.themeStore)
+        _units = State(initialValue: dependencies.units)
         _programViewModel = State(initialValue: dependencies.makeProgramViewModel())
     }
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
-                .environment(themeManager)
-                .environment(unitsManager)
+            RootView()
+                .environment(themeStore)
+                .environment(units)
                 .environment(programViewModel)
-                .preferredColorScheme(themeManager.selectedTheme.colorScheme)
-                .tint(themeManager.accentColor)
+                .preferredColorScheme(themeStore.selectedTheme.colorScheme)
+                .tint(themeStore.accentColor)
                 .task {
-                    ExerciseStore.shared.prefetchAllIcons()
+                    ExerciseRepo.shared.prefetchAllIcons()
                 }
         }
         .modelContainer(dependencies.modelContainer)

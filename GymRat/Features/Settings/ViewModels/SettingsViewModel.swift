@@ -15,9 +15,9 @@ final class SettingsViewModel {
     private(set) var errorMessage: String?
 
     // MARK: - Dependencies
-    private let dataResetService: DataResetServiceProtocol
+    private let dataResetService: DataResetServiceType
 
-    init(dataResetService: DataResetServiceProtocol) {
+    init(dataResetService: DataResetServiceType) {
         self.dataResetService = dataResetService
         appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0"
         developerHandle = "@albtugel"

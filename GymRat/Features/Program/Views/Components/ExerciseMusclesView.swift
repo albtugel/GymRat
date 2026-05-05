@@ -1,0 +1,25 @@
+import SwiftUI
+
+struct ExerciseMusclesView: View {
+    private let title: String
+    private let muscleLabels: [String]
+
+    init(title: String, muscleLabels: [String]) {
+        self.title = title
+        self.muscleLabels = muscleLabels
+    }
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text(title)
+                .font(.headline)
+            HStack(spacing: 8) {
+                ForEach(muscleLabels, id: \.self) { label in
+                    MuscleChip(text: label)
+                }
+            }
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(.horizontal)
+    }
+}

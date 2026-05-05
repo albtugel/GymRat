@@ -13,16 +13,16 @@ final class ProgramViewModel {
     private(set) var errorMessage: String?
 
     // MARK: - Dependencies
-    private let exerciseService: ExerciseServiceProtocol
-    private let programService: ProgramServiceProtocol
-    private let assignmentService: ProgramAssignmentServiceProtocol
-    private let dataResetService: DataResetServiceProtocol
+    private let exerciseService: ExerciseServiceType
+    private let programService: ProgramServiceType
+    private let assignmentService: ScheduleServiceType
+    private let dataResetService: DataResetServiceType
 
     init(
-        exerciseService: ExerciseServiceProtocol,
-        programService: ProgramServiceProtocol,
-        assignmentService: ProgramAssignmentServiceProtocol,
-        dataResetService: DataResetServiceProtocol
+        exerciseService: ExerciseServiceType,
+        programService: ProgramServiceType,
+        assignmentService: ScheduleServiceType,
+        dataResetService: DataResetServiceType
     ) {
         self.exerciseService = exerciseService
         self.programService = programService
@@ -31,9 +31,9 @@ final class ProgramViewModel {
     }
 
     // MARK: - Intents
-    func resolvePrograms(for date: Date) -> [Program] {
-        guard let weekday = ProgramWeekDayHelper.from(date: date) else { return [] }
-        return customPrograms.filter { ProgramModelMapper.weekdays(for: $0).contains(weekday) }
+    func programs(for date: Date) -> [Program] {
+        guard let weekday = ProgramWeekdayHelper.from(date: date) else { return [] }
+        return customPrograms.filter { ProgramMapper.weekdays(for: $0).contains(weekday) }
     }
 
     var hasCustomPrograms: Bool {
@@ -45,18 +45,18 @@ final class ProgramViewModel {
     }
 
     func makeProgram(for type: ProgramType) -> Program {
-        ProgramModel(
-            name: resolveProgramTitle(for: type),
+        Program(
+            name: title(for: type),
             typeRaw: type.rawValue
         )
     }
 
     func makeProgram(name: String, typeRaw: String) -> Program {
-        ProgramModel(name: name, typeRaw: typeRaw)
+        Program(name: name, typeRaw: typeRaw)
     }
 
-    func resolveProgramTitle(for type: ProgramType) -> String {
-        ProgramTypeDisplay.title(for: type)
+    func title(for type: ProgramType) -> String {
+        ProgramTypeText.title(for: type)
     }
 
     func dismissError() {
@@ -75,7 +75,7 @@ final class ProgramViewModel {
         }
     }
 
-    func loadDayPrograms() async {
+    func loadSchedules() async {
         do {
             let assignments = try await assignmentService.fetchAssignments()
             dayPrograms = [:]
@@ -101,11 +101,11 @@ final class ProgramViewModel {
     // MARK: - Actions
     func addProgram(_ program: Program) async {
         do {
-            try await programService.saveProgram(program)
+            try await programService.save(program)
             appendProgram(program)
-            let assignments = makeAssignments(for: program)
-            applyAssignments(assignments, program: program)
-            try await insertAssignments(assignments)
+            let assignments = buildSchedule(for: program)
+            applySchedule(assignments, program: program)
+            try await saveSchedule(assignments)
         } catch {
             errorMessage = error.localizedDescription
         }
@@ -158,7 +158,7 @@ final class ProgramViewModel {
         }
     }
 
-    func applyProgramOrder(_ reordered: [Program]) {
+    func reorderPrograms(_ reordered: [Program]) {
         let ids = reordered.map(\.id)
         var updated = customPrograms
         let indices = updated.enumerated().compactMap { index, element in
@@ -182,28 +182,28 @@ final class ProgramViewModel {
         customPrograms.append(program)
     }
 
-    private func makeAssignments(for program: Program) -> [ProgramAssignment] {
+    private func buildSchedule(for program: Program) -> [ScheduleItem] {
         let calendar = AppCalendar.calendar
         let startOfWeek = Date().startOfWeek
-        let weekdays = ProgramModelMapper.weekdays(for: program)
+        let weekdays = ProgramMapper.weekdays(for: program)
         return weekdays.compactMap { weekday in
             calendar.nextDate(
                 after: startOfWeek.addingTimeInterval(-1),
-                matching: DateComponents(weekday: ProgramWeekDayHelper.systemWeekdayNumber(for: weekday)),
+                matching: DateComponents(weekday: ProgramWeekdayHelper.systemWeekdayNumber(for: weekday)),
                 matchingPolicy: .nextTime
-            ).map { ProgramAssignment(program: program, date: $0) }
+            ).map { ScheduleItem(program: program, date: $0) }
         }
     }
 
-    private func applyAssignments(_ assignments: [ProgramAssignment], program: Program) {
+    private func applySchedule(_ assignments: [ScheduleItem], program: Program) {
         for assignment in assignments {
             let day = assignment.date.startOfDay
             dayPrograms[day, default: []].append(program)
         }
     }
 
-    private func insertAssignments(_ assignments: [ProgramAssignment]) async throws {
+    private func saveSchedule(_ assignments: [ScheduleItem]) async throws {
         guard !assignments.isEmpty else { return }
-        try await assignmentService.insertAssignments(assignments)
+        try await assignmentService.saveSchedule(assignments)
     }
 }

@@ -2,28 +2,28 @@ import Foundation
 import SwiftData
 
 @MainActor
-final class ExerciseService: ExerciseServiceProtocol {
+final class ExerciseService: ExerciseServiceType {
     private let modelContext: ModelContext
-    private let exerciseStore: ExerciseStore
+    private let exerciseStore: ExerciseRepo
 
-    init(modelContext: ModelContext, exerciseStore: ExerciseStore) {
+    init(modelContext: ModelContext, exerciseStore: ExerciseRepo) {
         self.modelContext = modelContext
         self.exerciseStore = exerciseStore
     }
 
-    func fetchExercises() async throws -> [ExerciseModel] {
-        let descriptor = FetchDescriptor<ExerciseModel>()
+    func fetchExercises() async throws -> [Exercise] {
+        let descriptor = FetchDescriptor<Exercise>()
         return try modelContext.fetch(descriptor)
     }
 
-    func fetchExercise(named name: String) async throws -> ExerciseModel? {
-        let descriptor = FetchDescriptor<ExerciseModel>(
-            predicate: #Predicate<ExerciseModel> { $0.name == name }
+    func fetchExercise(named name: String) async throws -> Exercise? {
+        let descriptor = FetchDescriptor<Exercise>(
+            predicate: #Predicate<Exercise> { $0.name == name }
         )
         return try modelContext.fetch(descriptor).first
     }
 
-    func addExercise(_ exercise: ExerciseModel) async throws {
+    func addExercise(_ exercise: Exercise) async throws {
         modelContext.insert(exercise)
         try modelContext.save()
     }
@@ -36,7 +36,7 @@ final class ExerciseService: ExerciseServiceProtocol {
         for seed in exerciseStore.seeds {
             let key = seed.name.lowercased()
             if !existingNames.contains(key) {
-                modelContext.insert(ExerciseModel(name: seed.name, categoryRaw: seed.category.rawValue))
+                modelContext.insert(Exercise(name: seed.name, categoryRaw: seed.category.rawValue))
                 didInsert = true
             }
         }
@@ -47,8 +47,8 @@ final class ExerciseService: ExerciseServiceProtocol {
     }
 
     func deleteCustomExercises() async throws {
-        let descriptor = FetchDescriptor<ExerciseModel>(
-            predicate: #Predicate<ExerciseModel> { $0.isCustom == true }
+        let descriptor = FetchDescriptor<Exercise>(
+            predicate: #Predicate<Exercise> { $0.isCustom == true }
         )
         let items = try modelContext.fetch(descriptor)
         items.forEach { modelContext.delete($0) }

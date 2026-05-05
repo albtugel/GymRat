@@ -4,8 +4,8 @@ struct ProgramListView: View {
 
     @Environment(ProgramViewModel.self) private var programViewModel
 
-    @State private var selectedProgram: ProgramModel?
-    @State private var mode: ProgramCustomizeMode = .create
+    @State private var selectedProgram: Program?
+    @State private var mode: ProgramEditorMode = .create
 
     var body: some View {
         List {
@@ -16,7 +16,7 @@ struct ProgramListView: View {
                         mode = .create
                     } label: {
                         HStack {
-                            Text(programViewModel.resolveProgramTitle(for: type))
+                            Text(programViewModel.title(for: type))
                             Spacer()
                             Image(systemName: "chevron.right")
                         }
@@ -44,8 +44,8 @@ struct ProgramListView: View {
             }
         }
         .sheet(item: $selectedProgram) { program in
-            ProgramCustomizeSheetView(
-                viewModel: ProgramCustomizeViewModelFactory.make(
+            ProgramEditorView(
+                viewModel: ProgramEditorFactory.make(
                     mode: mode,
                     program: program,
                     programViewModel: programViewModel

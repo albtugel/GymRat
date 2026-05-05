@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct SetRowView: View {
-    let columns: [ProgramTableExerciseRowViewModel.SetRowColumn]
+    let columns: [ExerciseRowViewModel.SetRowColumn]
     let index: Int
     let previousReps: String
     let previousWeight: String
@@ -17,13 +17,13 @@ struct SetRowView: View {
     @Binding var currentWeight: String
     @Binding var currentDuration: String
     let programExerciseId: UUID
-    @FocusState.Binding var focusedField: ProgramTableFocusField?
+    @FocusState.Binding var focusedField: ExerciseField?
     let columnSpacing: CGFloat
 
     var body: some View {
         HStack(spacing: columnSpacing) {
             ForEach(columns) { column in
-                SetRowColumnView(
+                SetColumn(
                     column: column,
                     index: index,
                     previousReps: previousReps,

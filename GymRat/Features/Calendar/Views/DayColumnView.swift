@@ -1,9 +1,9 @@
 import SwiftUI
 
 struct DayColumnView: View {
-    private let rows: [WeekTimelineViewModel.DayColumnRow]
+    private let rows: [WeekViewModel.DayColumnRow]
 
-    init(rows: [WeekTimelineViewModel.DayColumnRow]) {
+    init(rows: [WeekViewModel.DayColumnRow]) {
         self.rows = rows
     }
 
@@ -16,7 +16,7 @@ struct DayColumnView: View {
                             Text(displayItem.item.title)
                                 .padding()
                         } label: {
-                            TimelineItemView(
+                            EventView(
                                 title: displayItem.item.title,
                                 backgroundColor: displayItem.color.swiftUIColor
                             )

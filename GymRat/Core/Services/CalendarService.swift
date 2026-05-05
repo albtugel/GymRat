@@ -2,7 +2,7 @@ import EventKit
 import Foundation
 
 @MainActor
-final class CalendarService: CalendarServiceProtocol {
+final class CalendarService: CalendarServiceType {
     private let store = EKEventStore()
 
     func requestAccess() async throws -> Bool {
@@ -27,19 +27,19 @@ final class CalendarService: CalendarServiceProtocol {
         }
     }
 
-    func fetchEvents(start: Date, end: Date) async throws -> [TimelineItem] {
+    func fetchEvents(start: Date, end: Date) async throws -> [Event] {
         let predicate = store.predicateForEvents(withStart: start, end: end, calendars: nil)
         return store.events(matching: predicate).map {
-            TimelineItem(
+            Event(
                 title: $0.title,
                 startDate: $0.startDate,
                 endDate: $0.endDate,
-                typeRaw: TimelineItemType.externalCalendar.rawValue
+                typeRaw: EventType.externalCalendar.rawValue
             )
         }
     }
 
-    func addEvent(item: TimelineItem) async throws {
+    func addEvent(item: Event) async throws {
         let event = EKEvent(eventStore: store)
         event.title = item.title
         event.startDate = item.startDate

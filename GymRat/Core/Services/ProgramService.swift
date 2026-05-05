@@ -2,7 +2,7 @@ import Foundation
 import SwiftData
 
 @MainActor
-final class ProgramService: ProgramServiceProtocol {
+final class ProgramService: ProgramServiceType {
     private let modelContext: ModelContext
 
     init(modelContext: ModelContext) {
@@ -10,7 +10,7 @@ final class ProgramService: ProgramServiceProtocol {
     }
 
     func fetchPrograms() async throws -> [Program] {
-        let descriptor = FetchDescriptor<ProgramModel>()
+        let descriptor = FetchDescriptor<Program>()
         let programs = try modelContext.fetch(descriptor)
         var didUpdateSelectionIndex = false
         for program in programs {
@@ -28,7 +28,7 @@ final class ProgramService: ProgramServiceProtocol {
         return programs
     }
 
-    func saveProgram(_ program: Program) async throws {
+    func save(_ program: Program) async throws {
         if program.modelContext == nil {
             modelContext.insert(program)
         }

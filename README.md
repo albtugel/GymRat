@@ -40,6 +40,3 @@ All user-facing strings use snake_case keys in `GymRat/Localizable.xcstrings`.
 ## Notes
 - Cardio exercises use **Rounds** instead of **Sets** and include a **Dur** field.
 - Weight column is hidden for cardio exercises.
-
-## Tests
-No automated tests yet.

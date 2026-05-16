@@ -203,6 +203,7 @@
 "shared_history_alert_message" = "'%@' ist bereits in einem anderen Programm vorhanden. Gemeinsame Fortschrittshistorie verwenden?";
 "shared_history_alert_title" = "Gemeinsame Historie";
 "shared_history_button" = "Gemeinsame Historie";
+"support_email_label" = "Support";
 "templates_section" = "Vorlagen";
 "theme_dark" = "Dunkel";
 "theme_label" = "Design";

@@ -46,6 +46,7 @@
 "ai_unknown_exercises_note" = "Неизвестные упражнения будут созданы как пользовательские.";
 "ai_verifying_key_button" = "Проверка...";
 "ai_verify_save_key_button" = "Проверить и сохранить ключ";
+"apply_button" = "Применить";
 "app_name" = "GymRat";
 "app_version_label" = "Версия";
 "appearance_section" = "Внешний вид";

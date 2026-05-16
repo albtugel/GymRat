@@ -45,6 +45,7 @@
 "ai_unknown_exercises_note" = "Unknown exercises will be created as custom exercises.";
 "ai_verifying_key_button" = "Verifying...";
 "ai_verify_save_key_button" = "Verify & Save Key";
+"apply_button" = "Apply";
 "app_name" = "GymRat";
 "app_version_label" = "Version";
 "appearance_section" = "Appearance";

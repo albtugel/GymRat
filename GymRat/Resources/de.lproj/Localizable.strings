@@ -5,9 +5,9 @@
 "accent_color" = "Akzentfarbe";
 "add_program_button" = "Programm hinzufügen";
 "ai_api_key_placeholder" = "Mistral API-Schluessel";
-"ai_api_key_saved" = "API-Schluessel gespeichert";
-"ai_api_key_saved_subtitle" = "Mistral ist bereit fuer KI-Bearbeitungen.";
-"ai_api_setup_section" = "KI-Einrichtung";
+"ai_api_key_saved" = "Mistral-Schluessel geprueft";
+"ai_api_key_saved_subtitle" = "KI-Bearbeitung ist bereit.";
+"ai_api_setup_section" = "Mistral API";
 "ai_change_added" = "Hinzugefuegt";
 "ai_change_changed" = "Geaendert";
 "ai_change_custom" = "Neu Eigene";
@@ -22,7 +22,7 @@
 "ai_empty_response_error" = "Die KI hat eine leere Antwort zurueckgegeben.";
 "ai_error_title" = "KI-Fehler";
 "ai_generate_button" = "Generieren";
-"ai_inline_api_key_footer" = "GymRat prueft den Schluessel vor dem Speichern und nutzt ihn dann fuer KI-Bearbeitungen.";
+"ai_inline_api_key_footer" = "GymRat prueft deinen Schluessel bei Mistral, bevor er gespeichert wird.";
 "ai_invalid_json_error" = "GymRat konnte den KI-Plan nicht lesen.";
 "ai_invalid_url_error" = "Der KI-Endpunkt ist ungueltig.";
 "ai_keychain_invalid_value_error" = "Der API-Schluessel konnte nicht gelesen werden.";
@@ -31,6 +31,7 @@
 "ai_missing_api_key_error" = "Fuege zuerst deinen Mistral API-Schluessel hinzu.";
 "ai_missing_response_error" = "Die KI hat eine ungueltige Antwort zurueckgegeben.";
 "ai_preview_section" = "Vorschau";
+"ai_privacy_note" = "GymRat speichert keine Sprachaufnahmen oder Prompt-Texte. Sie werden nur an Mistral gesendet, wenn du KI-Transkription oder KI-Bearbeitung startest.";
 "ai_preview_sets_reps_format" = "%d Saetze x %d Wdh.";
 "ai_prompt_examples" = "Zum Beispiel: Heute leichter machen\nLanghantel durch Kurzhanteln ersetzen\nMehr Beine, unter 45 Minuten";
 "ai_prompt_section" = "Prompt";

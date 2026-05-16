@@ -10,7 +10,7 @@ struct AISection: View {
     }
 
     var body: some View {
-        Section("ai_section") {
+        Section {
             if aiSettingsManager.hasAPIKey && !isEditingSavedKey {
                 savedKeyContent
             } else {
@@ -23,6 +23,10 @@ struct AISection: View {
                     .foregroundStyle(.red)
                     .accessibilityIdentifier("aiSettingsAPIKeyErrorLabel")
             }
+        } header: {
+            Text("ai_api_setup_section")
+        } footer: {
+            Text("ai_privacy_note")
         }
     }
 

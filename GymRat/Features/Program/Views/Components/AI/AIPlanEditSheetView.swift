@@ -83,9 +83,7 @@ struct AIPlanEditSheetView: View {
         } header: {
             Text("ai_api_setup_section")
         } footer: {
-            if !viewModel.hasStoredAPIKey {
-                Text("ai_inline_api_key_footer")
-            }
+            Text(viewModel.hasStoredAPIKey ? "ai_privacy_note" : "ai_inline_api_key_footer")
         }
     }
 

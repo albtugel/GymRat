@@ -4,9 +4,9 @@
 "accent_color" = "Accent Color";
 "add_program_button" = "Add the program";
 "ai_api_key_placeholder" = "Mistral API key";
-"ai_api_key_saved" = "API key saved";
-"ai_api_key_saved_subtitle" = "Mistral is ready for AI edits.";
-"ai_api_setup_section" = "AI Setup";
+"ai_api_key_saved" = "Mistral key verified";
+"ai_api_key_saved_subtitle" = "AI editing is ready.";
+"ai_api_setup_section" = "Mistral API";
 "ai_change_added" = "Added";
 "ai_change_changed" = "Changed";
 "ai_change_custom" = "New Custom";
@@ -21,7 +21,7 @@
 "ai_empty_response_error" = "AI returned an empty response.";
 "ai_error_title" = "AI Error";
 "ai_generate_button" = "Generate";
-"ai_inline_api_key_footer" = "GymRat verifies the key before saving it, then uses it for AI edits.";
+"ai_inline_api_key_footer" = "GymRat checks your key with Mistral before saving it.";
 "ai_invalid_json_error" = "AI returned a plan GymRat couldn't read.";
 "ai_invalid_url_error" = "The AI endpoint is invalid.";
 "ai_keychain_invalid_value_error" = "The API key could not be read.";
@@ -30,6 +30,7 @@
 "ai_missing_api_key_error" = "Add your Mistral API key first.";
 "ai_missing_response_error" = "AI returned an invalid response.";
 "ai_preview_section" = "Preview";
+"ai_privacy_note" = "GymRat does not store your voice recordings or prompt text. They are sent to Mistral only when you ask AI to transcribe or edit a plan.";
 "ai_preview_sets_reps_format" = "%d sets x %d reps";
 "ai_prompt_examples" = "Try: Make this lighter today\nReplace barbell work with dumbbells\nAdd more legs, keep it under 45 minutes";
 "ai_prompt_section" = "Prompt";

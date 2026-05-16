@@ -5,9 +5,9 @@
 "accent_color" = "Акцентный цвет";
 "add_program_button" = "Добавить программу";
 "ai_api_key_placeholder" = "API-ключ Mistral";
-"ai_api_key_saved" = "API-ключ сохранён";
-"ai_api_key_saved_subtitle" = "Mistral готов для AI-редактирования.";
-"ai_api_setup_section" = "Настройка AI";
+"ai_api_key_saved" = "Ключ Mistral проверен";
+"ai_api_key_saved_subtitle" = "AI-редактирование готово.";
+"ai_api_setup_section" = "Mistral API";
 "ai_change_added" = "Добавлено";
 "ai_change_changed" = "Изменено";
 "ai_change_custom" = "Новое";
@@ -22,7 +22,7 @@
 "ai_empty_response_error" = "AI вернул пустой ответ.";
 "ai_error_title" = "Ошибка AI";
 "ai_generate_button" = "Сгенерировать";
-"ai_inline_api_key_footer" = "GymRat проверит ключ перед сохранением и будет использовать его для AI-редактирования.";
+"ai_inline_api_key_footer" = "GymRat проверит ключ через Mistral перед сохранением.";
 "ai_invalid_json_error" = "GymRat не смог прочитать план от AI.";
 "ai_invalid_url_error" = "Некорректный AI-эндпоинт.";
 "ai_keychain_invalid_value_error" = "Не удалось прочитать API-ключ.";
@@ -31,6 +31,7 @@
 "ai_missing_api_key_error" = "Сначала добавьте API-ключ Mistral.";
 "ai_missing_response_error" = "AI вернул некорректный ответ.";
 "ai_preview_section" = "Предпросмотр";
+"ai_privacy_note" = "GymRat не хранит голосовые записи и текст запросов. Они отправляются в Mistral только когда вы запускаете распознавание или AI-редактирование плана.";
 "ai_preview_sets_reps_format" = "%d сетов x %d раз";
 "ai_prompt_examples" = "Например: Сделай сегодня легче\nЗамени штангу на гантели\nДобавь ноги, уложись в 45 минут";
 "ai_prompt_section" = "Запрос";

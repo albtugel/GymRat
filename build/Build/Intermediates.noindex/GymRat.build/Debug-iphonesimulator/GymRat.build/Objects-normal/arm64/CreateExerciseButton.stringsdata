@@ -1,0 +1,48 @@
+{
+  "source": "/Users/alik/Documents/Work/Swift/GymRat/GymRat/Features/Program/Views/Components/CreateExerciseButton.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "create_exercise_button",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 17
+        }
+      },
+      {
+        "comment": "",
+        "key": "exercise_name_placeholder",
+        "location": {
+          "startingColumn": 23,
+          "startingLine": 22
+        }
+      },
+      {
+        "comment": "",
+        "key": "",
+        "location": {
+          "startingColumn": 20,
+          "startingLine": 24
+        }
+      },
+      {
+        "comment": "",
+        "key": "save_button",
+        "location": {
+          "startingColumn": 20,
+          "startingLine": 29
+        }
+      },
+      {
+        "comment": "",
+        "key": "cancel_button",
+        "location": {
+          "startingColumn": 20,
+          "startingLine": 32
+        }
+      }
+    ]
+  },
+  "version": 1
+}

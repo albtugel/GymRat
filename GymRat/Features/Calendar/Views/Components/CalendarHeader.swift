@@ -9,7 +9,7 @@ struct CalendarHeader: View {
         self.onSettingsTap = onSettingsTap
     }
 
-    // MARK: - Body
+
     var body: some View {
         HStack {
             Text("app_name")

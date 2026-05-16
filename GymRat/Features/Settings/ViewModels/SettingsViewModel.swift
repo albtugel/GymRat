@@ -5,7 +5,7 @@ import Observation
 @MainActor
 final class SettingsViewModel {
 
-    // MARK: - State
+
     private(set) var appVersion: String
     private(set) var developerHandle: String
     private(set) var supportEmailURL: URL?
@@ -14,7 +14,7 @@ final class SettingsViewModel {
     private(set) var exerciseDBURL: URL?
     private(set) var errorMessage: String?
 
-    // MARK: - Dependencies
+
     private let dataResetService: DataResetServiceType
 
     init(dataResetService: DataResetServiceType) {
@@ -27,7 +27,7 @@ final class SettingsViewModel {
         exerciseDBURL = URL(string: "https://github.com/yuhonas/free-exercise-db")
     }
 
-    // MARK: - Intents
+
     func deletePrograms(at offsets: IndexSet, programViewModel: ProgramViewModel) async {
         await programViewModel.deletePrograms(at: offsets)
     }

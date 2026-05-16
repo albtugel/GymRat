@@ -1,0 +1,16 @@
+{
+  "source": "/Users/alik/Documents/Work/Swift/GymRat/GymRat/Features/Settings/Views/ThemeView.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "theme_label",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 15
+        }
+      }
+    ]
+  },
+  "version": 1
+}

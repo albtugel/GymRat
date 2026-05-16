@@ -1,0 +1,72 @@
+{
+  "source": "/Users/alik/Documents/Work/Swift/GymRat/GymRat/Features/Program/Views/Components/ProgramAlerts.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "Error",
+        "location": {
+          "startingColumn": 20,
+          "startingLine": 13
+        }
+      },
+      {
+        "comment": "",
+        "key": "ok_button",
+        "location": {
+          "startingColumn": 24,
+          "startingLine": 14
+        }
+      },
+      {
+        "comment": "",
+        "key": "shared_history_button",
+        "location": {
+          "startingColumn": 24,
+          "startingLine": 19
+        }
+      },
+      {
+        "comment": "",
+        "key": "separate_history_button",
+        "location": {
+          "startingColumn": 24,
+          "startingLine": 22
+        }
+      },
+      {
+        "comment": "",
+        "key": "cancel_button",
+        "location": {
+          "startingColumn": 24,
+          "startingLine": 25
+        }
+      },
+      {
+        "comment": "",
+        "key": "shared_history_alert_message",
+        "location": {
+          "startingColumn": 55,
+          "startingLine": 30
+        }
+      },
+      {
+        "comment": "",
+        "key": "ok_button",
+        "location": {
+          "startingColumn": 24,
+          "startingLine": 33
+        }
+      },
+      {
+        "comment": "",
+        "key": "ok_button",
+        "location": {
+          "startingColumn": 24,
+          "startingLine": 40
+        }
+      }
+    ]
+  },
+  "version": 1
+}

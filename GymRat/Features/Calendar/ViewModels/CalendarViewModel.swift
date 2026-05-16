@@ -5,19 +5,19 @@ import Observation
 @MainActor
 final class CalendarViewModel {
 
-    // MARK: - State
+
     private(set) var items: [Event] = []
     private(set) var isLoading: Bool = false
     private(set) var errorMessage: String?
 
-    // MARK: - Dependencies
+
     private let timelineService: TimelineServiceType
 
     init(timelineService: TimelineServiceType) {
         self.timelineService = timelineService
     }
 
-    // MARK: - Intents
+
     func loadItems() async {
         isLoading = true
         defer { isLoading = false }
@@ -42,7 +42,7 @@ final class CalendarViewModel {
         errorMessage = nil
     }
 
-    // MARK: - Helpers
+
     static func makeItemColor(for item: Event) -> TimelineColor {
         switch TimelineMapper.type(for: item) {
         case .workout:

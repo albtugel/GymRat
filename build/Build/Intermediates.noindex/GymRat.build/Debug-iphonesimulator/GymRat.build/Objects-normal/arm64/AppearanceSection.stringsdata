@@ -1,0 +1,16 @@
+{
+  "source": "/Users/alik/Documents/Work/Swift/GymRat/GymRat/Features/Settings/Views/Components/AppearanceSection.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "appearance_section",
+        "location": {
+          "startingColumn": 17,
+          "startingLine": 17
+        }
+      }
+    ]
+  },
+  "version": 1
+}

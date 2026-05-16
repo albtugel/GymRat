@@ -1,0 +1,24 @@
+{
+  "source": "/Users/alik/Documents/Work/Swift/GymRat/GymRat/Features/Settings/Views/AccentColorPickerView.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "accent_color",
+        "location": {
+          "startingColumn": 18,
+          "startingLine": 8
+        }
+      },
+      {
+        "comment": "",
+        "key": "",
+        "location": {
+          "startingColumn": 25,
+          "startingLine": 11
+        }
+      }
+    ]
+  },
+  "version": 1
+}

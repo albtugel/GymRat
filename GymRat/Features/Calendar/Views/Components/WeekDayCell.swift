@@ -15,7 +15,7 @@ struct WeekDayCell: View {
         self.onSelect = onSelect
     }
 
-    // MARK: - Body
+
     var body: some View {
         VStack(spacing: 4) {
             Text(day.number)

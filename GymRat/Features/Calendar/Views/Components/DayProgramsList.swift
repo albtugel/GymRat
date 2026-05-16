@@ -27,7 +27,7 @@ struct DayProgramsList: View {
         self.onReorder = onReorder
     }
 
-    // MARK: - Body
+
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 12) {

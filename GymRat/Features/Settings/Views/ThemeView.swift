@@ -8,13 +8,13 @@ struct ThemeView: View {
         Button {
             withAnimation(.easeInOut(duration: 0.7)) {
                 cycleTheme()
-                rotation += 360 // плавное вращение иконки при смене
+                rotation += 360
             }
         } label: {
             VStack(alignment: .leading, spacing: 12) {
                 Text("theme_label")
                     .font(.headline)
-                
+
                 Image(systemName: iconName())
                     .resizable()
                     .scaledToFit()
@@ -40,11 +40,11 @@ struct ThemeView: View {
     private func iconName() -> String {
         switch selectedTheme {
         case .system:
-            return "desktopcomputer" // системная тема
+            return "desktopcomputer"
         case .light:
-            return "sun.max.fill" // светлая
+            return "sun.max.fill"
         case .dark:
-            return "moon.fill" // темная
+            return "moon.fill"
         }
     }
 }

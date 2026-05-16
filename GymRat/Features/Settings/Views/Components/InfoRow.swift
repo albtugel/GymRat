@@ -9,7 +9,7 @@ struct InfoRow: View {
         self.valueText = valueText
     }
 
-    // MARK: - Body
+
     var body: some View {
         HStack {
             Text(LocalizedStringKey(titleKey))

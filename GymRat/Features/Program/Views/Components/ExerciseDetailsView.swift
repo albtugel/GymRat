@@ -25,6 +25,9 @@ struct ExerciseDetailsView: View {
                     Button("done_button") { dismiss() }
                 }
             }
+            .task {
+                await viewModel.loadLatestDetails()
+            }
         }
     }
 }

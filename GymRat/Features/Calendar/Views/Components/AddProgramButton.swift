@@ -9,7 +9,7 @@ struct AddProgramButton: View {
         self.onAddProgramTap = onAddProgramTap
     }
 
-    // MARK: - Body
+
     var body: some View {
         HStack {
             Spacer()

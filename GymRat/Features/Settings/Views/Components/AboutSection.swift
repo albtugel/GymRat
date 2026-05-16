@@ -24,7 +24,7 @@ struct AboutSection: View {
         self.exerciseDBURL = exerciseDBURL
     }
 
-    // MARK: - Body
+
     var body: some View {
         Section("about_section") {
             InfoRow(

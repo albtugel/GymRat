@@ -1,0 +1,24 @@
+{
+  "source": "/Users/alik/Documents/Work/Swift/GymRat/GymRat/Shared/DistanceUnit.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "kilometers_label",
+        "location": {
+          "startingColumn": 52,
+          "startingLine": 9
+        }
+      },
+      {
+        "comment": "",
+        "key": "miles_label",
+        "location": {
+          "startingColumn": 47,
+          "startingLine": 10
+        }
+      }
+    ]
+  },
+  "version": 1
+}

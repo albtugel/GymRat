@@ -7,7 +7,7 @@ struct ExerciseSearchBar: View {
         self.viewModel = viewModel
     }
 
-    // MARK: - Body
+
     var body: some View {
         HStack {
             Image(systemName: "magnifyingglass")
@@ -28,7 +28,7 @@ struct ExerciseSearchBar: View {
         }
     }
 
-    // MARK: - Helpers
+
     private var searchTextBinding: Binding<String> {
         Binding(
             get: { viewModel.searchText },

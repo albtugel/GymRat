@@ -9,7 +9,7 @@ struct MonthButton: View {
         self.onTap = onTap
     }
 
-    // MARK: - Body
+
     var body: some View {
         Button(action: onTap) {
             Text(title)

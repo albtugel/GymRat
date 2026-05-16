@@ -15,7 +15,7 @@ struct LinkRow: View {
         self.url = url
     }
 
-    // MARK: - Body
+
     var body: some View {
         Link(destination: url) {
             HStack {
@@ -26,7 +26,7 @@ struct LinkRow: View {
         }
     }
 
-    // MARK: - Helpers
+
     private var linkValue: some View {
         Group {
             if let valueKey {

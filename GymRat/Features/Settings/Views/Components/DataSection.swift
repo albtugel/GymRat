@@ -7,7 +7,7 @@ struct DataSection: View {
         self.onReset = onReset
     }
 
-    // MARK: - Body
+
     var body: some View {
         Section("data_section") {
             Button(role: .destructive) {

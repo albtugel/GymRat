@@ -33,7 +33,8 @@ final class ExerciseService: ExerciseServiceType {
         let existingNames = Set(existing.map { $0.name.lowercased() })
 
         var didInsert = false
-        for seed in exerciseStore.seeds {
+        let seeds = await exerciseStore.seedSnapshot()
+        for seed in seeds {
             let key = seed.name.lowercased()
             if !existingNames.contains(key) {
                 modelContext.insert(Exercise(name: seed.name, categoryRaw: seed.category.rawValue))

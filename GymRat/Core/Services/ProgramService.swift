@@ -44,7 +44,7 @@ final class ProgramService: ProgramServiceType {
 
     func reorderExercises(in program: Program, from source: IndexSet, to destination: Int) async throws {
         let _ = (source, destination)
-        // Assumes the caller already updated program.exercises order.
+
         for (index, exercise) in program.exercises.enumerated() {
             let newIndex = index + 1
             if exercise.selectionIndex != newIndex {

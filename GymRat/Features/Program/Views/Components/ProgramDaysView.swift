@@ -7,7 +7,7 @@ struct ProgramDaysView: View {
         self.viewModel = viewModel
     }
 
-    // MARK: - Body
+
     var body: some View {
         Section("days_section") {
             let columns = Array(repeating: GridItem(.flexible(), spacing: 6), count: 7)

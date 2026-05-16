@@ -12,7 +12,7 @@ struct UnitsSection: View {
         self._distanceUnit = distanceUnit
     }
 
-    // MARK: - Body
+
     var body: some View {
         Section("units_section") {
             Picker("weight_unit_label", selection: $weightUnit) {

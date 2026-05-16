@@ -1,0 +1,16 @@
+{
+  "source": "/Users/alik/Documents/Work/Swift/GymRat/GymRat/Features/Calendar/Views/Components/AddProgramButton.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "add_program_button",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 21
+        }
+      }
+    ]
+  },
+  "version": 1
+}

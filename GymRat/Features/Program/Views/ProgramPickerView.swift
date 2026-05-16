@@ -51,7 +51,7 @@ struct ProgramPickerView: View {
                             }
                             .buttonStyle(.plain)
                         }
-                        .onDelete(perform: deleteProgram) // <-- будет передан context
+                        .onDelete(perform: deleteProgram)
                     }
                 }
             }

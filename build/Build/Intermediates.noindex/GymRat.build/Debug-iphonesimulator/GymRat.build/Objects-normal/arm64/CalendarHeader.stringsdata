@@ -1,0 +1,16 @@
+{
+  "source": "/Users/alik/Documents/Work/Swift/GymRat/GymRat/Features/Calendar/Views/Components/CalendarHeader.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "app_name",
+        "location": {
+          "startingColumn": 18,
+          "startingLine": 15
+        }
+      }
+    ]
+  },
+  "version": 1
+}

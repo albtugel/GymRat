@@ -10,7 +10,7 @@ struct WeekHeaderView: View {
         self.onMonthTap = onMonthTap
     }
 
-    // MARK: - Body
+
     var body: some View {
         VStack(spacing: 8) {
             MonthButton(

@@ -1,0 +1,16 @@
+{
+  "source": "/Users/alik/Documents/Work/Swift/GymRat/GymRat/Features/Program/ViewModels/ExerciseDetailsViewModel.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "muscles_section",
+        "location": {
+          "startingColumn": 47,
+          "startingLine": 18
+        }
+      }
+    ]
+  },
+  "version": 1
+}

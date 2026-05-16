@@ -1,0 +1,32 @@
+{
+  "source": "/Users/alik/Documents/Work/Swift/GymRat/GymRat/Features/Settings/Views/Components/UnitsSection.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "units_section",
+        "location": {
+          "startingColumn": 17,
+          "startingLine": 17
+        }
+      },
+      {
+        "comment": "",
+        "key": "weight_unit_label",
+        "location": {
+          "startingColumn": 20,
+          "startingLine": 18
+        }
+      },
+      {
+        "comment": "",
+        "key": "distance_unit_label",
+        "location": {
+          "startingColumn": 20,
+          "startingLine": 25
+        }
+      }
+    ]
+  },
+  "version": 1
+}

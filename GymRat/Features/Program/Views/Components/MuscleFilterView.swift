@@ -7,7 +7,7 @@ struct MuscleFilterView: View {
         self.viewModel = viewModel
     }
 
-    // MARK: - Body
+
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: 8) {

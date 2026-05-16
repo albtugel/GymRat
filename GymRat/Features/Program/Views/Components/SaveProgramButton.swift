@@ -9,7 +9,7 @@ struct SaveProgramButton: View {
         self.onSave = onSave
     }
 
-    // MARK: - Body
+
     var body: some View {
         Button {
             onSave()

@@ -28,7 +28,7 @@ final class WeekViewModel {
         let items: [(item: Event, color: TimelineColor)]
     }
 
-    // MARK: - State
+
     private(set) var weekStartDate: Date
     private(set) var selectedDate: Date
     private(set) var isCalendarPresented: Bool = false
@@ -40,7 +40,7 @@ final class WeekViewModel {
         selectedDate = initialDate
     }
 
-    // MARK: - Derived
+
     var monthTitle: String {
         makeMonthTitle(for: selectedDate)
     }
@@ -68,7 +68,7 @@ final class WeekViewModel {
         }
     }
 
-    // MARK: - Intents
+
     func selectDate(_ date: Date) {
         notifySaveLogs()
         selectedDate = date
@@ -150,7 +150,7 @@ final class WeekViewModel {
         )
     }
 
-    // MARK: - Helpers
+
     private func makeMonthTitle(for date: Date) -> String {
         makeDateFormatter(format: "LLLL yyyy")
             .string(from: date)

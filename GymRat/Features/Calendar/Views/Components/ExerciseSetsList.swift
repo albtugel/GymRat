@@ -27,7 +27,7 @@ struct ExerciseSetsList: View {
         self.rowSpacing = rowSpacing
         self.statBoxWidth = statBoxWidth
     }
-    // MARK: - Body
+
     var body: some View {
         ScrollView(.vertical, showsIndicators: false) {
             VStack(spacing: rowSpacing) {

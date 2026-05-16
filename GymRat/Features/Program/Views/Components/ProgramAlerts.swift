@@ -7,7 +7,7 @@ struct ProgramAlerts: ViewModifier {
         self.viewModel = viewModel
     }
 
-    // MARK: - Body
+
     func body(content: Content) -> some View {
         content
             .alert("Error", isPresented: errorAlertBinding) {
@@ -45,7 +45,7 @@ struct ProgramAlerts: ViewModifier {
             }
     }
 
-    // MARK: - Helpers
+
     private var errorAlertBinding: Binding<Bool> {
         Binding(
             get: { viewModel.errorMessage != nil },

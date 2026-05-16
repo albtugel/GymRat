@@ -18,7 +18,7 @@ struct WeekDaysRow: View {
         self.onChangeWeek = onChangeWeek
     }
 
-    // MARK: - Body
+
     var body: some View {
         HStack(spacing: 0) {
             WeekArrowButton(

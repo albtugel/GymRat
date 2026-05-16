@@ -1,0 +1,16 @@
+{
+  "source": "/Users/alik/Documents/Work/Swift/GymRat/GymRat/Features/Calendar/Views/SetsField.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "-",
+        "location": {
+          "startingColumn": 23,
+          "startingLine": 14
+        }
+      }
+    ]
+  },
+  "version": 1
+}

@@ -18,7 +18,7 @@ final class ExerciseRowViewModel {
         let hasValues: Bool
     }
 
-    // MARK: - State
+
     let programExercise: WorkoutExercise
     private(set) var repsBySetText: [String] = []
     private(set) var weightsBySetText: [String] = []
@@ -26,6 +26,7 @@ final class ExerciseRowViewModel {
     private(set) var previousRepsBySetText: [String] = []
     private(set) var previousWeightsBySetText: [String] = []
     private(set) var previousDurationsBySetText: [String] = []
+    private(set) var seed: ExerciseRepo.ExerciseSeed?
     private(set) var setsCountText: String
     private(set) var isLoadingLog: Bool = false
     private(set) var errorMessage: String?
@@ -39,7 +40,7 @@ final class ExerciseRowViewModel {
     private var isDirty: Bool = false
     private var selectedDate: Date
 
-    // MARK: - Dependencies
+
     private let logService: ExerciseLogServiceType
     private let units: Units
     private let exerciseStore: ExerciseRepo
@@ -60,14 +61,10 @@ final class ExerciseRowViewModel {
         self.dataDate = selectedDate.startOfDay
     }
 
-    // MARK: - Derived
+
     var setsCount: Int {
         let parsed = Int(setsCountText.trimmingCharacters(in: .whitespacesAndNewlines)) ?? programExercise.sets
         return min(10, max(1, parsed))
-    }
-
-    var seed: ExerciseRepo.ExerciseSeed? {
-        exerciseStore.seeds.first { $0.name == programExercise.exercise.name }
     }
 
     var inputType: ExerciseInputType {
@@ -143,10 +140,11 @@ final class ExerciseRowViewModel {
         }
     }
 
-    // MARK: - Intents
+
     func load() async {
         isLoadingLog = true
         defer { isLoadingLog = false }
+        seed = await exerciseStore.getExerciseSeed(named: programExercise.exercise.name)
         let context = await buildLogContext()
         applyLogContext(context)
     }
@@ -175,7 +173,7 @@ final class ExerciseRowViewModel {
         editSessionDate = dataDate
     }
 
-    // MARK: - Bindings
+
     func setsText() -> String {
         setsCountText
     }
@@ -238,7 +236,7 @@ final class ExerciseRowViewModel {
         markEdited()
     }
 
-    // MARK: - Log Loading
+
     private func buildLogContext() async -> LogContext {
         let day = selectedDate.startOfDay
         let logs = await fetchLogs()
@@ -352,7 +350,7 @@ final class ExerciseRowViewModel {
         }
     }
 
-    // MARK: - Save
+
     private func saveCurrentLogIfNeeded() async {
         guard isDirty || setsEditedForDay else { return }
         guard let targetDate = editSessionDate else { return }
@@ -444,7 +442,7 @@ final class ExerciseRowViewModel {
         }
     }
 
-    // MARK: - Normalization
+
     private func normalizeArrays() {
         repsBySetText = normalize(repsBySetText, fill: "")
         weightsBySetText = normalize(weightsBySetText, fill: "")
@@ -464,7 +462,7 @@ final class ExerciseRowViewModel {
         return result
     }
 
-    // MARK: - Formatting
+
     private func formatRepsValue(_ value: Int) -> String {
         guard value > 0 else { return "" }
         if isCardio {
@@ -525,7 +523,7 @@ final class ExerciseRowViewModel {
         return formatter.string(from: NSNumber(value: weight)) ?? String(weight)
     }
 
-    // MARK: - Input Sanitizers
+
     private func sanitizeDecimalInput(_ text: String, maxFractionDigits: Int) -> String {
         let normalized = text.replacingOccurrences(of: ",", with: ".")
         var result = ""
@@ -571,7 +569,7 @@ final class ExerciseRowViewModel {
         return sanitized
     }
 
-    // MARK: - Helpers
+
     private func text(at index: Int, in array: [String]) -> String {
         index < array.count ? array[index] : ""
     }

@@ -52,16 +52,6 @@
 			path = GymRat;
 			sourceTree = "<group>";
 		};
-		44DE8F132F0E6CEC008AC986 /* GymRatTests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = GymRatTests;
-			sourceTree = "<group>";
-		};
-		44DE8F1D2F0E6CEC008AC986 /* GymRatUITests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = GymRatUITests;
-			sourceTree = "<group>";
-		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -101,8 +91,6 @@
 			isa = PBXGroup;
 			children = (
 				44DE8EFE2F0E6CEB008AC986 /* GymRat */,
-				44DE8F132F0E6CEC008AC986 /* GymRatTests */,
-				44DE8F1D2F0E6CEC008AC986 /* GymRatUITests */,
 				44973D3E2F9F72A50098D200 /* Frameworks */,
 				44DE8EFD2F0E6CEB008AC986 /* Products */,
 			);
@@ -157,9 +145,6 @@
 			dependencies = (
 				44DE8F122F0E6CEC008AC986 /* PBXTargetDependency */,
 			);
-			fileSystemSynchronizedGroups = (
-				44DE8F132F0E6CEC008AC986 /* GymRatTests */,
-			);
 			name = GymRatTests;
 			packageProductDependencies = (
 			);
@@ -179,9 +164,6 @@
 			);
 			dependencies = (
 				44DE8F1C2F0E6CEC008AC986 /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				44DE8F1D2F0E6CEC008AC986 /* GymRatUITests */,
 			);
 			name = GymRatUITests;
 			packageProductDependencies = (
@@ -330,9 +312,13 @@
 				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = AL.GymRat;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -365,9 +351,13 @@
 				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.albtugel.gymrat;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};

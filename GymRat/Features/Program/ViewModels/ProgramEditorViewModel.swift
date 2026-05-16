@@ -123,6 +123,14 @@ final class ProgramEditorViewModel {
         selectedExercises.map(\.id)
     }
 
+    var aiAvailableExerciseNames: [String] {
+        let seedNames = exerciseSeeds.flatMap { seed in
+            [seed.name, seed.canonicalName]
+        }
+        let customNames = customExercises.map(\.name)
+        return Array(Set(seedNames + customNames)).sorted()
+    }
+
 
     func updateProgramName(_ name: String) {
         programName = name
@@ -317,6 +325,43 @@ final class ProgramEditorViewModel {
         }
     }
 
+    func makeAIPlanPreview(from response: AIPlanEditResponse) async throws -> AIPlanEditPreview {
+        let seedNames = aiAvailableExerciseNames
+        let availableExercises = try await availableExercisesForAI()
+        return try AIPlanEditApplier.makePreview(
+            response: response,
+            availableExercises: availableExercises,
+            seedNames: seedNames,
+            existingSelectedExercises: selectedExercises
+        )
+    }
+
+    func applyAIPlanPreview(_ preview: AIPlanEditPreview) async {
+        do {
+            let availableExercises = try await availableExercisesForAI()
+            let result = AIPlanEditApplier.apply(
+                preview: preview,
+                programType: programType,
+                existingSelectedExercises: selectedExercises,
+                availableExercises: availableExercises
+            )
+            for exercise in result.customExercises {
+                try await exerciseService.addExercise(exercise)
+            }
+            for workoutExercise in result.exercises where try await exerciseService.fetchExercise(named: workoutExercise.exercise.name) == nil {
+                try await exerciseService.addExercise(workoutExercise.exercise)
+            }
+            if let programName = result.programName {
+                updateProgramName(programName)
+            }
+            selectedExercises = result.exercises
+            customExercises = (try await exerciseService.fetchExercises()).filter { $0.isCustom }
+            errorMessage = nil
+        } catch {
+            errorMessage = error.localizedDescription
+        }
+    }
+
 
     private func fetchOrCreateExercise(_ seed: ExerciseRepo.ExerciseSeed) async -> Exercise? {
         do {
@@ -331,6 +376,22 @@ final class ProgramEditorViewModel {
             errorMessage = error.localizedDescription
             return nil
         }
+    }
+
+    private func availableExercisesForAI() async throws -> [Exercise] {
+        var exercises = try await exerciseService.fetchExercises()
+        let existingNames = Set(exercises.map { normalizedExerciseName($0.name) })
+        let seedExercises = exerciseSeeds
+            .filter { !existingNames.contains(normalizedExerciseName($0.name)) }
+            .map { Exercise(name: $0.name, categoryRaw: $0.category.rawValue) }
+        exercises.append(contentsOf: seedExercises)
+        return exercises
+    }
+
+    private func normalizedExerciseName(_ value: String) -> String {
+        value
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+            .folding(options: [.caseInsensitive, .diacriticInsensitive], locale: .current)
     }
 
 

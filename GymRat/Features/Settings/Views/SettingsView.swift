@@ -4,6 +4,7 @@ struct SettingsView: View {
     @Environment(ThemeStore.self) private var themeStore
     @Environment(ProgramViewModel.self) private var programViewModel
     @Environment(Units.self) private var units
+    @Environment(AISettingsManager.self) private var aiSettingsManager
     @State private var viewModel: SettingsViewModel
     @State private var selectedProgram: Program?
     @State private var showResetAlert = false
@@ -37,6 +38,8 @@ struct SettingsView: View {
                 weightUnit: $units.weightUnit,
                 distanceUnit: $units.distanceUnit
             )
+
+            AISection(aiSettingsManager: aiSettingsManager)
 
             AboutSection(
                 appVersion: viewModel.appVersion,

@@ -26,11 +26,16 @@ struct ExerciseRowHeader: View {
         HStack {
             Text(name)
                 .font(.headline)
+                .lineLimit(2)
+                .truncationMode(.tail)
+                .fixedSize(horizontal: false, vertical: true)
+                .layoutPriority(1)
 
             if isSharedHistory {
                 Image(systemName: "link.circle.fill")
                     .foregroundColor(accentColor)
                     .font(.system(size: 16))
+                    .fixedSize()
             }
 
             Spacer()
@@ -45,10 +50,12 @@ struct ExerciseRowHeader: View {
                         .foregroundColor(.white)
                 }
                 .frame(width: 22, height: 22)
+                .fixedSize()
             }
 
             if let seed {
                 ExerciseDetailsButton(seed: seed)
+                    .fixedSize()
             }
         }
     }

@@ -44,7 +44,7 @@ final class Dependencies {
 
         modelContext = modelContainer.mainContext
 
-        exerciseStore = ExerciseRepo()
+        exerciseStore = ExerciseRepo.shared
         exerciseService = ExerciseService(modelContext: modelContext, exerciseStore: exerciseStore)
         programService = ProgramService(modelContext: modelContext)
         programAssignmentService = ScheduleService(modelContext: modelContext)

@@ -1,0 +1,16 @@
+{
+  "source": "/Users/alik/Documents/Work/Swift/GymRat/GymRat/Features/Program/Views/Components/ProgramEditorContent.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "cancel_button",
+        "location": {
+          "startingColumn": 28,
+          "startingLine": 42
+        }
+      }
+    ]
+  },
+  "version": 1
+}

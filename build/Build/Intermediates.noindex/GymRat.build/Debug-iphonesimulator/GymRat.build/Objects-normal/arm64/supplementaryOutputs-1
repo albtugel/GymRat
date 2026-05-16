@@ -1,0 +1,23 @@
+{
+  "/Users/alik/Documents/Work/Swift/GymRat/GymRat/App/Dependencies.swift" : {
+    "const-values" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/GymRat.build/Debug-iphonesimulator/GymRat.build/Objects-normal/arm64/Dependencies.swiftconstvalues",
+    "dependencies" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/GymRat.build/Debug-iphonesimulator/GymRat.build/Objects-normal/arm64/Dependencies.d",
+    "diagnostics" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/GymRat.build/Debug-iphonesimulator/GymRat.build/Objects-normal/arm64/Dependencies.dia",
+    "object" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/GymRat.build/Debug-iphonesimulator/GymRat.build/Objects-normal/arm64/Dependencies.o",
+    "swift-dependencies" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/GymRat.build/Debug-iphonesimulator/GymRat.build/Objects-normal/arm64/Dependencies.swiftdeps"
+  },
+  "/Users/alik/Documents/Work/Swift/GymRat/GymRat/App/GymRatApp.swift" : {
+    "const-values" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/GymRat.build/Debug-iphonesimulator/GymRat.build/Objects-normal/arm64/GymRatApp.swiftconstvalues",
+    "dependencies" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/GymRat.build/Debug-iphonesimulator/GymRat.build/Objects-normal/arm64/GymRatApp.d",
+    "diagnostics" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/GymRat.build/Debug-iphonesimulator/GymRat.build/Objects-normal/arm64/GymRatApp.dia",
+    "object" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/GymRat.build/Debug-iphonesimulator/GymRat.build/Objects-normal/arm64/GymRatApp.o",
+    "swift-dependencies" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/GymRat.build/Debug-iphonesimulator/GymRat.build/Objects-normal/arm64/GymRatApp.swiftdeps"
+  },
+  "/Users/alik/Documents/Work/Swift/GymRat/GymRat/Core/Services/ExerciseRepo/ExerciseCache.swift" : {
+    "const-values" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/GymRat.build/Debug-iphonesimulator/GymRat.build/Objects-normal/arm64/ExerciseCache.swiftconstvalues",
+    "dependencies" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/GymRat.build/Debug-iphonesimulator/GymRat.build/Objects-normal/arm64/ExerciseCache.d",
+    "diagnostics" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/GymRat.build/Debug-iphonesimulator/GymRat.build/Objects-normal/arm64/ExerciseCache.dia",
+    "object" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/GymRat.build/Debug-iphonesimulator/GymRat.build/Objects-normal/arm64/ExerciseCache.o",
+    "swift-dependencies" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/GymRat.build/Debug-iphonesimulator/GymRat.build/Objects-normal/arm64/ExerciseCache.swiftdeps"
+  }
+}

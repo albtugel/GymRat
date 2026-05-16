@@ -5,13 +5,13 @@ import Observation
 @MainActor
 final class DayProgramsViewModel {
 
-    // MARK: - State
+
     private(set) var dayPrograms: [Program] = []
     private(set) var draggingProgram: Program?
     private(set) var editingProgram: Program?
     private(set) var selectedDate: Date
 
-    // MARK: - Dependencies
+
     private let programViewModel: ProgramViewModel
 
     init(selectedDate: Date, programViewModel: ProgramViewModel) {
@@ -20,7 +20,7 @@ final class DayProgramsViewModel {
         reloadPrograms()
     }
 
-    // MARK: - Intents
+
     func updateSelectedDate(_ date: Date) {
         selectedDate = date
         reloadPrograms()
@@ -55,7 +55,7 @@ final class DayProgramsViewModel {
         dayPrograms = reordered
     }
 
-    // MARK: - Helpers
+
     private func reloadPrograms() {
         dayPrograms = programViewModel.programs(for: selectedDate)
     }

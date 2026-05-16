@@ -22,7 +22,7 @@ struct ProgramsList: View {
         self.onReorder = onReorder
     }
 
-    // MARK: - Body
+
     var body: some View {
         ForEach(dayPrograms) { program in
             ProgramCard(

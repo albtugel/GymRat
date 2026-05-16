@@ -1,0 +1,64 @@
+{
+  "source": "/Users/alik/Documents/Work/Swift/GymRat/GymRat/Features/Calendar/Views/Weekday.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "weekday_mon_short",
+        "location": {
+          "startingColumn": 48,
+          "startingLine": 16
+        }
+      },
+      {
+        "comment": "",
+        "key": "weekday_tue_short",
+        "location": {
+          "startingColumn": 49,
+          "startingLine": 17
+        }
+      },
+      {
+        "comment": "",
+        "key": "weekday_wed_short",
+        "location": {
+          "startingColumn": 51,
+          "startingLine": 18
+        }
+      },
+      {
+        "comment": "",
+        "key": "weekday_thu_short",
+        "location": {
+          "startingColumn": 50,
+          "startingLine": 19
+        }
+      },
+      {
+        "comment": "",
+        "key": "weekday_fri_short",
+        "location": {
+          "startingColumn": 48,
+          "startingLine": 20
+        }
+      },
+      {
+        "comment": "",
+        "key": "weekday_sat_short",
+        "location": {
+          "startingColumn": 50,
+          "startingLine": 21
+        }
+      },
+      {
+        "comment": "",
+        "key": "weekday_sun_short",
+        "location": {
+          "startingColumn": 48,
+          "startingLine": 22
+        }
+      }
+    ]
+  },
+  "version": 1
+}

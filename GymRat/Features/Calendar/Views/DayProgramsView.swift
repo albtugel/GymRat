@@ -21,7 +21,7 @@ struct DayProgramsView: View {
         ))
     }
 
-    // MARK: - Body
+
     var body: some View {
         DayProgramsList(
             selectedDate: viewModel.selectedDate,
@@ -51,7 +51,7 @@ struct DayProgramsView: View {
         }
     }
 
-    // MARK: - Helpers
+
     private var dayProgramsBinding: Binding<[Program]> {
         Binding(
             get: { viewModel.dayPrograms },

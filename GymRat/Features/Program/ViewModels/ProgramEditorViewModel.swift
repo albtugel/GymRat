@@ -5,7 +5,7 @@ import Observation
 @MainActor
 final class ProgramEditorViewModel {
 
-    // MARK: - State
+
     private(set) var mode: ProgramEditorMode
     private(set) var program: Program
     private(set) var programName: String
@@ -24,12 +24,13 @@ final class ProgramEditorViewModel {
     private(set) var showNoSharedExerciseAlert: Bool = false
     private(set) var showWeekdaysRequiredAlert: Bool = false
     private(set) var pendingSeed: ExerciseRepo.ExerciseSeed?
+    private(set) var exerciseSeeds: [ExerciseRepo.ExerciseSeed] = []
     private(set) var isLoading: Bool = false
     private(set) var errorMessage: String?
     private(set) var didSave: Bool = false
     private var didClearNameOnFocus: Bool = false
 
-    // MARK: - Dependencies
+
     private let programService: ProgramServiceType
     private let exerciseService: ExerciseServiceType
     private let exerciseLogService: ExerciseLogServiceType
@@ -58,7 +59,7 @@ final class ProgramEditorViewModel {
         self.programViewModel = programViewModel
     }
 
-    // MARK: - Derived
+
     var programType: ProgramType {
         ProgramMapper.type(for: program)
     }
@@ -81,7 +82,7 @@ final class ProgramEditorViewModel {
     }
 
     var filteredExerciseSeeds: [ExerciseRepo.ExerciseSeed] {
-        var seeds = exerciseStore.seeds
+        var seeds = exerciseSeeds
             .filter { ProgramTypeText.allows(programType, category: $0.category) }
 
         let custom = customExercises
@@ -93,8 +94,9 @@ final class ProgramEditorViewModel {
                     name: $0.name,
                     category: category,
                     muscles: [],
-                    exerciseDBKey: nil,
-                    inputType: inputType
+                    inputType: inputType,
+                    exerciseId: nil,
+                    remoteExercise: nil
                 )
             }
 
@@ -121,7 +123,7 @@ final class ProgramEditorViewModel {
         selectedExercises.map(\.id)
     }
 
-    // MARK: - Intents
+
     func updateProgramName(_ name: String) {
         programName = name
     }
@@ -214,10 +216,13 @@ final class ProgramEditorViewModel {
     func seedExercisesIfNeeded() async {
         await ExerciseSeeder.seedIfNeeded(using: exerciseService)
     }
-    
+
     func load() async {
         isLoading = true
         defer { isLoading = false }
+
+        exerciseSeeds = await exerciseStore.seedSnapshot()
+        refreshExerciseCatalogInBackground()
 
         do {
             let exercises = try await exerciseService.fetchExercises()
@@ -230,6 +235,16 @@ final class ProgramEditorViewModel {
             allPrograms = try await programService.fetchPrograms()
         } catch {
             errorMessage = error.localizedDescription
+        }
+    }
+
+    private func refreshExerciseCatalogInBackground() {
+        Task { [exerciseStore] in
+            _ = await exerciseStore.refresh()
+            let refreshedSeeds = await exerciseStore.seedSnapshot()
+            await MainActor.run {
+                self.exerciseSeeds = refreshedSeeds
+            }
         }
     }
 
@@ -302,7 +317,7 @@ final class ProgramEditorViewModel {
         }
     }
 
-    // MARK: - Helpers
+
     private func fetchOrCreateExercise(_ seed: ExerciseRepo.ExerciseSeed) async -> Exercise? {
         do {
             if let existing = try await exerciseService.fetchExercise(named: seed.name) {
@@ -318,7 +333,7 @@ final class ProgramEditorViewModel {
         }
     }
 
-    // MARK: - Helpers
+
     private func addExercise(from seed: ExerciseRepo.ExerciseSeed, sharedHistory: Bool) async {
         guard let exercise = await fetchOrCreateExercise(seed) else { return }
         guard !isExerciseSelected(exercise) else {

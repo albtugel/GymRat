@@ -1,0 +1,24 @@
+{
+  "source": "/Users/alik/Documents/Work/Swift/GymRat/GymRat/Shared/WeightUnit.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "kg_label",
+        "location": {
+          "startingColumn": 44,
+          "startingLine": 9
+        }
+      },
+      {
+        "comment": "",
+        "key": "lbs_label",
+        "location": {
+          "startingColumn": 45,
+          "startingLine": 10
+        }
+      }
+    ]
+  },
+  "version": 1
+}

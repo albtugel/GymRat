@@ -1,0 +1,32 @@
+{
+  "source": "/Users/alik/Documents/Work/Swift/GymRat/GymRat/Features/Program/Views/Components/ProgramInfoView.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "program_info_section",
+        "location": {
+          "startingColumn": 17,
+          "startingLine": 29
+        }
+      },
+      {
+        "comment": "",
+        "key": "program_color_label",
+        "location": {
+          "startingColumn": 25,
+          "startingLine": 43
+        }
+      },
+      {
+        "comment": "",
+        "key": "program_name_placeholder",
+        "location": {
+          "startingColumn": 27,
+          "startingLine": 31
+        }
+      }
+    ]
+  },
+  "version": 1
+}

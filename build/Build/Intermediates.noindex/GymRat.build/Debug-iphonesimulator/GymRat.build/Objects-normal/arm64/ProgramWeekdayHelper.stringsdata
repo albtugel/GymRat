@@ -1,0 +1,120 @@
+{
+  "source": "/Users/alik/Documents/Work/Swift/GymRat/GymRat/Features/Program/ViewModels/ProgramWeekdayHelper.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "weekday_monday",
+        "location": {
+          "startingColumn": 48,
+          "startingLine": 41
+        }
+      },
+      {
+        "comment": "",
+        "key": "weekday_tuesday",
+        "location": {
+          "startingColumn": 49,
+          "startingLine": 42
+        }
+      },
+      {
+        "comment": "",
+        "key": "weekday_wednesday",
+        "location": {
+          "startingColumn": 51,
+          "startingLine": 43
+        }
+      },
+      {
+        "comment": "",
+        "key": "weekday_thursday",
+        "location": {
+          "startingColumn": 50,
+          "startingLine": 44
+        }
+      },
+      {
+        "comment": "",
+        "key": "weekday_friday",
+        "location": {
+          "startingColumn": 48,
+          "startingLine": 45
+        }
+      },
+      {
+        "comment": "",
+        "key": "weekday_saturday",
+        "location": {
+          "startingColumn": 50,
+          "startingLine": 46
+        }
+      },
+      {
+        "comment": "",
+        "key": "weekday_sunday",
+        "location": {
+          "startingColumn": 48,
+          "startingLine": 47
+        }
+      },
+      {
+        "comment": "",
+        "key": "weekday_mon_short",
+        "location": {
+          "startingColumn": 48,
+          "startingLine": 53
+        }
+      },
+      {
+        "comment": "",
+        "key": "weekday_tue_short",
+        "location": {
+          "startingColumn": 49,
+          "startingLine": 54
+        }
+      },
+      {
+        "comment": "",
+        "key": "weekday_wed_short",
+        "location": {
+          "startingColumn": 51,
+          "startingLine": 55
+        }
+      },
+      {
+        "comment": "",
+        "key": "weekday_thu_short",
+        "location": {
+          "startingColumn": 50,
+          "startingLine": 56
+        }
+      },
+      {
+        "comment": "",
+        "key": "weekday_fri_short",
+        "location": {
+          "startingColumn": 48,
+          "startingLine": 57
+        }
+      },
+      {
+        "comment": "",
+        "key": "weekday_sat_short",
+        "location": {
+          "startingColumn": 50,
+          "startingLine": 58
+        }
+      },
+      {
+        "comment": "",
+        "key": "weekday_sun_short",
+        "location": {
+          "startingColumn": 48,
+          "startingLine": 59
+        }
+      }
+    ]
+  },
+  "version": 1
+}

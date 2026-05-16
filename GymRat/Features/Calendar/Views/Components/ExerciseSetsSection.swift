@@ -16,7 +16,7 @@ struct ExerciseSetsSection: View {
         self._focusedField = focusedField
     }
 
-    // MARK: - Body
+
     var body: some View {
         ExerciseSetsContent(
             viewModel: viewModel,
@@ -31,7 +31,7 @@ struct ExerciseSetsSection: View {
         )
     }
 
-    // MARK: - Helpers
+
     private var setsCountBinding: Binding<String> {
         Binding(
             get: { viewModel.setsText() },

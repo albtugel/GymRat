@@ -1,18 +1,19 @@
 import Foundation
 import Observation
+import Kingfisher
 
 @Observable
 @MainActor
 final class ProgramViewModel {
 
-    // MARK: - State
+
     private(set) var programs: [Program] = []
     private(set) var customPrograms: [Program] = []
     private(set) var dayPrograms: [Date: [Program]] = [:]
     private(set) var isLoading: Bool = false
     private(set) var errorMessage: String?
 
-    // MARK: - Dependencies
+
     private let exerciseService: ExerciseServiceType
     private let programService: ProgramServiceType
     private let assignmentService: ScheduleServiceType
@@ -30,7 +31,7 @@ final class ProgramViewModel {
         self.dataResetService = dataResetService
     }
 
-    // MARK: - Intents
+
     func programs(for date: Date) -> [Program] {
         guard let weekday = ProgramWeekdayHelper.from(date: date) else { return [] }
         return customPrograms.filter { ProgramMapper.weekdays(for: $0).contains(weekday) }
@@ -63,7 +64,7 @@ final class ProgramViewModel {
         errorMessage = nil
     }
 
-    // MARK: - Loading
+
     func loadPrograms() async {
         isLoading = true
         defer { isLoading = false }
@@ -98,7 +99,7 @@ final class ProgramViewModel {
         }
     }
 
-    // MARK: - Actions
+
     func addProgram(_ program: Program) async {
         do {
             try await programService.save(program)
@@ -152,6 +153,12 @@ final class ProgramViewModel {
     func resetAllData() async {
         do {
             try await dataResetService.resetAllData()
+            
+            ImageCache.default.clearMemoryCache()
+            ImageCache.default.clearDiskCache {
+                print("Kingfisher cache cleared")
+            }
+
             resetPrograms()
         } catch {
             errorMessage = error.localizedDescription
@@ -176,7 +183,7 @@ final class ProgramViewModel {
         }
     }
 
-    // MARK: - Helpers
+
     private func appendProgram(_ program: Program) {
         programs.append(program)
         customPrograms.append(program)

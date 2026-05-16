@@ -1,0 +1,65 @@
+{
+  "/Users/alik/Documents/Work/Swift/GymRat/build/SourcePackages/checkouts/Kingfisher/Sources/SwiftUI/KFAnimatedImage.swift" : {
+    "const-values" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/Kingfisher.build/Debug-iphonesimulator/Kingfisher.build/Objects-normal/arm64/KFAnimatedImage.swiftconstvalues",
+    "dependencies" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/Kingfisher.build/Debug-iphonesimulator/Kingfisher.build/Objects-normal/arm64/KFAnimatedImage.d",
+    "diagnostics" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/Kingfisher.build/Debug-iphonesimulator/Kingfisher.build/Objects-normal/arm64/KFAnimatedImage.dia",
+    "object" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/Kingfisher.build/Debug-iphonesimulator/Kingfisher.build/Objects-normal/arm64/KFAnimatedImage.o",
+    "swift-dependencies" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/Kingfisher.build/Debug-iphonesimulator/Kingfisher.build/Objects-normal/arm64/KFAnimatedImage.swiftdeps"
+  },
+  "/Users/alik/Documents/Work/Swift/GymRat/build/SourcePackages/checkouts/Kingfisher/Sources/SwiftUI/KFImage.swift" : {
+    "const-values" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/Kingfisher.build/Debug-iphonesimulator/Kingfisher.build/Objects-normal/arm64/KFImage.swiftconstvalues",
+    "dependencies" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/Kingfisher.build/Debug-iphonesimulator/Kingfisher.build/Objects-normal/arm64/KFImage.d",
+    "diagnostics" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/Kingfisher.build/Debug-iphonesimulator/Kingfisher.build/Objects-normal/arm64/KFImage.dia",
+    "object" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/Kingfisher.build/Debug-iphonesimulator/Kingfisher.build/Objects-normal/arm64/KFImage.o",
+    "swift-dependencies" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/Kingfisher.build/Debug-iphonesimulator/Kingfisher.build/Objects-normal/arm64/KFImage.swiftdeps"
+  },
+  "/Users/alik/Documents/Work/Swift/GymRat/build/SourcePackages/checkouts/Kingfisher/Sources/SwiftUI/KFImageOptions.swift" : {
+    "const-values" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/Kingfisher.build/Debug-iphonesimulator/Kingfisher.build/Objects-normal/arm64/KFImageOptions.swiftconstvalues",
+    "dependencies" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/Kingfisher.build/Debug-iphonesimulator/Kingfisher.build/Objects-normal/arm64/KFImageOptions.d",
+    "diagnostics" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/Kingfisher.build/Debug-iphonesimulator/Kingfisher.build/Objects-normal/arm64/KFImageOptions.dia",
+    "object" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/Kingfisher.build/Debug-iphonesimulator/Kingfisher.build/Objects-normal/arm64/KFImageOptions.o",
+    "swift-dependencies" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/Kingfisher.build/Debug-iphonesimulator/Kingfisher.build/Objects-normal/arm64/KFImageOptions.swiftdeps"
+  },
+  "/Users/alik/Documents/Work/Swift/GymRat/build/SourcePackages/checkouts/Kingfisher/Sources/SwiftUI/KFImageProtocol.swift" : {
+    "const-values" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/Kingfisher.build/Debug-iphonesimulator/Kingfisher.build/Objects-normal/arm64/KFImageProtocol.swiftconstvalues",
+    "dependencies" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/Kingfisher.build/Debug-iphonesimulator/Kingfisher.build/Objects-normal/arm64/KFImageProtocol.d",
+    "diagnostics" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/Kingfisher.build/Debug-iphonesimulator/Kingfisher.build/Objects-normal/arm64/KFImageProtocol.dia",
+    "object" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/Kingfisher.build/Debug-iphonesimulator/Kingfisher.build/Objects-normal/arm64/KFImageProtocol.o",
+    "swift-dependencies" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/Kingfisher.build/Debug-iphonesimulator/Kingfisher.build/Objects-normal/arm64/KFImageProtocol.swiftdeps"
+  },
+  "/Users/alik/Documents/Work/Swift/GymRat/build/SourcePackages/checkouts/Kingfisher/Sources/SwiftUI/KFImageRenderer.swift" : {
+    "const-values" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/Kingfisher.build/Debug-iphonesimulator/Kingfisher.build/Objects-normal/arm64/KFImageRenderer.swiftconstvalues",
+    "dependencies" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/Kingfisher.build/Debug-iphonesimulator/Kingfisher.build/Objects-normal/arm64/KFImageRenderer.d",
+    "diagnostics" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/Kingfisher.build/Debug-iphonesimulator/Kingfisher.build/Objects-normal/arm64/KFImageRenderer.dia",
+    "object" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/Kingfisher.build/Debug-iphonesimulator/Kingfisher.build/Objects-normal/arm64/KFImageRenderer.o",
+    "swift-dependencies" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/Kingfisher.build/Debug-iphonesimulator/Kingfisher.build/Objects-normal/arm64/KFImageRenderer.swiftdeps"
+  },
+  "/Users/alik/Documents/Work/Swift/GymRat/build/SourcePackages/checkouts/Kingfisher/Sources/Utility/Box.swift" : {
+    "const-values" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/Kingfisher.build/Debug-iphonesimulator/Kingfisher.build/Objects-normal/arm64/Box.swiftconstvalues",
+    "dependencies" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/Kingfisher.build/Debug-iphonesimulator/Kingfisher.build/Objects-normal/arm64/Box.d",
+    "diagnostics" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/Kingfisher.build/Debug-iphonesimulator/Kingfisher.build/Objects-normal/arm64/Box.dia",
+    "object" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/Kingfisher.build/Debug-iphonesimulator/Kingfisher.build/Objects-normal/arm64/Box.o",
+    "swift-dependencies" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/Kingfisher.build/Debug-iphonesimulator/Kingfisher.build/Objects-normal/arm64/Box.swiftdeps"
+  },
+  "/Users/alik/Documents/Work/Swift/GymRat/build/SourcePackages/checkouts/Kingfisher/Sources/Utility/CallbackQueue.swift" : {
+    "const-values" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/Kingfisher.build/Debug-iphonesimulator/Kingfisher.build/Objects-normal/arm64/CallbackQueue.swiftconstvalues",
+    "dependencies" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/Kingfisher.build/Debug-iphonesimulator/Kingfisher.build/Objects-normal/arm64/CallbackQueue.d",
+    "diagnostics" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/Kingfisher.build/Debug-iphonesimulator/Kingfisher.build/Objects-normal/arm64/CallbackQueue.dia",
+    "object" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/Kingfisher.build/Debug-iphonesimulator/Kingfisher.build/Objects-normal/arm64/CallbackQueue.o",
+    "swift-dependencies" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/Kingfisher.build/Debug-iphonesimulator/Kingfisher.build/Objects-normal/arm64/CallbackQueue.swiftdeps"
+  },
+  "/Users/alik/Documents/Work/Swift/GymRat/build/SourcePackages/checkouts/Kingfisher/Sources/Utility/CancellationToken.swift" : {
+    "const-values" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/Kingfisher.build/Debug-iphonesimulator/Kingfisher.build/Objects-normal/arm64/CancellationToken.swiftconstvalues",
+    "dependencies" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/Kingfisher.build/Debug-iphonesimulator/Kingfisher.build/Objects-normal/arm64/CancellationToken.d",
+    "diagnostics" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/Kingfisher.build/Debug-iphonesimulator/Kingfisher.build/Objects-normal/arm64/CancellationToken.dia",
+    "object" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/Kingfisher.build/Debug-iphonesimulator/Kingfisher.build/Objects-normal/arm64/CancellationToken.o",
+    "swift-dependencies" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/Kingfisher.build/Debug-iphonesimulator/Kingfisher.build/Objects-normal/arm64/CancellationToken.swiftdeps"
+  },
+  "/Users/alik/Documents/Work/Swift/GymRat/build/SourcePackages/checkouts/Kingfisher/Sources/Utility/Delegate.swift" : {
+    "const-values" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/Kingfisher.build/Debug-iphonesimulator/Kingfisher.build/Objects-normal/arm64/Delegate.swiftconstvalues",
+    "dependencies" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/Kingfisher.build/Debug-iphonesimulator/Kingfisher.build/Objects-normal/arm64/Delegate.d",
+    "diagnostics" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/Kingfisher.build/Debug-iphonesimulator/Kingfisher.build/Objects-normal/arm64/Delegate.dia",
+    "object" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/Kingfisher.build/Debug-iphonesimulator/Kingfisher.build/Objects-normal/arm64/Delegate.o",
+    "swift-dependencies" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/Kingfisher.build/Debug-iphonesimulator/Kingfisher.build/Objects-normal/arm64/Delegate.swiftdeps"
+  }
+}

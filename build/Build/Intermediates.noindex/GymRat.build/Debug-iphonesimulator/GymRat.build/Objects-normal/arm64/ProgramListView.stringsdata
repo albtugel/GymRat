@@ -1,0 +1,32 @@
+{
+  "source": "/Users/alik/Documents/Work/Swift/GymRat/GymRat/Features/Program/Views/ProgramListView.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "programs_title",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 55
+        }
+      },
+      {
+        "comment": "",
+        "key": "programs_title",
+        "location": {
+          "startingColumn": 21,
+          "startingLine": 12
+        }
+      },
+      {
+        "comment": "",
+        "key": "my_programs_section",
+        "location": {
+          "startingColumn": 25,
+          "startingLine": 29
+        }
+      }
+    ]
+  },
+  "version": 1
+}

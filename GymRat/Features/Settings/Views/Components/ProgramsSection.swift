@@ -21,7 +21,7 @@ struct ProgramsSection: View {
         self.onAdd = onAdd
     }
 
-    // MARK: - Body
+
     var body: some View {
         Section("programs_title") {
             if !hasPrograms {

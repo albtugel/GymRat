@@ -21,7 +21,7 @@ struct ExerciseRowHeader: View {
         self.seed = seed
     }
 
-    // MARK: - Body
+
     var body: some View {
         HStack {
             Text(name)
@@ -47,7 +47,7 @@ struct ExerciseRowHeader: View {
                 .frame(width: 22, height: 22)
             }
 
-            if let seed, seed.exerciseDBKey != nil {
+            if let seed {
                 ExerciseDetailsButton(seed: seed)
             }
         }

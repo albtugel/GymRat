@@ -1,0 +1,56 @@
+{
+  "source": "/Users/alik/Documents/Work/Swift/GymRat/GymRat/Features/Calendar/ViewModels/ExerciseRowViewModel.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "dur_label",
+        "location": {
+          "startingColumn": 27,
+          "startingLine": 124
+        }
+      },
+      {
+        "comment": "",
+        "key": "reps_label",
+        "location": {
+          "startingColumn": 50,
+          "startingLine": 129
+        }
+      },
+      {
+        "comment": "",
+        "key": "jumps_label",
+        "location": {
+          "startingColumn": 52,
+          "startingLine": 131
+        }
+      },
+      {
+        "comment": "",
+        "key": "reps_label",
+        "location": {
+          "startingColumn": 47,
+          "startingLine": 132
+        }
+      },
+      {
+        "comment": "",
+        "key": "sets_label",
+        "location": {
+          "startingColumn": 58,
+          "startingLine": 138
+        }
+      },
+      {
+        "comment": "",
+        "key": "rounds_label",
+        "location": {
+          "startingColumn": 69,
+          "startingLine": 139
+        }
+      }
+    ]
+  },
+  "version": 1
+}

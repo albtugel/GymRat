@@ -12,7 +12,7 @@ struct AppearanceSection: View {
         self._accentColor = accentColor
     }
 
-    // MARK: - Body
+
     var body: some View {
         Section("appearance_section") {
             ThemeView(selectedTheme: $selectedTheme)

@@ -1,6 +1,6 @@
 import SwiftUI
 
-let hourHeight: CGFloat = 60 // 1 час = 60pt
+let hourHeight: CGFloat = 60
 
 func yOffset(for date: Date) -> CGFloat {
     let hour = Calendar.current.component(.hour, from: date)

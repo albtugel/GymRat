@@ -1,0 +1,32 @@
+{
+  "source": "/Users/alik/Documents/Work/Swift/GymRat/GymRat/Features/Settings/Views/Components/ProgramsSection.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "programs_title",
+        "location": {
+          "startingColumn": 17,
+          "startingLine": 26
+        }
+      },
+      {
+        "comment": "",
+        "key": "no_programs_yet",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 28
+        }
+      },
+      {
+        "comment": "",
+        "key": "add_program_button",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 53
+        }
+      }
+    ]
+  },
+  "version": 1
+}

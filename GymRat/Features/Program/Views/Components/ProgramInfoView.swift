@@ -24,7 +24,7 @@ struct ProgramInfoView: View {
         self.onNameFieldFocusChange = onNameFieldFocusChange
     }
 
-    // MARK: - Body
+
     var body: some View {
         Section("program_info_section") {
             HStack {
@@ -44,7 +44,7 @@ struct ProgramInfoView: View {
         }
     }
 
-    // MARK: - Helpers
+
     private var programNameBinding: Binding<String> {
         Binding(
             get: { programName },

@@ -11,7 +11,7 @@ struct WeekArrowButton: View {
         self.onTap = onTap
     }
 
-    // MARK: - Body
+
     var body: some View {
         Button(action: onTap) {
             Image(systemName: systemName)

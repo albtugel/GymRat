@@ -1,0 +1,16 @@
+{
+  "source": "/Users/alik/Documents/Work/Swift/GymRat/GymRat/Features/Program/Views/Components/ProgramDaysView.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "days_section",
+        "location": {
+          "startingColumn": 17,
+          "startingLine": 12
+        }
+      }
+    ]
+  },
+  "version": 1
+}

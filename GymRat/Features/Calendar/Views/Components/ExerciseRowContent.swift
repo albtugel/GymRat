@@ -15,7 +15,7 @@ struct ExerciseLogRowRootView: View {
         self.accentColor = accentColor
     }
 
-    // MARK: - Body
+
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             ExerciseRowHeader(

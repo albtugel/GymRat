@@ -24,7 +24,7 @@ struct ExercisePickerRowView: View {
         self.onClearHistory = onClearHistory
     }
 
-    // MARK: - Body
+
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
             HStack(spacing: 8) {
@@ -59,7 +59,7 @@ struct ExercisePickerRowView: View {
         }
     }
 
-    // MARK: - Subviews
+
     @ViewBuilder
     private var selectionIndicator: some View {
         if let number = selectionNumber {

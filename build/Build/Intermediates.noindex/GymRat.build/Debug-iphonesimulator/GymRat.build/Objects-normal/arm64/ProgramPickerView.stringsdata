@@ -1,0 +1,40 @@
+{
+  "source": "/Users/alik/Documents/Work/Swift/GymRat/GymRat/Features/Program/Views/ProgramPickerView.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "select_program_title",
+        "location": {
+          "startingColumn": 30,
+          "startingLine": 58
+        }
+      },
+      {
+        "comment": "",
+        "key": "templates_section",
+        "location": {
+          "startingColumn": 25,
+          "startingLine": 16
+        }
+      },
+      {
+        "comment": "",
+        "key": "my_programs_section",
+        "location": {
+          "startingColumn": 29,
+          "startingLine": 38
+        }
+      },
+      {
+        "comment": "",
+        "key": "cancel_button",
+        "location": {
+          "startingColumn": 28,
+          "startingLine": 61
+        }
+      }
+    ]
+  },
+  "version": 1
+}

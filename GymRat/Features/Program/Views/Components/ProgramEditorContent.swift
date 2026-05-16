@@ -18,7 +18,7 @@ struct ProgramEditorContent: View {
         self.onCancel = onCancel
     }
 
-    // MARK: - Body
+
     var body: some View {
         NavigationStack {
             Form {
@@ -47,7 +47,7 @@ struct ProgramEditorContent: View {
         }
     }
 
-    // MARK: - Helpers
+
     private var programColor: Color {
         if !viewModel.programColorHex.isEmpty, let color = Color(hex: viewModel.programColorHex) {
             return color

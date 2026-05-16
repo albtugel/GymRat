@@ -33,7 +33,7 @@ struct ExerciseSetsContent: View {
         self.statBoxWidth = statBoxWidth
     }
 
-    // MARK: - Body
+
     var body: some View {
         HStack(alignment: .top, spacing: 12) {
             SetsField(

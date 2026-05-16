@@ -1,0 +1,24 @@
+{
+  "source": "/Users/alik/Documents/Work/Swift/GymRat/GymRat/Features/Program/Views/Components/ExercisePickerRowView.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "clear_exercise_history",
+        "location": {
+          "startingColumn": 46,
+          "startingLine": 56
+        }
+      },
+      {
+        "comment": "",
+        "key": "%lld",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 69
+        }
+      }
+    ]
+  },
+  "version": 1
+}

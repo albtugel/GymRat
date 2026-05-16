@@ -7,7 +7,7 @@ struct ExercisePickerView: View {
         self.viewModel = viewModel
     }
 
-    // MARK: - Body
+
     var body: some View {
         Section("exercises_section") {
             ExerciseSearchBar(viewModel: viewModel)

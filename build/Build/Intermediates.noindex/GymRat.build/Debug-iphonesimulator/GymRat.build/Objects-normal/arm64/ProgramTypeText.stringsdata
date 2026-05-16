@@ -1,0 +1,32 @@
+{
+  "source": "/Users/alik/Documents/Work/Swift/GymRat/GymRat/Features/Program/ViewModels/ProgramTypeText.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "program_type_strength",
+        "location": {
+          "startingColumn": 50,
+          "startingLine": 6
+        }
+      },
+      {
+        "comment": "",
+        "key": "program_type_cardio",
+        "location": {
+          "startingColumn": 48,
+          "startingLine": 7
+        }
+      },
+      {
+        "comment": "",
+        "key": "program_type_crossfit",
+        "location": {
+          "startingColumn": 50,
+          "startingLine": 8
+        }
+      }
+    ]
+  },
+  "version": 1
+}

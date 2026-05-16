@@ -10,7 +10,7 @@ struct ProgramEditorView: View {
         _viewModel = State(initialValue: viewModel)
     }
 
-    // MARK: - Body
+
     var body: some View {
         ProgramEditorContent(
             viewModel: viewModel,

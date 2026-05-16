@@ -1,0 +1,80 @@
+{
+  "source": "/Users/alik/Documents/Work/Swift/GymRat/GymRat/Features/Program/ViewModels/MuscleText.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "muscle_chest",
+        "location": {
+          "startingColumn": 47,
+          "startingLine": 6
+        }
+      },
+      {
+        "comment": "",
+        "key": "muscle_back",
+        "location": {
+          "startingColumn": 46,
+          "startingLine": 7
+        }
+      },
+      {
+        "comment": "",
+        "key": "muscle_shoulders",
+        "location": {
+          "startingColumn": 51,
+          "startingLine": 8
+        }
+      },
+      {
+        "comment": "",
+        "key": "muscle_biceps",
+        "location": {
+          "startingColumn": 48,
+          "startingLine": 9
+        }
+      },
+      {
+        "comment": "",
+        "key": "muscle_triceps",
+        "location": {
+          "startingColumn": 49,
+          "startingLine": 10
+        }
+      },
+      {
+        "comment": "",
+        "key": "muscle_legs",
+        "location": {
+          "startingColumn": 46,
+          "startingLine": 11
+        }
+      },
+      {
+        "comment": "",
+        "key": "muscle_glutes",
+        "location": {
+          "startingColumn": 48,
+          "startingLine": 12
+        }
+      },
+      {
+        "comment": "",
+        "key": "muscle_core",
+        "location": {
+          "startingColumn": 46,
+          "startingLine": 13
+        }
+      },
+      {
+        "comment": "",
+        "key": "muscle_calves",
+        "location": {
+          "startingColumn": 48,
+          "startingLine": 14
+        }
+      }
+    ]
+  },
+  "version": 1
+}

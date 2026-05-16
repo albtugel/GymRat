@@ -1,0 +1,16 @@
+{
+  "source": "/Users/alik/Documents/Work/Swift/GymRat/GymRat/Features/Calendar/Views/WeekView.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "ok_button",
+        "location": {
+          "startingColumn": 24,
+          "startingLine": 44
+        }
+      }
+    ]
+  },
+  "version": 1
+}

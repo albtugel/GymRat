@@ -1,0 +1,24 @@
+{
+  "source": "/Users/alik/Documents/Work/Swift/GymRat/GymRat/Features/Calendar/Views/DateSheet.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "select_date_label",
+        "location": {
+          "startingColumn": 17,
+          "startingLine": 10
+        }
+      },
+      {
+        "comment": "",
+        "key": "done_button",
+        "location": {
+          "startingColumn": 28,
+          "startingLine": 19
+        }
+      }
+    ]
+  },
+  "version": 1
+}

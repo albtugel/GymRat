@@ -1,0 +1,16 @@
+{
+  "source": "/Users/alik/Documents/Work/Swift/GymRat/GymRat/Features/Calendar/Views/Components/ExerciseRowHeader.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "%lld",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 42
+        }
+      }
+    ]
+  },
+  "version": 1
+}

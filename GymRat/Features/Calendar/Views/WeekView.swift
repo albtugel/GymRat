@@ -14,7 +14,7 @@ struct WeekView: View {
         _viewModel = State(initialValue: viewModel)
     }
 
-    // MARK: - Body
+
     var body: some View {
         VStack(spacing: 2) {
 
@@ -62,7 +62,7 @@ struct WeekView: View {
         }
     }
 
-    // MARK: - Helpers
+
     private var calendarPresented: Binding<Bool> {
         Binding(
             get: { viewModel.isCalendarPresented },

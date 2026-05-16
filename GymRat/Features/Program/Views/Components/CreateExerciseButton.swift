@@ -7,7 +7,7 @@ struct CreateExerciseButton: View {
         self.viewModel = viewModel
     }
 
-    // MARK: - Body
+
     var body: some View {
         Button {
             viewModel.presentCreateExerciseAlert()
@@ -37,7 +37,7 @@ struct CreateExerciseButton: View {
         }
     }
 
-    // MARK: - Helpers
+
     private var newExerciseNameBinding: Binding<String> {
         Binding(
             get: { viewModel.newExerciseName },

@@ -1,0 +1,128 @@
+{
+  "/Users/alik/Documents/Work/Swift/GymRat/GymRat/Features/Calendar/Views/Components/DayProgramsList.swift" : {
+    "const-values" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/GymRat.build/Debug-iphonesimulator/GymRat.build/Objects-normal/arm64/DayProgramsList.swiftconstvalues",
+    "dependencies" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/GymRat.build/Debug-iphonesimulator/GymRat.build/Objects-normal/arm64/DayProgramsList.d",
+    "diagnostics" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/GymRat.build/Debug-iphonesimulator/GymRat.build/Objects-normal/arm64/DayProgramsList.dia",
+    "object" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/GymRat.build/Debug-iphonesimulator/GymRat.build/Objects-normal/arm64/DayProgramsList.o",
+    "swift-dependencies" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/GymRat.build/Debug-iphonesimulator/GymRat.build/Objects-normal/arm64/DayProgramsList.swiftdeps"
+  },
+  "/Users/alik/Documents/Work/Swift/GymRat/GymRat/Features/Calendar/Views/Components/ExerciseRowContent.swift" : {
+    "const-values" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/GymRat.build/Debug-iphonesimulator/GymRat.build/Objects-normal/arm64/ExerciseRowContent.swiftconstvalues",
+    "dependencies" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/GymRat.build/Debug-iphonesimulator/GymRat.build/Objects-normal/arm64/ExerciseRowContent.d",
+    "diagnostics" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/GymRat.build/Debug-iphonesimulator/GymRat.build/Objects-normal/arm64/ExerciseRowContent.dia",
+    "object" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/GymRat.build/Debug-iphonesimulator/GymRat.build/Objects-normal/arm64/ExerciseRowContent.o",
+    "swift-dependencies" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/GymRat.build/Debug-iphonesimulator/GymRat.build/Objects-normal/arm64/ExerciseRowContent.swiftdeps"
+  },
+  "/Users/alik/Documents/Work/Swift/GymRat/GymRat/Features/Calendar/Views/Components/ExerciseRowHeader.swift" : {
+    "const-values" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/GymRat.build/Debug-iphonesimulator/GymRat.build/Objects-normal/arm64/ExerciseRowHeader.swiftconstvalues",
+    "dependencies" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/GymRat.build/Debug-iphonesimulator/GymRat.build/Objects-normal/arm64/ExerciseRowHeader.d",
+    "diagnostics" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/GymRat.build/Debug-iphonesimulator/GymRat.build/Objects-normal/arm64/ExerciseRowHeader.dia",
+    "object" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/GymRat.build/Debug-iphonesimulator/GymRat.build/Objects-normal/arm64/ExerciseRowHeader.o",
+    "swift-dependencies" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/GymRat.build/Debug-iphonesimulator/GymRat.build/Objects-normal/arm64/ExerciseRowHeader.swiftdeps"
+  },
+  "/Users/alik/Documents/Work/Swift/GymRat/GymRat/Features/Calendar/Views/Components/ExerciseSetsContent.swift" : {
+    "const-values" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/GymRat.build/Debug-iphonesimulator/GymRat.build/Objects-normal/arm64/ExerciseSetsContent.swiftconstvalues",
+    "dependencies" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/GymRat.build/Debug-iphonesimulator/GymRat.build/Objects-normal/arm64/ExerciseSetsContent.d",
+    "diagnostics" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/GymRat.build/Debug-iphonesimulator/GymRat.build/Objects-normal/arm64/ExerciseSetsContent.dia",
+    "object" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/GymRat.build/Debug-iphonesimulator/GymRat.build/Objects-normal/arm64/ExerciseSetsContent.o",
+    "swift-dependencies" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/GymRat.build/Debug-iphonesimulator/GymRat.build/Objects-normal/arm64/ExerciseSetsContent.swiftdeps"
+  },
+  "/Users/alik/Documents/Work/Swift/GymRat/GymRat/Features/Calendar/Views/Components/ExerciseSetsList.swift" : {
+    "const-values" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/GymRat.build/Debug-iphonesimulator/GymRat.build/Objects-normal/arm64/ExerciseSetsList.swiftconstvalues",
+    "dependencies" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/GymRat.build/Debug-iphonesimulator/GymRat.build/Objects-normal/arm64/ExerciseSetsList.d",
+    "diagnostics" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/GymRat.build/Debug-iphonesimulator/GymRat.build/Objects-normal/arm64/ExerciseSetsList.dia",
+    "object" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/GymRat.build/Debug-iphonesimulator/GymRat.build/Objects-normal/arm64/ExerciseSetsList.o",
+    "swift-dependencies" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/GymRat.build/Debug-iphonesimulator/GymRat.build/Objects-normal/arm64/ExerciseSetsList.swiftdeps"
+  },
+  "/Users/alik/Documents/Work/Swift/GymRat/GymRat/Features/Calendar/Views/Components/ExerciseSetsSection.swift" : {
+    "const-values" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/GymRat.build/Debug-iphonesimulator/GymRat.build/Objects-normal/arm64/ExerciseSetsSection.swiftconstvalues",
+    "dependencies" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/GymRat.build/Debug-iphonesimulator/GymRat.build/Objects-normal/arm64/ExerciseSetsSection.d",
+    "diagnostics" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/GymRat.build/Debug-iphonesimulator/GymRat.build/Objects-normal/arm64/ExerciseSetsSection.dia",
+    "object" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/GymRat.build/Debug-iphonesimulator/GymRat.build/Objects-normal/arm64/ExerciseSetsSection.o",
+    "swift-dependencies" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/GymRat.build/Debug-iphonesimulator/GymRat.build/Objects-normal/arm64/ExerciseSetsSection.swiftdeps"
+  },
+  "/Users/alik/Documents/Work/Swift/GymRat/GymRat/Features/Calendar/Views/Components/MonthButton.swift" : {
+    "const-values" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/GymRat.build/Debug-iphonesimulator/GymRat.build/Objects-normal/arm64/MonthButton.swiftconstvalues",
+    "dependencies" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/GymRat.build/Debug-iphonesimulator/GymRat.build/Objects-normal/arm64/MonthButton.d",
+    "diagnostics" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/GymRat.build/Debug-iphonesimulator/GymRat.build/Objects-normal/arm64/MonthButton.dia",
+    "object" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/GymRat.build/Debug-iphonesimulator/GymRat.build/Objects-normal/arm64/MonthButton.o",
+    "swift-dependencies" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/GymRat.build/Debug-iphonesimulator/GymRat.build/Objects-normal/arm64/MonthButton.swiftdeps"
+  },
+  "/Users/alik/Documents/Work/Swift/GymRat/GymRat/Features/Calendar/Views/Components/ProgramsList.swift" : {
+    "const-values" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/GymRat.build/Debug-iphonesimulator/GymRat.build/Objects-normal/arm64/ProgramsList.swiftconstvalues",
+    "dependencies" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/GymRat.build/Debug-iphonesimulator/GymRat.build/Objects-normal/arm64/ProgramsList.d",
+    "diagnostics" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/GymRat.build/Debug-iphonesimulator/GymRat.build/Objects-normal/arm64/ProgramsList.dia",
+    "object" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/GymRat.build/Debug-iphonesimulator/GymRat.build/Objects-normal/arm64/ProgramsList.o",
+    "swift-dependencies" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/GymRat.build/Debug-iphonesimulator/GymRat.build/Objects-normal/arm64/ProgramsList.swiftdeps"
+  },
+  "/Users/alik/Documents/Work/Swift/GymRat/GymRat/Features/Calendar/Views/Components/SetColumn.swift" : {
+    "const-values" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/GymRat.build/Debug-iphonesimulator/GymRat.build/Objects-normal/arm64/SetColumn.swiftconstvalues",
+    "dependencies" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/GymRat.build/Debug-iphonesimulator/GymRat.build/Objects-normal/arm64/SetColumn.d",
+    "diagnostics" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/GymRat.build/Debug-iphonesimulator/GymRat.build/Objects-normal/arm64/SetColumn.dia",
+    "object" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/GymRat.build/Debug-iphonesimulator/GymRat.build/Objects-normal/arm64/SetColumn.o",
+    "swift-dependencies" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/GymRat.build/Debug-iphonesimulator/GymRat.build/Objects-normal/arm64/SetColumn.swiftdeps"
+  },
+  "/Users/alik/Documents/Work/Swift/GymRat/GymRat/Features/Calendar/Views/Components/SetValue.swift" : {
+    "const-values" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/GymRat.build/Debug-iphonesimulator/GymRat.build/Objects-normal/arm64/SetValue.swiftconstvalues",
+    "dependencies" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/GymRat.build/Debug-iphonesimulator/GymRat.build/Objects-normal/arm64/SetValue.d",
+    "diagnostics" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/GymRat.build/Debug-iphonesimulator/GymRat.build/Objects-normal/arm64/SetValue.dia",
+    "object" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/GymRat.build/Debug-iphonesimulator/GymRat.build/Objects-normal/arm64/SetValue.o",
+    "swift-dependencies" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/GymRat.build/Debug-iphonesimulator/GymRat.build/Objects-normal/arm64/SetValue.swiftdeps"
+  },
+  "/Users/alik/Documents/Work/Swift/GymRat/GymRat/Features/Calendar/Views/Components/WeekArrowButton.swift" : {
+    "const-values" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/GymRat.build/Debug-iphonesimulator/GymRat.build/Objects-normal/arm64/WeekArrowButton.swiftconstvalues",
+    "dependencies" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/GymRat.build/Debug-iphonesimulator/GymRat.build/Objects-normal/arm64/WeekArrowButton.d",
+    "diagnostics" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/GymRat.build/Debug-iphonesimulator/GymRat.build/Objects-normal/arm64/WeekArrowButton.dia",
+    "object" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/GymRat.build/Debug-iphonesimulator/GymRat.build/Objects-normal/arm64/WeekArrowButton.o",
+    "swift-dependencies" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/GymRat.build/Debug-iphonesimulator/GymRat.build/Objects-normal/arm64/WeekArrowButton.swiftdeps"
+  },
+  "/Users/alik/Documents/Work/Swift/GymRat/GymRat/Features/Calendar/Views/Components/WeekDayCell.swift" : {
+    "const-values" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/GymRat.build/Debug-iphonesimulator/GymRat.build/Objects-normal/arm64/WeekDayCell.swiftconstvalues",
+    "dependencies" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/GymRat.build/Debug-iphonesimulator/GymRat.build/Objects-normal/arm64/WeekDayCell.d",
+    "diagnostics" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/GymRat.build/Debug-iphonesimulator/GymRat.build/Objects-normal/arm64/WeekDayCell.dia",
+    "object" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/GymRat.build/Debug-iphonesimulator/GymRat.build/Objects-normal/arm64/WeekDayCell.o",
+    "swift-dependencies" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/GymRat.build/Debug-iphonesimulator/GymRat.build/Objects-normal/arm64/WeekDayCell.swiftdeps"
+  },
+  "/Users/alik/Documents/Work/Swift/GymRat/GymRat/Features/Calendar/Views/Components/WeekDaysRow.swift" : {
+    "const-values" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/GymRat.build/Debug-iphonesimulator/GymRat.build/Objects-normal/arm64/WeekDaysRow.swiftconstvalues",
+    "dependencies" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/GymRat.build/Debug-iphonesimulator/GymRat.build/Objects-normal/arm64/WeekDaysRow.d",
+    "diagnostics" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/GymRat.build/Debug-iphonesimulator/GymRat.build/Objects-normal/arm64/WeekDaysRow.dia",
+    "object" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/GymRat.build/Debug-iphonesimulator/GymRat.build/Objects-normal/arm64/WeekDaysRow.o",
+    "swift-dependencies" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/GymRat.build/Debug-iphonesimulator/GymRat.build/Objects-normal/arm64/WeekDaysRow.swiftdeps"
+  },
+  "/Users/alik/Documents/Work/Swift/GymRat/GymRat/Features/Calendar/Views/DateSheet.swift" : {
+    "const-values" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/GymRat.build/Debug-iphonesimulator/GymRat.build/Objects-normal/arm64/DateSheet.swiftconstvalues",
+    "dependencies" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/GymRat.build/Debug-iphonesimulator/GymRat.build/Objects-normal/arm64/DateSheet.d",
+    "diagnostics" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/GymRat.build/Debug-iphonesimulator/GymRat.build/Objects-normal/arm64/DateSheet.dia",
+    "object" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/GymRat.build/Debug-iphonesimulator/GymRat.build/Objects-normal/arm64/DateSheet.o",
+    "swift-dependencies" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/GymRat.build/Debug-iphonesimulator/GymRat.build/Objects-normal/arm64/DateSheet.swiftdeps"
+  },
+  "/Users/alik/Documents/Work/Swift/GymRat/GymRat/Features/Calendar/Views/DayColumnView.swift" : {
+    "const-values" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/GymRat.build/Debug-iphonesimulator/GymRat.build/Objects-normal/arm64/DayColumnView.swiftconstvalues",
+    "dependencies" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/GymRat.build/Debug-iphonesimulator/GymRat.build/Objects-normal/arm64/DayColumnView.d",
+    "diagnostics" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/GymRat.build/Debug-iphonesimulator/GymRat.build/Objects-normal/arm64/DayColumnView.dia",
+    "object" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/GymRat.build/Debug-iphonesimulator/GymRat.build/Objects-normal/arm64/DayColumnView.o",
+    "swift-dependencies" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/GymRat.build/Debug-iphonesimulator/GymRat.build/Objects-normal/arm64/DayColumnView.swiftdeps"
+  },
+  "/Users/alik/Documents/Work/Swift/GymRat/GymRat/Features/Calendar/Views/DayProgramsView.swift" : {
+    "const-values" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/GymRat.build/Debug-iphonesimulator/GymRat.build/Objects-normal/arm64/DayProgramsView.swiftconstvalues",
+    "dependencies" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/GymRat.build/Debug-iphonesimulator/GymRat.build/Objects-normal/arm64/DayProgramsView.d",
+    "diagnostics" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/GymRat.build/Debug-iphonesimulator/GymRat.build/Objects-normal/arm64/DayProgramsView.dia",
+    "object" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/GymRat.build/Debug-iphonesimulator/GymRat.build/Objects-normal/arm64/DayProgramsView.o",
+    "swift-dependencies" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/GymRat.build/Debug-iphonesimulator/GymRat.build/Objects-normal/arm64/DayProgramsView.swiftdeps"
+  },
+  "/Users/alik/Documents/Work/Swift/GymRat/GymRat/Features/Calendar/Views/EventView.swift" : {
+    "const-values" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/GymRat.build/Debug-iphonesimulator/GymRat.build/Objects-normal/arm64/EventView.swiftconstvalues",
+    "dependencies" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/GymRat.build/Debug-iphonesimulator/GymRat.build/Objects-normal/arm64/EventView.d",
+    "diagnostics" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/GymRat.build/Debug-iphonesimulator/GymRat.build/Objects-normal/arm64/EventView.dia",
+    "object" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/GymRat.build/Debug-iphonesimulator/GymRat.build/Objects-normal/arm64/EventView.o",
+    "swift-dependencies" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/GymRat.build/Debug-iphonesimulator/GymRat.build/Objects-normal/arm64/EventView.swiftdeps"
+  },
+  "/Users/alik/Documents/Work/Swift/GymRat/GymRat/Features/Calendar/Views/ExerciseField.swift" : {
+    "const-values" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/GymRat.build/Debug-iphonesimulator/GymRat.build/Objects-normal/arm64/ExerciseField.swiftconstvalues",
+    "dependencies" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/GymRat.build/Debug-iphonesimulator/GymRat.build/Objects-normal/arm64/ExerciseField.d",
+    "diagnostics" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/GymRat.build/Debug-iphonesimulator/GymRat.build/Objects-normal/arm64/ExerciseField.dia",
+    "object" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/GymRat.build/Debug-iphonesimulator/GymRat.build/Objects-normal/arm64/ExerciseField.o",
+    "swift-dependencies" : "/Users/alik/Documents/Work/Swift/GymRat/build/Build/Intermediates.noindex/GymRat.build/Debug-iphonesimulator/GymRat.build/Objects-normal/arm64/ExerciseField.swiftdeps"
+  }
+}

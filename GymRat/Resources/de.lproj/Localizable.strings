@@ -46,6 +46,7 @@
 "ai_unknown_exercises_note" = "Unbekannte Uebungen werden als eigene Uebungen erstellt.";
 "ai_verifying_key_button" = "Pruefe...";
 "ai_verify_save_key_button" = "Schluessel pruefen und speichern";
+"apply_button" = "Anwenden";
 "app_name" = "GymRat";
 "app_version_label" = "Version";
 "appearance_section" = "Darstellung";

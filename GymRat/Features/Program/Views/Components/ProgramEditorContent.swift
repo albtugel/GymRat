@@ -5,6 +5,7 @@ struct ProgramEditorContent: View {
     @FocusState.Binding private var nameFieldIsFocused: Bool
     private let accentColor: Color
     private let onCancel: () -> Void
+    @State private var showsAIEditSheet = false
 
     init(
         viewModel: ProgramEditorViewModel,
@@ -33,6 +34,10 @@ struct ProgramEditorContent: View {
 
                 ProgramDaysView(viewModel: viewModel)
 
+                ProgramAISection {
+                    showsAIEditSheet = true
+                }
+
                 ExercisePickerView(viewModel: viewModel)
             }
             .safeAreaPadding(.bottom, 50)
@@ -43,6 +48,11 @@ struct ProgramEditorContent: View {
                         onCancel()
                     }
                 }
+            }
+            .sheet(isPresented: $showsAIEditSheet) {
+                AIPlanEditSheetView(
+                    viewModel: Dependencies.shared.makeAIPlanEditViewModel(programEditorViewModel: viewModel)
+                )
             }
         }
     }

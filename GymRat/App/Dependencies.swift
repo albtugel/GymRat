@@ -18,6 +18,8 @@ final class Dependencies {
     let themeStore: ThemeStore
     let units: Units
     let exerciseStore: ExerciseRepo
+    let aiSettingsManager: AISettingsManager
+    let aiPlanEditingService: AIPlanEditingService
 
     private init() {
         let storeURL = Self.makeStoreURL()
@@ -54,6 +56,8 @@ final class Dependencies {
         calendarService = CalendarService()
         themeStore = ThemeStore()
         units = Units()
+        aiSettingsManager = AISettingsManager()
+        aiPlanEditingService = AIPlanEditingService()
     }
 
     func makeProgramViewModel() -> ProgramViewModel {
@@ -96,6 +100,15 @@ final class Dependencies {
 
     func makeSettingsViewModel() -> SettingsViewModel {
         SettingsViewModel(dataResetService: dataResetService)
+    }
+
+    func makeAIPlanEditViewModel(programEditorViewModel: ProgramEditorViewModel) -> AIPlanEditViewModel {
+        AIPlanEditViewModel(
+            programEditorViewModel: programEditorViewModel,
+            settingsManager: aiSettingsManager,
+            editingService: aiPlanEditingService,
+            audioRecorder: AudioRecorder()
+        )
     }
 
     private static func makeStoreURL() -> URL {

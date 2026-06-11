@@ -1,0 +1,232 @@
+{
+  "source": "/Users/alik/Documents/Work/Swift/GymRat/GymRat/Features/Program/Views/Components/AI/AIPlanEditSheetView.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "ai_edit_title",
+        "location": {
+          "startingColumn": 30,
+          "startingLine": 19
+        }
+      },
+      {
+        "comment": "",
+        "key": "ai_error_title",
+        "location": {
+          "startingColumn": 20,
+          "startingLine": 36
+        }
+      },
+      {
+        "comment": "",
+        "key": "ai_prompt_section",
+        "location": {
+          "startingColumn": 17,
+          "startingLine": 91
+        }
+      },
+      {
+        "comment": "",
+        "key": "ai_transcript_section",
+        "location": {
+          "startingColumn": 21,
+          "startingLine": 131
+        }
+      },
+      {
+        "comment": "",
+        "key": "ai_preview_section",
+        "location": {
+          "startingColumn": 21,
+          "startingLine": 141
+        }
+      },
+      {
+        "comment": "",
+        "key": "cancel_button",
+        "location": {
+          "startingColumn": 28,
+          "startingLine": 22
+        }
+      },
+      {
+        "comment": "",
+        "key": "apply_button",
+        "location": {
+          "startingColumn": 28,
+          "startingLine": 27
+        }
+      },
+      {
+        "comment": "",
+        "key": "ok_button",
+        "location": {
+          "startingColumn": 24,
+          "startingLine": 37
+        }
+      },
+      {
+        "comment": "",
+        "key": "ai_api_key_placeholder",
+        "location": {
+          "startingColumn": 29,
+          "startingLine": 56
+        }
+      },
+      {
+        "comment": "",
+        "key": "ai_verify_save_key_button",
+        "location": {
+          "startingColumn": 30,
+          "startingLine": 70
+        }
+      },
+      {
+        "comment": "",
+        "key": "ai_verifying_key_button",
+        "location": {
+          "startingColumn": 34,
+          "startingLine": 67
+        }
+      },
+      {
+        "comment": "",
+        "key": "ai_api_setup_section",
+        "location": {
+          "startingColumn": 18,
+          "startingLine": 84
+        }
+      },
+      {
+        "comment": "",
+        "key": "ai_privacy_note",
+        "location": {
+          "startingColumn": 46,
+          "startingLine": 86
+        }
+      },
+      {
+        "comment": "",
+        "key": "ai_inline_api_key_footer",
+        "location": {
+          "startingColumn": 66,
+          "startingLine": 86
+        }
+      },
+      {
+        "comment": "",
+        "key": "ai_transcribing_label",
+        "location": {
+          "startingColumn": 30,
+          "startingLine": 123
+        }
+      },
+      {
+        "comment": "",
+        "key": "ai_prompt_examples",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 94
+        }
+      },
+      {
+        "comment": "",
+        "key": "ai_stop_recording_button",
+        "location": {
+          "startingColumn": 49,
+          "startingLine": 112
+        }
+      },
+      {
+        "comment": "",
+        "key": "ai_record_button",
+        "location": {
+          "startingColumn": 78,
+          "startingLine": 112
+        }
+      },
+      {
+        "comment": "",
+        "key": "program_name_placeholder",
+        "location": {
+          "startingColumn": 36,
+          "startingLine": 143
+        }
+      },
+      {
+        "comment": "",
+        "key": "ai_unknown_exercises_note",
+        "location": {
+          "startingColumn": 27,
+          "startingLine": 175
+        }
+      },
+      {
+        "comment": "",
+        "key": "ai_preview_sets_reps_format",
+        "location": {
+          "startingColumn": 63,
+          "startingLine": 153
+        }
+      },
+      {
+        "comment": "",
+        "key": "ai_unknown_exercise_format",
+        "location": {
+          "startingColumn": 67,
+          "startingLine": 157
+        }
+      },
+      {
+        "comment": "",
+        "key": "ai_change_added",
+        "location": {
+          "startingColumn": 34,
+          "startingLine": 217
+        }
+      },
+      {
+        "comment": "",
+        "key": "ai_change_changed",
+        "location": {
+          "startingColumn": 34,
+          "startingLine": 219
+        }
+      },
+      {
+        "comment": "",
+        "key": "ai_change_unchanged",
+        "location": {
+          "startingColumn": 34,
+          "startingLine": 221
+        }
+      },
+      {
+        "comment": "",
+        "key": "ai_change_custom",
+        "location": {
+          "startingColumn": 34,
+          "startingLine": 223
+        }
+      },
+      {
+        "comment": "",
+        "key": "ai_change_removed",
+        "location": {
+          "startingColumn": 46,
+          "startingLine": 170
+        }
+      },
+      {
+        "comment": "",
+        "key": "ai_generate_button",
+        "location": {
+          "startingColumn": 23,
+          "startingLine": 191
+        }
+      }
+    ]
+  },
+  "version": 1
+}

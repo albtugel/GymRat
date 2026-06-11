@@ -23,8 +23,6 @@
 				<string>AppIcon60x60</string>
 				<string>AppIcon76x76</string>
 			</array>
-			<key>CFBundleIconName</key>
-			<string>AppIcon</string>
 		</dict>
 	</dict>
 </dict>

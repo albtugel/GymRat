@@ -1,0 +1,32 @@
+{
+  "source": "/Users/alik/Documents/Work/Swift/GymRat/GymRat/Features/Program/Views/Components/AI/ProgramAISection.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "ai_section",
+        "location": {
+          "startingColumn": 17,
+          "startingLine": 7
+        }
+      },
+      {
+        "comment": "",
+        "key": "ai_edit_button",
+        "location": {
+          "startingColumn": 30,
+          "startingLine": 15
+        }
+      },
+      {
+        "comment": "",
+        "key": "ai_edit_button_subtitle",
+        "location": {
+          "startingColumn": 30,
+          "startingLine": 16
+        }
+      }
+    ]
+  },
+  "version": 1
+}

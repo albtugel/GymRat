@@ -1,0 +1,40 @@
+{
+  "source": "/Users/alik/Documents/Work/Swift/GymRat/GymRat/Core/Services/AI/AIPlanEditModels.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "ai_missing_api_key_error",
+        "location": {
+          "startingColumn": 38,
+          "startingLine": 59
+        }
+      },
+      {
+        "comment": "",
+        "key": "ai_empty_prompt_error",
+        "location": {
+          "startingColumn": 38,
+          "startingLine": 61
+        }
+      },
+      {
+        "comment": "",
+        "key": "ai_invalid_json_error",
+        "location": {
+          "startingColumn": 38,
+          "startingLine": 63
+        }
+      },
+      {
+        "comment": "",
+        "key": "ai_empty_plan_error",
+        "location": {
+          "startingColumn": 38,
+          "startingLine": 65
+        }
+      }
+    ]
+  },
+  "version": 1
+}

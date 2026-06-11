@@ -1,0 +1,24 @@
+{
+  "source": "/Users/alik/Documents/Work/Swift/GymRat/GymRat/Core/Services/AI/KeychainStore.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "ai_keychain_invalid_value_error",
+        "location": {
+          "startingColumn": 38,
+          "startingLine": 11
+        }
+      },
+      {
+        "comment": "",
+        "key": "ai_keychain_unexpected_error",
+        "location": {
+          "startingColumn": 38,
+          "startingLine": 13
+        }
+      }
+    ]
+  },
+  "version": 1
+}

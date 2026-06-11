@@ -8,6 +8,15 @@
 /Users/alik/Documents/Work/Swift/GymRat/GymRat/Core/Protocols/ProgramServiceType.swift
 /Users/alik/Documents/Work/Swift/GymRat/GymRat/Core/Protocols/ScheduleServiceType.swift
 /Users/alik/Documents/Work/Swift/GymRat/GymRat/Core/Protocols/TimelineServiceType.swift
+/Users/alik/Documents/Work/Swift/GymRat/GymRat/Core/Services/AI/AIPlanEditingService.swift
+/Users/alik/Documents/Work/Swift/GymRat/GymRat/Core/Services/AI/AIPlanEditModels.swift
+/Users/alik/Documents/Work/Swift/GymRat/GymRat/Core/Services/AI/AISettingsManager.swift
+/Users/alik/Documents/Work/Swift/GymRat/GymRat/Core/Services/AI/AITestSupport.swift
+/Users/alik/Documents/Work/Swift/GymRat/GymRat/Core/Services/AI/AudioRecorder.swift
+/Users/alik/Documents/Work/Swift/GymRat/GymRat/Core/Services/AI/KeychainStore.swift
+/Users/alik/Documents/Work/Swift/GymRat/GymRat/Core/Services/AI/MistralAPIKeyValidator.swift
+/Users/alik/Documents/Work/Swift/GymRat/GymRat/Core/Services/AI/MistralChatClient.swift
+/Users/alik/Documents/Work/Swift/GymRat/GymRat/Core/Services/AI/MistralTranscriptionClient.swift
 /Users/alik/Documents/Work/Swift/GymRat/GymRat/Core/Services/ExerciseRepo/ExerciseCache.swift
 /Users/alik/Documents/Work/Swift/GymRat/GymRat/Core/Services/ExerciseRepo/ExerciseHelpers.swift
 /Users/alik/Documents/Work/Swift/GymRat/GymRat/Core/Services/ExerciseRepo/ExerciseModels.swift
@@ -81,6 +90,7 @@
 /Users/alik/Documents/Work/Swift/GymRat/GymRat/Features/Program/Models/ProgramType.swift
 /Users/alik/Documents/Work/Swift/GymRat/GymRat/Features/Program/Models/ProgramWeekday.swift
 /Users/alik/Documents/Work/Swift/GymRat/GymRat/Features/Program/Models/ScheduleItem.swift
+/Users/alik/Documents/Work/Swift/GymRat/GymRat/Features/Program/ViewModels/AIPlanEditViewModel.swift
 /Users/alik/Documents/Work/Swift/GymRat/GymRat/Features/Program/ViewModels/ExerciseCategoryText.swift
 /Users/alik/Documents/Work/Swift/GymRat/GymRat/Features/Program/ViewModels/ExerciseDetailsViewModel.swift
 /Users/alik/Documents/Work/Swift/GymRat/GymRat/Features/Program/ViewModels/ExerciseMapper.swift
@@ -93,6 +103,8 @@
 /Users/alik/Documents/Work/Swift/GymRat/GymRat/Features/Program/ViewModels/ProgramViewModel.swift
 /Users/alik/Documents/Work/Swift/GymRat/GymRat/Features/Program/ViewModels/ProgramWeekdayHelper.swift
 /Users/alik/Documents/Work/Swift/GymRat/GymRat/Features/Program/ViewModels/SelectionInfo.swift
+/Users/alik/Documents/Work/Swift/GymRat/GymRat/Features/Program/Views/Components/AI/AIPlanEditSheetView.swift
+/Users/alik/Documents/Work/Swift/GymRat/GymRat/Features/Program/Views/Components/AI/ProgramAISection.swift
 /Users/alik/Documents/Work/Swift/GymRat/GymRat/Features/Program/Views/Components/CreateExerciseButton.swift
 /Users/alik/Documents/Work/Swift/GymRat/GymRat/Features/Program/Views/Components/ExerciseDetailsButton.swift
 /Users/alik/Documents/Work/Swift/GymRat/GymRat/Features/Program/Views/Components/ExerciseDetailsContent.swift
@@ -118,6 +130,7 @@
 /Users/alik/Documents/Work/Swift/GymRat/GymRat/Features/Program/Views/ProgramTemplate.swift
 /Users/alik/Documents/Work/Swift/GymRat/GymRat/Features/Settings/ViewModels/SettingsViewModel.swift
 /Users/alik/Documents/Work/Swift/GymRat/GymRat/Features/Settings/Views/Components/AboutSection.swift
+/Users/alik/Documents/Work/Swift/GymRat/GymRat/Features/Settings/Views/Components/AISection.swift
 /Users/alik/Documents/Work/Swift/GymRat/GymRat/Features/Settings/Views/Components/AppearanceSection.swift
 /Users/alik/Documents/Work/Swift/GymRat/GymRat/Features/Settings/Views/Components/DataSection.swift
 /Users/alik/Documents/Work/Swift/GymRat/GymRat/Features/Settings/Views/Components/InfoRow.swift
@@ -128,6 +141,7 @@
 /Users/alik/Documents/Work/Swift/GymRat/GymRat/Features/Settings/Views/ProgramsView.swift
 /Users/alik/Documents/Work/Swift/GymRat/GymRat/Features/Settings/Views/SettingsView.swift
 /Users/alik/Documents/Work/Swift/GymRat/GymRat/Features/Settings/Views/ThemeView.swift
+/Users/alik/Documents/Work/Swift/GymRat/GymRat/Shared/Components/AIAPIKeyStatusRow.swift
 /Users/alik/Documents/Work/Swift/GymRat/GymRat/Shared/Components/Alerts.swift
 /Users/alik/Documents/Work/Swift/GymRat/GymRat/Shared/Components/KeyboardObserver.swift
 /Users/alik/Documents/Work/Swift/GymRat/GymRat/Shared/Components/Notification.Name.swift

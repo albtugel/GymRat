@@ -1,0 +1,16 @@
+{
+  "source": "/Users/alik/Documents/Work/Swift/GymRat/GymRat/Features/Program/ViewModels/AIPlanEditViewModel.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "ai_microphone_permission_error",
+        "location": {
+          "startingColumn": 50,
+          "startingLine": 141
+        }
+      }
+    ]
+  },
+  "version": 1
+}

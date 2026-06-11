@@ -7,7 +7,7 @@
         "key": "settings_title",
         "location": {
           "startingColumn": 26,
-          "startingLine": 52
+          "startingLine": 55
         }
       },
       {
@@ -15,7 +15,7 @@
         "key": "reset_button",
         "location": {
           "startingColumn": 20,
-          "startingLine": 65
+          "startingLine": 68
         }
       },
       {
@@ -23,7 +23,7 @@
         "key": "cancel_button",
         "location": {
           "startingColumn": 20,
-          "startingLine": 69
+          "startingLine": 72
         }
       }
     ]

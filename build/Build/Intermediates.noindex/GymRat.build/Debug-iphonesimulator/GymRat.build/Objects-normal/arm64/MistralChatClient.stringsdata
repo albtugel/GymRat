@@ -1,0 +1,32 @@
+{
+  "source": "/Users/alik/Documents/Work/Swift/GymRat/GymRat/Core/Services/AI/MistralChatClient.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "ai_invalid_url_error",
+        "location": {
+          "startingColumn": 38,
+          "startingLine": 12
+        }
+      },
+      {
+        "comment": "",
+        "key": "ai_missing_response_error",
+        "location": {
+          "startingColumn": 38,
+          "startingLine": 14
+        }
+      },
+      {
+        "comment": "",
+        "key": "ai_empty_response_error",
+        "location": {
+          "startingColumn": 38,
+          "startingLine": 16
+        }
+      }
+    ]
+  },
+  "version": 1
+}

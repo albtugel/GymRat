@@ -61,3 +61,10 @@ fastlane/Preview.html
 fastlane/screenshots/**/*.png
 fastlane/test_output
 build/
+
+# AI development tools
+.claude/
+/CLAUDE.md
+
+# Secrets
+GymRat/Core/Secrets.swift

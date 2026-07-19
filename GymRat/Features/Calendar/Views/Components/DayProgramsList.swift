@@ -6,6 +6,7 @@ struct DayProgramsList: View {
     @Binding private var draggingProgram: Program?
     private let accentColor: Color
     private let onEdit: (Program) -> Void
+    private let onDelete: (Program) -> Void
     private let onAddProgramTap: () -> Void
     private let onReorder: ([Program]) -> Void
 
@@ -15,6 +16,7 @@ struct DayProgramsList: View {
         draggingProgram: Binding<Program?>,
         accentColor: Color,
         onEdit: @escaping (Program) -> Void,
+        onDelete: @escaping (Program) -> Void,
         onAddProgramTap: @escaping () -> Void,
         onReorder: @escaping ([Program]) -> Void
     ) {
@@ -23,6 +25,7 @@ struct DayProgramsList: View {
         self._draggingProgram = draggingProgram
         self.accentColor = accentColor
         self.onEdit = onEdit
+        self.onDelete = onDelete
         self.onAddProgramTap = onAddProgramTap
         self.onReorder = onReorder
     }
@@ -36,6 +39,7 @@ struct DayProgramsList: View {
                     dayPrograms: $dayPrograms,
                     draggingProgram: $draggingProgram,
                     onEdit: onEdit,
+                    onDelete: onDelete,
                     onReorder: onReorder
                 )
 

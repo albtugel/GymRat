@@ -5,6 +5,7 @@ struct ProgramCard: View {
     let program: Program
     let selectedDate: Date
     let onEdit: ((Program) -> Void)?
+    let onDelete: ((Program) -> Void)?
 
     @State private var draggingExercise: WorkoutExercise?
     @FocusState private var focusedField: ExerciseField?
@@ -19,9 +20,11 @@ struct ProgramCard: View {
 
     var body: some View {
         VStack(spacing: 8) {
-            ProgramHeader(name: program.name, onEdit: {
-                onEdit?(program)
-            })
+            ProgramHeader(
+                name: program.name,
+                onEdit: onEdit.map { handler in { handler(program) } },
+                onDelete: onDelete.map { handler in { handler(program) } }
+            )
 
             ForEach(program.exercises) { exercise in
                 ExerciseRow(

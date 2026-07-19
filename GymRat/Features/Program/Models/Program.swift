@@ -8,6 +8,8 @@ final class Program: Identifiable {
     var typeRaw: String
     @Relationship(deleteRule: .cascade)
     var exercises: [WorkoutExercise] = []
+    @Relationship(deleteRule: .cascade, inverse: \ScheduleItem.program)
+    var scheduleItems: [ScheduleItem] = []
     @Attribute var colorHex: String? = nil
 
     @Attribute var weekdaysRaw: [String] = []

@@ -38,6 +38,8 @@ final class ProgramService: ProgramServiceType {
     }
 
     func deleteProgram(_ program: Program) async throws {
+        // Program.scheduleItems cascades, so the program's ScheduleItems are
+        // removed in the same save.
         modelContext.delete(program)
         try modelContext.save()
     }

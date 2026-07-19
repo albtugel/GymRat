@@ -68,3 +68,5 @@ build/
 
 # Secrets
 GymRat/Core/Secrets.swift
+.agents/
+skills-lock.json

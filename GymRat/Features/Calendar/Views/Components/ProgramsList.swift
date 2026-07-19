@@ -6,6 +6,7 @@ struct ProgramsList: View {
     @Binding private var dayPrograms: [Program]
     @Binding private var draggingProgram: Program?
     private let onEdit: (Program) -> Void
+    private let onDelete: (Program) -> Void
     private let onReorder: ([Program]) -> Void
 
     init(
@@ -13,12 +14,14 @@ struct ProgramsList: View {
         dayPrograms: Binding<[Program]>,
         draggingProgram: Binding<Program?>,
         onEdit: @escaping (Program) -> Void,
+        onDelete: @escaping (Program) -> Void,
         onReorder: @escaping ([Program]) -> Void
     ) {
         self.selectedDate = selectedDate
         self._dayPrograms = dayPrograms
         self._draggingProgram = draggingProgram
         self.onEdit = onEdit
+        self.onDelete = onDelete
         self.onReorder = onReorder
     }
 
@@ -28,7 +31,8 @@ struct ProgramsList: View {
             ProgramCard(
                 program: program,
                 selectedDate: selectedDate,
-                onEdit: { onEdit($0) }
+                onEdit: { onEdit($0) },
+                onDelete: { onDelete($0) }
             )
             .onDrag {
                 draggingProgram = program

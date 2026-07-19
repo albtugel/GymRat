@@ -81,9 +81,10 @@ final class ProgramViewModel {
             let assignments = try await assignmentService.fetchAssignments()
             dayPrograms = [:]
             for assign in assignments {
+                guard let program = assign.program else { continue }
                 let day = assign.date.startOfDay
                 if day >= Date().startOfDay {
-                    dayPrograms[day, default: []].append(assign.program)
+                    dayPrograms[day, default: []].append(program)
                 }
             }
         } catch {
@@ -113,17 +114,16 @@ final class ProgramViewModel {
     }
 
     func deleteProgram(_ program: Program) async {
+        // Purge in-memory copies before the store delete so nothing reads
+        // properties of an invalidated model (views re-render on these arrays).
+        let programID = program.id
+        programs.removeAll { $0.id == programID }
+        customPrograms.removeAll { $0.id == programID }
+        for key in dayPrograms.keys {
+            dayPrograms[key]?.removeAll { $0.id == programID }
+        }
         do {
-            let programID = program.id
             try await programService.deleteProgram(program)
-            programs.removeAll { $0.id == programID }
-            customPrograms.removeAll { $0.id == programID }
-
-            try await assignmentService.deleteAssignments(forProgramId: programID)
-
-            for key in dayPrograms.keys {
-                dayPrograms[key]?.removeAll { $0.id == programID }
-            }
         } catch {
             errorMessage = error.localizedDescription
         }

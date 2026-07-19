@@ -11,20 +11,12 @@ final class ScheduleService: ScheduleServiceType {
 
     func fetchAssignments() async throws -> [ScheduleItem] {
         let descriptor = FetchDescriptor<ScheduleItem>()
-        return try modelContext.fetch(descriptor)
+        let assignments = try modelContext.fetch(descriptor)
+        return assignments.filter { $0.program != nil }
     }
 
     func saveSchedule(_ assignments: [ScheduleItem]) async throws {
         assignments.forEach { modelContext.insert($0) }
-        try modelContext.save()
-    }
-
-    func deleteAssignments(forProgramId programId: UUID) async throws {
-        let descriptor = FetchDescriptor<ScheduleItem>()
-        let assignments = try modelContext.fetch(descriptor)
-        for assignment in assignments where assignment.program.id == programId {
-            modelContext.delete(assignment)
-        }
         try modelContext.save()
     }
 

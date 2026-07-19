@@ -50,6 +50,14 @@ final class DayProgramsViewModel {
         editingProgram = program
     }
 
+    func delete(_ program: Program) {
+        Task { [weak self] in
+            guard let self else { return }
+            await self.programViewModel.deleteProgram(program)
+            self.reloadPrograms()
+        }
+    }
+
     func applyReorder(_ reordered: [Program]) {
         programViewModel.reorderPrograms(reordered)
         dayPrograms = reordered

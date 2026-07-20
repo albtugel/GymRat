@@ -2,6 +2,12 @@ import Foundation
 
 
 extension ExerciseRepo {
+    /// ExerciseDB serves media at a fixed path, so a known exercise id is enough to show a GIF
+    /// even when the catalog API is unreachable.
+    static func mediaURLString(forExerciseId id: String) -> String {
+        "https://static.exercisedb.dev/media/\(id).gif"
+    }
+
     struct Exercise: Identifiable, Codable, Equatable, Sendable {
         let id: String
         let name: String
@@ -89,8 +95,11 @@ extension ExerciseRepo {
         }
 
         var gifURL: URL? {
-            guard let remoteURL = remoteExercise?.gifUrl else { return nil }
-            return URL(string: remoteURL)
+            if let remoteURL = remoteExercise?.gifUrl, let url = URL(string: remoteURL) {
+                return url
+            }
+            guard let exerciseId else { return nil }
+            return URL(string: ExerciseRepo.mediaURLString(forExerciseId: exerciseId))
         }
 
         var iconURL: URL? { gifURL }

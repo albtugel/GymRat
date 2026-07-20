@@ -2,7 +2,9 @@ import Foundation
 
 extension ExerciseRepo {
     static var cacheFileName: String {
-        "exercisedb-exercises-cache.json"
+        // v2: earlier builds cached a broken catalog (the API cursor never advanced, so only the
+        // first ~25 exercises were stored, repeated). Bumping the name forces one clean refetch.
+        "exercisedb-exercises-cache-v2.json"
     }
 
     static func cacheURL(fileName: String) -> URL? {

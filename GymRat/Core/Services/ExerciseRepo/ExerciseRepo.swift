@@ -13,6 +13,11 @@ actor ExerciseRepo {
 
     private let baseURL = "https://oss.exercisedb.dev/api/v1/exercises"
 
+    /// The API caps every response at 25 items regardless of the requested limit.
+    private static let pageSize = 25
+    /// Hard stop so a misbehaving cursor can never turn paging into an endless request loop.
+    private static let maxCatalogPages = 80
+
     private init() {
         if let cached = Self.loadCachedRemoteExercises(fileName: Self.cacheFileName) {
             remoteCache = cached
@@ -59,14 +64,17 @@ actor ExerciseRepo {
 
     func fetchExercises() async throws -> [RemoteExercise] {
         var allExercises: [RemoteExercise] = []
-        var cursor: String?
+        var seenIds = Set<String>()
+        var after: String?
         var page = 1
 
-        repeat {
+        // `meta.hasNextPage` stays true even on the last page and `meta.nextCursor` never advances,
+        // so paging is driven by the last id seen and stopped once a page adds nothing new.
+        while page <= Self.maxCatalogPages {
             var components = URLComponents(string: baseURL)
-            var queryItems = [URLQueryItem(name: "limit", value: "100")]
-            if let cursor {
-                queryItems.append(URLQueryItem(name: "cursor", value: cursor))
+            var queryItems = [URLQueryItem(name: "limit", value: String(Self.pageSize))]
+            if let after {
+                queryItems.append(URLQueryItem(name: "after", value: after))
             }
             components?.queryItems = queryItems
             guard let url = components?.url else { throw URLError(.badURL) }
@@ -81,17 +89,25 @@ actor ExerciseRepo {
                !(200...299).contains(httpResponse.statusCode) {
                 let message = String(data: data, encoding: .utf8) ?? "No response body"
                 Self.log("ExerciseDB page \(page) failed with HTTP \(httpResponse.statusCode): \(message)")
-                throw URLError(.badServerResponse)
+                // Keep whatever was already downloaded; a partial catalog still enriches seeds.
+                if allExercises.isEmpty { throw URLError(.badServerResponse) }
+                break
             }
 
-            let response = try JSONDecoder().decode(APIResponse.self, from: data)
-            guard response.success else { throw URLError(.cannotParseResponse) }
+            guard let response = try? JSONDecoder().decode(APIResponse.self, from: data), response.success else {
+                Self.log("ExerciseDB page \(page) returned an unreadable body.")
+                if allExercises.isEmpty { throw URLError(.cannotParseResponse) }
+                break
+            }
 
-            allExercises.append(contentsOf: response.data)
-            Self.log("Fetched ExerciseDB page \(page): +\(response.data.count), total \(allExercises.count).")
-            cursor = response.meta.hasNextPage ? response.meta.nextCursor : nil
+            let newExercises = response.data.filter { seenIds.insert($0.exerciseId).inserted }
+            allExercises.append(contentsOf: newExercises)
+            Self.log("Fetched ExerciseDB page \(page): +\(newExercises.count), total \(allExercises.count).")
+
+            guard let lastId = response.data.last?.exerciseId, !newExercises.isEmpty else { break }
+            after = lastId
             page += 1
-        } while cursor != nil
+        }
 
         return allExercises
     }
@@ -165,46 +181,36 @@ actor ExerciseRepo {
             .first
     }
 
+    /// A name search already returns the relevant candidates in one page, so it is deliberately
+    /// not paginated — the API's cursor does not advance and would loop forever.
     private func fetchExercises(named name: String) async throws -> [RemoteExercise] {
-        var allExercises: [RemoteExercise] = []
-        var cursor: String?
-        var page = 1
+        var components = URLComponents(string: baseURL)
+        components?.queryItems = [
+            URLQueryItem(name: "name", value: name),
+            URLQueryItem(name: "limit", value: String(Self.pageSize))
+        ]
+        guard let url = components?.url else { throw URLError(.badURL) }
 
-        repeat {
-            var components = URLComponents(string: baseURL)
-            var queryItems = [
-                URLQueryItem(name: "name", value: name),
-                URLQueryItem(name: "limit", value: "25")
-            ]
-            if let cursor {
-                queryItems.append(URLQueryItem(name: "cursor", value: cursor))
-            }
-            components?.queryItems = queryItems
-            guard let url = components?.url else { throw URLError(.badURL) }
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.timeoutInterval = 20
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
 
-            var request = URLRequest(url: url)
-            request.httpMethod = "GET"
-            request.timeoutInterval = 20
-            request.addValue("application/json", forHTTPHeaderField: "Accept")
+        let (data, urlResponse) = try await URLSession.shared.data(for: request)
+        if let httpResponse = urlResponse as? HTTPURLResponse,
+           !(200...299).contains(httpResponse.statusCode) {
+            let message = String(data: data, encoding: .utf8) ?? "No response body"
+            Self.log("ExerciseDB lookup '\(name)' failed with HTTP \(httpResponse.statusCode): \(message)")
+            return []
+        }
 
-            let (data, urlResponse) = try await URLSession.shared.data(for: request)
-            if let httpResponse = urlResponse as? HTTPURLResponse,
-               !(200...299).contains(httpResponse.statusCode) {
-                let message = String(data: data, encoding: .utf8) ?? "No response body"
-                Self.log("ExerciseDB lookup '\(name)' page \(page) failed with HTTP \(httpResponse.statusCode): \(message)")
-                return allExercises
-            }
+        guard let response = try? JSONDecoder().decode(APIResponse.self, from: data), response.success else {
+            Self.log("ExerciseDB lookup '\(name)' returned an unreadable body.")
+            return []
+        }
 
-            let response = try JSONDecoder().decode(APIResponse.self, from: data)
-            guard response.success else { throw URLError(.cannotParseResponse) }
-
-            allExercises.append(contentsOf: response.data)
-            cursor = response.meta.hasNextPage ? response.meta.nextCursor : nil
-            page += 1
-        } while cursor != nil
-
-        Self.log("Fetched ExerciseDB lookup '\(name)': \(allExercises.count) candidates.")
-        return allExercises
+        Self.log("Fetched ExerciseDB lookup '\(name)': \(response.data.count) candidates.")
+        return response.data
     }
 
     private static func mergeWithSeeds(remoteExercises: [RemoteExercise]) -> [Exercise] {
@@ -218,7 +224,7 @@ actor ExerciseRepo {
                     category: seed.category,
                     muscles: seed.muscles,
                     inputType: seed.inputType,
-                    gifUrl: nil,
+                    gifUrl: seed.exerciseId.map { mediaURLString(forExerciseId: $0) },
                     bodyParts: [],
                     targetMuscles: [],
                     secondaryMuscles: [],
@@ -237,7 +243,7 @@ actor ExerciseRepo {
                 category: seed.category,
                 muscles: mappedMuscles.isEmpty ? seed.muscles : mappedMuscles,
                 inputType: seed.inputType,
-                gifUrl: remote.gifUrl,
+                gifUrl: remote.gifUrl ?? mediaURLString(forExerciseId: remote.exerciseId),
                 bodyParts: remote.bodyParts,
                 targetMuscles: remote.targetMuscles,
                 secondaryMuscles: remote.secondaryMuscles ?? [],
@@ -262,7 +268,7 @@ actor ExerciseRepo {
                         secondaryMuscles: remote.secondaryMuscles ?? []
                     ),
                     inputType: .strength,
-                    gifUrl: remote.gifUrl,
+                    gifUrl: remote.gifUrl ?? mediaURLString(forExerciseId: remote.exerciseId),
                     bodyParts: remote.bodyParts,
                     targetMuscles: remote.targetMuscles,
                     secondaryMuscles: remote.secondaryMuscles ?? [],
@@ -335,9 +341,8 @@ actor ExerciseRepo {
         remoteById: [String: RemoteExercise],
         remoteExercises: [RemoteExercise]
     ) -> RemoteExercise? {
-        if seed.category == .cardio,
-           let exerciseId = seed.exerciseId,
-           let remote = remoteById[exerciseId] {
+        // Seed ids are hand-verified against the catalog, so they outrank any name guess.
+        if let exerciseId = seed.exerciseId, let remote = remoteById[exerciseId] {
             return remote
         }
 
@@ -346,12 +351,6 @@ actor ExerciseRepo {
             if let remote = remoteByName[name.normalizedExerciseToken] {
                 return remote
             }
-        }
-
-        if let exerciseId = seed.exerciseId,
-           let remote = remoteById[exerciseId],
-           preferredNames.contains(where: { namesMatch(seedName: $0, remoteName: remote.name) }) {
-            return remote
         }
 
         let canonical = seed.canonicalName.normalizedExerciseToken

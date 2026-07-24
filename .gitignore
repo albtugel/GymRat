@@ -65,8 +65,8 @@ build/
 # AI development tools
 .claude/
 /CLAUDE.md
-
-# Secrets
-GymRat/Core/Secrets.swift
 .agents/
 skills-lock.json
+
+# Secrets
+GymRat/Core/Secrets.xcconfig

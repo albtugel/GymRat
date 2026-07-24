@@ -172,6 +172,7 @@
 "muscle_shoulders" = "Плечи";
 "muscle_triceps" = "Трицепс";
 "muscles_section" = "Мышечные группы";
+"instructions_section" = "Техника выполнения";
 "my_programs_section" = "Мои программы";
 "no_programs_yet" = "Пока нет программ";
 "no_shared_exercise_message" = "Для этого упражнения пока недоступна общая история.";

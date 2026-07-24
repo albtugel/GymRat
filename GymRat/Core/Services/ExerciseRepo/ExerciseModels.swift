@@ -119,4 +119,10 @@ extension ExerciseRepo {
         let meta: Meta
         let data: [RemoteExercise]
     }
+
+    /// The by-id endpoint (`/exercises/{id}`) returns a single object instead of a list.
+    struct APISingleResponse: Codable, Sendable {
+        let success: Bool
+        let data: RemoteExercise
+    }
 }

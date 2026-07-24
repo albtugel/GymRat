@@ -15,7 +15,9 @@ struct ExerciseDetailsView: View {
                     imageURLs: viewModel.imageURLs,
                     placeholderSystemName: viewModel.placeholderSystemName,
                     musclesTitle: viewModel.musclesTitle,
-                    muscleLabels: viewModel.muscleLabels
+                    muscleLabels: viewModel.muscleLabels,
+                    instructionsTitle: viewModel.instructionsTitle,
+                    instructions: viewModel.instructions
                 )
             }
             .navigationTitle(viewModel.title)

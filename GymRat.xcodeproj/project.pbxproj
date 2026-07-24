@@ -37,6 +37,7 @@
 		445DF4012F7F8C8A0002750A /* Exceptions for "GymRat" folder in "GymRat" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				Core/Secrets.xcconfig,
 				Resources/Info.plist,
 			);
 			target = 44DE8EFB2F0E6CEB008AC986 /* GymRat */;
@@ -180,7 +181,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1620;
-				LastUpgradeCheck = 2640;
+				LastUpgradeCheck = 2660;
 				TargetAttributes = {
 					44DE8EFB2F0E6CEB008AC986 = {
 						CreatedOnToolsVersion = 16.2;
@@ -285,6 +286,8 @@
 /* Begin XCBuildConfiguration section */
 		44DE8F242F0E6CEC008AC986 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = 44DE8EFE2F0E6CEB008AC986 /* GymRat */;
+			baseConfigurationReferenceRelativePath = Core/Secrets.xcconfig;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -300,6 +303,7 @@
 				INFOPLIST_FILE = GymRat/Resources/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = GymRat;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.sports";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "GymRat uses the microphone to transcribe your workout plan edits.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -324,6 +328,8 @@
 		};
 		44DE8F252F0E6CEC008AC986 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = 44DE8EFE2F0E6CEB008AC986 /* GymRat */;
+			baseConfigurationReferenceRelativePath = Core/Secrets.xcconfig;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -339,6 +345,7 @@
 				INFOPLIST_FILE = GymRat/Resources/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = GymRat;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.sports";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "GymRat uses the microphone to transcribe your workout plan edits.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

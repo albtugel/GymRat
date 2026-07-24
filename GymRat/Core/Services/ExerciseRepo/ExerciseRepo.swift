@@ -139,10 +139,12 @@ actor ExerciseRepo {
 
     func getExerciseSeedResolvingRemote(named name: String) async -> ExerciseSeed? {
         guard let seed = getExerciseSeed(named: name) else { return nil }
-        guard seed.gifURL == nil else { return seed }
+        // A seed always has a gifURL when it carries an id (id-based media fallback), so the gate
+        // is whether we still lack API metadata (target muscles, instructions), not the image.
+        guard seed.remoteExercise == nil else { return seed }
 
         do {
-            guard let remote = try await fetchBestRemoteExercise(for: seed) else { return seed }
+            guard let remote = try await fetchRemoteExercise(for: seed) else { return seed }
             remoteCache = (remoteCache + [remote]).uniqued(by: \.exerciseId)
             exercises = Self.mergeWithSeeds(remoteExercises: remoteCache)
             mergedSeeds = Self.makeMergedSeeds(remoteExercises: remoteCache)
@@ -156,6 +158,46 @@ actor ExerciseRepo {
 
     func fetchAndCacheExercises() async {
         _ = await refresh()
+    }
+
+    /// Resolves the catalog entry backing a seed, preferring the hand-verified id (an exact,
+    /// deterministic lookup) and only falling back to a name search when the seed has no id.
+    private func fetchRemoteExercise(for seed: ExerciseSeed) async throws -> RemoteExercise? {
+        if let id = seed.exerciseId, let remote = try await fetchExercise(byId: id) {
+            return remote
+        }
+        return try await fetchBestRemoteExercise(for: seed)
+    }
+
+    /// The `/exercises/{id}` endpoint returns the exact entry with full metadata (target muscles,
+    /// instructions, equipment), so it enriches a seed reliably where name matching often misses.
+    private func fetchExercise(byId id: String) async throws -> RemoteExercise? {
+        let trimmed = id.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmed.isEmpty,
+              let encoded = trimmed.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed),
+              let url = URL(string: "\(baseURL)/\(encoded)") else {
+            return nil
+        }
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.timeoutInterval = 20
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+
+        let (data, urlResponse) = try await URLSession.shared.data(for: request)
+        if let httpResponse = urlResponse as? HTTPURLResponse,
+           !(200...299).contains(httpResponse.statusCode) {
+            Self.log("ExerciseDB id lookup '\(trimmed)' failed with HTTP \(httpResponse.statusCode).")
+            return nil
+        }
+
+        guard let response = try? JSONDecoder().decode(APISingleResponse.self, from: data), response.success else {
+            Self.log("ExerciseDB id lookup '\(trimmed)' returned an unreadable body.")
+            return nil
+        }
+
+        Self.log("Resolved seed by id '\(trimmed)' -> '\(response.data.name)'.")
+        return response.data
     }
 
     private func fetchBestRemoteExercise(for seed: ExerciseSeed) async throws -> RemoteExercise? {
@@ -316,7 +358,7 @@ actor ExerciseRepo {
                 remoteById: remoteById,
                 remoteExercises: remoteExercises
             ) else {
-                Self.log("No exact API match for seed '\(seed.canonicalName)'. Keeping it without gifUrl.")
+                Self.log("Seed '\(seed.canonicalName)' unmatched in bulk catalog; using id-based media, metadata resolves by id on open.")
                 continue
             }
             resolved[seed.matchKey] = remote

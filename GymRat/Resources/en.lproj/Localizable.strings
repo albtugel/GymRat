@@ -171,6 +171,7 @@
 "muscle_shoulders" = "Shoulders";
 "muscle_triceps" = "Triceps";
 "muscles_section" = "Muscles section";
+"instructions_section" = "Instructions";
 "my_programs_section" = "My Programs";
 "no_programs_yet" = "No programs yet";
 "no_shared_exercise_message" = "This exercise doesn't support shared history yet.";

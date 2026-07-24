@@ -69,4 +69,4 @@ build/
 skills-lock.json
 
 # Secrets
-GymRat/Core/Secrets.swift
+GymRat/Core/Secrets.xcconfig

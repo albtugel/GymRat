@@ -29,6 +29,7 @@ struct DayProgramsView: View {
             draggingProgram: draggingProgramBinding,
             accentColor: themeStore.accentColor,
             onEdit: { viewModel.edit($0) },
+            onDelete: { viewModel.delete($0) },
             onAddProgramTap: onAddProgramTap,
             onReorder: viewModel.applyReorder
         )

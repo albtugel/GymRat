@@ -6,6 +6,12 @@ import Foundation
 /// so this type stays decoupled from where secrets are stored. Endpoints, headers and JSON shape
 /// follow WorkoutX's published docs; the exact field names and whether the GIF endpoint needs the
 /// key are verified against the live API once a real key is wired in.
+///
+/// - Note: **Not wired in yet.** The app currently sources exercise media and metadata from
+///   `exercisedb.dev` (no auth) via `ExerciseRepo`, so nothing instantiates this client and the
+///   `RAPID_*` / `WORKOUTX_API_KEY` secrets are unused. This is intentional groundwork — when
+///   WorkoutX is adopted, create it as `WorkoutXClient(apiKey: Secrets.workoutXAPIKey)` and first
+///   validate the endpoints, headers and JSON shape below against the live API.
 struct WorkoutXClient: Sendable {
     struct Exercise: Codable, Sendable, Identifiable {
         let id: String

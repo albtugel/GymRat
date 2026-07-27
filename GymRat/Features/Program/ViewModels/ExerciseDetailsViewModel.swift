@@ -39,16 +39,26 @@ final class ExerciseDetailsViewModel {
         instructions = Self.instructionSteps(from: seed)
     }
 
-    /// The catalog prefixes each step with a `Step:N` marker; strip it so the UI shows clean text.
+    /// Condenses catalog instructions for a compact details screen: strips the `Step:N` marker,
+    /// drops the ubiquitous "Repeat for the desired number of repetitions." closing boilerplate,
+    /// and keeps only the first clause (up to the first comma) so each step reads as a short cue.
     private static func instructionSteps(from seed: ExerciseRepo.ExerciseSeed) -> [String] {
         (seed.remoteExercise?.instructions ?? []).compactMap { raw in
-            let cleaned = raw
+            let full = raw
                 .replacingOccurrences(
                     of: #"^\s*Step\s*:?\s*\d+\s*[:.)-]?\s*"#,
                     with: "",
                     options: [.regularExpression, .caseInsensitive]
                 )
                 .trimmingCharacters(in: .whitespacesAndNewlines)
+
+            guard !full.lowercased().hasPrefix("repeat for the desired number of") else { return nil }
+
+            let firstClause = full.firstIndex(of: ",").map { String(full[..<$0]) } ?? full
+            let cleaned = firstClause
+                .replacingOccurrences(of: #"[.;:!]+$"#, with: "", options: .regularExpression)
+                .trimmingCharacters(in: .whitespacesAndNewlines)
+
             return cleaned.isEmpty ? nil : cleaned
         }
     }

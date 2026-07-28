@@ -57,6 +57,9 @@
 "create_exercise_title" = "Übung erstellen";
 "data_section" = "Daten";
 "days_section" = "Tage";
+"details_image_accessibility_format" = "Vorführung: %@";
+"details_image_retry_button" = "Erneut versuchen";
+"details_info_button_label" = "Übungsdetails";
 "developer_label" = "Entwickler";
 "distance_unit_label" = "Distanz";
 "done_button" = "Fertig";

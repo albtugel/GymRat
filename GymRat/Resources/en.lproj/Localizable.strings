@@ -56,6 +56,9 @@
 "create_exercise_title" = "Create Exercise";
 "data_section" = "Data";
 "days_section" = "Days";
+"details_image_accessibility_format" = "%@ demonstration";
+"details_image_retry_button" = "Retry";
+"details_info_button_label" = "Exercise details";
 "developer_label" = "Developer";
 "distance_unit_label" = "Distance";
 "done_button" = "Done";

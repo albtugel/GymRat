@@ -13,6 +13,8 @@ struct ExerciseDetailsButton: View {
                 .foregroundColor(.secondary)
         }
         .buttonStyle(.plain)
+        .accessibilityIdentifier("exerciseDetailsButton")
+        .accessibilityLabel(Text("details_info_button_label"))
         .sheet(isPresented: $showSheet) {
             ExerciseDetailsView(seed: seed)
         }

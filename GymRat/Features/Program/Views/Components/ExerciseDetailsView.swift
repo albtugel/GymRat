@@ -14,6 +14,7 @@ struct ExerciseDetailsView: View {
                 ExerciseDetailsContent(
                     imageURLs: viewModel.imageURLs,
                     placeholderSystemName: viewModel.placeholderSystemName,
+                    exerciseName: viewModel.title,
                     musclesTitle: viewModel.musclesTitle,
                     muscleLabels: viewModel.muscleLabels,
                     instructionsTitle: viewModel.instructionsTitle,

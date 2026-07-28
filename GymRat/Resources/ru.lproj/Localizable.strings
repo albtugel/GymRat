@@ -57,6 +57,9 @@
 "create_exercise_title" = "Создать упражнение";
 "data_section" = "Данные";
 "days_section" = "Дни";
+"details_image_accessibility_format" = "Демонстрация: %@";
+"details_image_retry_button" = "Повторить";
+"details_info_button_label" = "Детали упражнения";
 "developer_label" = "Разработчик";
 "distance_unit_label" = "Дистанция";
 "done_button" = "Готово";

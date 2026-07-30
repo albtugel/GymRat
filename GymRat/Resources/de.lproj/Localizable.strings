@@ -64,7 +64,6 @@
 "distance_unit_label" = "Distanz";
 "done_button" = "Fertig";
 "dur_label" = "Sek";
-"edit_program_button" = "Bearbeiten";
 "exercise_ab_wheel" = "Bauchrad";
 "exercise_ab_wheel_rollout" = "Ab Wheel Rollout";
 "exercise_arnold_press" = "Arnold-Press";
@@ -209,10 +208,7 @@
 "shared_history_button" = "Gemeinsame Historie";
 "support_email_label" = "Support";
 "templates_section" = "Vorlagen";
-"theme_dark" = "Dunkel";
 "theme_label" = "Design";
-"theme_light" = "Hell";
-"theme_system" = "System";
 "units_section" = "Einheiten";
 "weekday_fri_short" = "Fr";
 "weekday_friday" = "Freitag";

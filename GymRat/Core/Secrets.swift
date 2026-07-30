@@ -1,8 +1,6 @@
 import Foundation
 
 enum Secrets {
-    static let rapidAPIKey = value(for: "RAPID_API_KEY")
-    static let rapidAPIHost = value(for: "RAPID_API_HOST")
     static let workoutXAPIKey = value(for: "WORKOUTX_API_KEY")
 
     private static func value(for key: String) -> String {

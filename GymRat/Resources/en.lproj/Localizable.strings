@@ -63,7 +63,6 @@
 "distance_unit_label" = "Distance";
 "done_button" = "Done";
 "dur_label" = "Sec";
-"edit_program_button" = "Edit";
 "exercise_ab_wheel" = "Ab Wheel";
 "exercise_ab_wheel_rollout" = "Ab Wheel Rollout";
 "exercise_arnold_press" = "Arnold Press";
@@ -208,10 +207,7 @@
 "shared_history_button" = "Shared history";
 "support_email_label" = "Support";
 "templates_section" = "Templates";
-"theme_dark" = "Dark";
 "theme_label" = "Theme";
-"theme_light" = "Light";
-"theme_system" = "System";
 "units_section" = "Units";
 "weekday_fri_short" = "Fri";
 "weekday_friday" = "Friday";

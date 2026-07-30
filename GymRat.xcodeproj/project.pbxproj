@@ -37,7 +37,6 @@
 		445DF4012F7F8C8A0002750A /* Exceptions for "GymRat" folder in "GymRat" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				Core/Secrets.example.xcconfig,
 				Core/Secrets.xcconfig,
 				Resources/Info.plist,
 			);

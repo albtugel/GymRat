@@ -13,6 +13,7 @@ final class DayProgramsViewModel {
 
 
     private let programViewModel: ProgramViewModel
+    private let imagePrefetcher = ExerciseImagePrefetcher()
 
     init(selectedDate: Date, programViewModel: ProgramViewModel) {
         self.selectedDate = selectedDate
@@ -68,5 +69,8 @@ final class DayProgramsViewModel {
 
     private func reloadPrograms() {
         dayPrograms = programViewModel.programs(for: selectedDate)
+        imagePrefetcher.prefetch(
+            exerciseNames: dayPrograms.flatMap { $0.exercises.map(\.exercise.name) }
+        )
     }
 }

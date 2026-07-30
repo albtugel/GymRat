@@ -9,7 +9,7 @@ import Foundation
 ///
 /// - Note: **Not wired in yet.** The app currently sources exercise media and metadata from
 ///   `exercisedb.dev` (no auth) via `ExerciseRepo`, so nothing instantiates this client and the
-///   `RAPID_*` / `WORKOUTX_API_KEY` secrets are unused. This is intentional groundwork — when
+///   `WORKOUTX_API_KEY` secret is unused. This is intentional groundwork — when
 ///   WorkoutX is adopted, create it as `WorkoutXClient(apiKey: Secrets.workoutXAPIKey)` and first
 ///   validate the endpoints, headers and JSON shape below against the live API.
 struct WorkoutXClient: Sendable {

@@ -14,7 +14,6 @@ struct GymRatApp: App {
     init() {
         Self.configureImageCache()
         dependencies = Dependencies.shared
-        AITestSupport.resetIfNeeded(dependencies: dependencies)
         _themeStore = State(initialValue: dependencies.themeStore)
         _units = State(initialValue: dependencies.units)
         _aiSettingsManager = State(initialValue: dependencies.aiSettingsManager)

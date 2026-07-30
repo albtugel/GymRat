@@ -5,6 +5,10 @@
 ## User settings
 xcuserdata/
 
+## Editor scratch files
+*.swp
+.DS_Store
+
 ## Obj-C/Swift specific
 *.hmap
 

@@ -156,7 +156,7 @@ final class ProgramViewModel {
             
             ImageCache.default.clearMemoryCache()
             ImageCache.default.clearDiskCache {
-                print("Kingfisher cache cleared")
+                AppLog.imageCache.notice("Kingfisher cache cleared")
             }
 
             resetPrograms()

@@ -10,6 +10,9 @@ actor ExerciseRepo {
     private var exercises: [Exercise] = []
     private var mergedSeeds: [ExerciseSeed] = []
     private var remoteCache: [RemoteExercise] = []
+    /// Where bulk paging stopped, so an interrupted download resumes instead of restarting.
+    private var catalogCursor: String?
+    private var catalogIsComplete = false
 
     private let baseURL = "https://oss.exercisedb.dev/api/v1/exercises"
 
@@ -17,13 +20,23 @@ actor ExerciseRepo {
     private static let pageSize = 25
     /// Hard stop so a misbehaving cursor can never turn paging into an endless request loop.
     private static let maxCatalogPages = 80
+    /// Spacing between page requests. Firing ~50 requests back to back is what trips the rate limiter.
+    private static let pageInterval: Duration = .milliseconds(200)
+    private static let maxRateLimitRetries = 3
+    /// Used when the server rate limits without a `Retry-After` header; matches the API's own advice.
+    private static let defaultRetryDelay: TimeInterval = 30
+    private static let maxRetryDelay: TimeInterval = 120
 
     private init() {
-        if let cached = Self.loadCachedRemoteExercises(fileName: Self.cacheFileName) {
-            remoteCache = cached
-            exercises = Self.mergeWithSeeds(remoteExercises: cached)
-            mergedSeeds = Self.makeMergedSeeds(remoteExercises: cached)
-            Self.log("Restored \(cached.count) API exercises from cache.")
+        Self.removeLegacyCaches()
+
+        if let cached = Self.loadCachedCatalog(fileName: Self.cacheFileName), !cached.exercises.isEmpty {
+            remoteCache = cached.exercises
+            catalogCursor = cached.paginationCursor
+            catalogIsComplete = cached.isComplete
+            exercises = Self.mergeWithSeeds(remoteExercises: cached.exercises)
+            mergedSeeds = Self.makeMergedSeeds(remoteExercises: cached.exercises)
+            Self.log("Restored \(cached.exercises.count) API exercises from cache (complete: \(cached.isComplete)).")
         } else {
             exercises = Self.mergeWithSeeds(remoteExercises: [])
             mergedSeeds = Self.localSeeds
@@ -32,84 +45,165 @@ actor ExerciseRepo {
     }
 
     func refresh() async -> [Exercise] {
-        if !remoteCache.isEmpty {
-            Self.log("ExerciseDB refresh skipped: using \(remoteCache.count) cached exercises.")
+        if catalogIsComplete, !remoteCache.isEmpty {
+            Self.log("ExerciseDB refresh skipped: catalog complete with \(remoteCache.count) exercises.")
             return exercises
         }
 
-        do {
+        if remoteCache.isEmpty {
             Self.log("Refreshing exercise catalog from ExerciseDB.")
-            let remoteExercises = try await fetchExercises()
-            remoteCache = remoteExercises
-            exercises = Self.mergeWithSeeds(remoteExercises: remoteExercises)
-            mergedSeeds = Self.makeMergedSeeds(remoteExercises: remoteExercises)
-            Self.saveCachedRemoteExercises(remoteExercises, fileName: Self.cacheFileName)
-            Self.log("Refresh completed. API: \(remoteExercises.count), merged: \(exercises.count), seeds: \(mergedSeeds.count).")
-            return exercises
-        } catch {
-            Self.log("ExerciseDB refresh failed: \(error.localizedDescription)")
-            if let cached = Self.loadCachedRemoteExercises(fileName: Self.cacheFileName), !cached.isEmpty {
-                remoteCache = cached
-                exercises = Self.mergeWithSeeds(remoteExercises: cached)
-                mergedSeeds = Self.makeMergedSeeds(remoteExercises: cached)
-                Self.log("Using cached API exercises: \(cached.count).")
-            } else if exercises.isEmpty {
-                exercises = Self.mergeWithSeeds(remoteExercises: [])
-                mergedSeeds = Self.localSeeds
-                Self.log("Using local seeds only.")
-            }
+        } else {
+            Self.logNotice("Resuming ExerciseDB catalog download from \(remoteCache.count) cached exercises.")
+        }
+
+        let result = await fetchCatalogPages(
+            startingAfter: catalogCursor,
+            knownIds: Set(remoteCache.map(\.exerciseId))
+        )
+
+        guard !result.exercises.isEmpty || result.isComplete else {
+            Self.logNotice("Catalog download made no progress; keeping \(remoteCache.count) cached exercises.")
             return exercises
         }
+
+        remoteCache = (remoteCache + result.exercises).uniqued(by: \.exerciseId)
+        catalogCursor = result.cursor ?? catalogCursor
+        catalogIsComplete = result.isComplete
+        exercises = Self.mergeWithSeeds(remoteExercises: remoteCache)
+        mergedSeeds = Self.makeMergedSeeds(remoteExercises: remoteCache)
+        persistCatalog()
+        Self.logNotice("Refresh finished. API: \(remoteCache.count), merged: \(exercises.count), complete: \(catalogIsComplete).")
+        return exercises
     }
 
-    func fetchExercises() async throws -> [RemoteExercise] {
-        var allExercises: [RemoteExercise] = []
-        var seenIds = Set<String>()
-        var after: String?
+    /// Writes the catalog together with its paging state, so single-id lookups that grow the cache
+    /// never clear the cursor or the completeness flag.
+    private func persistCatalog() {
+        Self.saveCachedCatalog(
+            CachedCatalog(
+                exercises: remoteCache,
+                paginationCursor: catalogCursor,
+                isComplete: catalogIsComplete
+            ),
+            fileName: Self.cacheFileName
+        )
+    }
+
+    private struct CatalogPageRun {
+        var exercises: [RemoteExercise] = []
+        var cursor: String?
+        var isComplete = false
+    }
+
+    private enum CatalogPageOutcome {
+        case success([RemoteExercise])
+        case rateLimited(retryAfter: TimeInterval)
+        case failed(String)
+    }
+
+    /// Pages through the bulk catalog, resuming after `startingAfter` and backing off when the API
+    /// rate limits. Deliberately non-throwing: an interrupted run returns what it managed to fetch
+    /// along with a cursor, so the next launch continues instead of freezing a partial catalog.
+    ///
+    /// `meta.hasNextPage` stays true even on the last page and `meta.nextCursor` never advances, so
+    /// paging is driven by the last id seen and stops once a page adds nothing new.
+    private func fetchCatalogPages(
+        startingAfter startCursor: String?,
+        knownIds: Set<String>
+    ) async -> CatalogPageRun {
+        var run = CatalogPageRun(cursor: startCursor)
+        var seenIds = knownIds
+        var after = startCursor
         var page = 1
+        var rateLimitAttempts = 0
 
-        // `meta.hasNextPage` stays true even on the last page and `meta.nextCursor` never advances,
-        // so paging is driven by the last id seen and stopped once a page adds nothing new.
         while page <= Self.maxCatalogPages {
-            var components = URLComponents(string: baseURL)
-            var queryItems = [URLQueryItem(name: "limit", value: String(Self.pageSize))]
-            if let after {
-                queryItems.append(URLQueryItem(name: "after", value: after))
-            }
-            components?.queryItems = queryItems
-            guard let url = components?.url else { throw URLError(.badURL) }
+            try? await Task.sleep(for: Self.pageInterval)
 
-            var request = URLRequest(url: url)
-            request.httpMethod = "GET"
-            request.timeoutInterval = 20
-            request.addValue("application/json", forHTTPHeaderField: "Accept")
-
-            let (data, urlResponse) = try await URLSession.shared.data(for: request)
-            if let httpResponse = urlResponse as? HTTPURLResponse,
-               !(200...299).contains(httpResponse.statusCode) {
-                let message = String(data: data, encoding: .utf8) ?? "No response body"
-                Self.log("ExerciseDB page \(page) failed with HTTP \(httpResponse.statusCode): \(message)")
-                // Keep whatever was already downloaded; a partial catalog still enriches seeds.
-                if allExercises.isEmpty { throw URLError(.badServerResponse) }
-                break
+            let outcome: CatalogPageOutcome
+            do {
+                outcome = try await fetchCatalogPage(after: after)
+            } catch {
+                Self.log("ExerciseDB page \(page) failed: \(error.localizedDescription). Catalog stays partial.")
+                return run
             }
 
-            guard let response = try? JSONDecoder().decode(APIResponse.self, from: data), response.success else {
-                Self.log("ExerciseDB page \(page) returned an unreadable body.")
-                if allExercises.isEmpty { throw URLError(.cannotParseResponse) }
-                break
+            switch outcome {
+            case .rateLimited(let retryAfter):
+                guard rateLimitAttempts < Self.maxRateLimitRetries else {
+                    Self.logNotice("ExerciseDB still rate limited after \(rateLimitAttempts) retries. Catalog stays partial.")
+                    return run
+                }
+                let delay = min(retryAfter * pow(2, Double(rateLimitAttempts)), Self.maxRetryDelay)
+                rateLimitAttempts += 1
+                Self.logNotice("Rate limited on page \(page); retrying in \(Int(delay))s (attempt \(rateLimitAttempts)).")
+                try? await Task.sleep(for: .seconds(delay))
+
+            case .failed(let reason):
+                Self.log("ExerciseDB page \(page) failed: \(reason). Catalog stays partial.")
+                return run
+
+            case .success(let fetched):
+                rateLimitAttempts = 0
+                let newExercises = fetched.filter { seenIds.insert($0.exerciseId).inserted }
+                run.exercises.append(contentsOf: newExercises)
+
+                guard let lastId = fetched.last?.exerciseId, !newExercises.isEmpty else {
+                    run.isComplete = true
+                    Self.logNotice("ExerciseDB catalog complete: \(seenIds.count) exercises.")
+                    return run
+                }
+
+                Self.log("Fetched ExerciseDB page \(page): +\(newExercises.count), total \(seenIds.count).")
+                after = lastId
+                run.cursor = lastId
+                page += 1
             }
-
-            let newExercises = response.data.filter { seenIds.insert($0.exerciseId).inserted }
-            allExercises.append(contentsOf: newExercises)
-            Self.log("Fetched ExerciseDB page \(page): +\(newExercises.count), total \(allExercises.count).")
-
-            guard let lastId = response.data.last?.exerciseId, !newExercises.isEmpty else { break }
-            after = lastId
-            page += 1
         }
 
-        return allExercises
+        Self.logNotice("Hit the \(Self.maxCatalogPages)-page cap; catalog stays partial and resumes next launch.")
+        return run
+    }
+
+    private func fetchCatalogPage(after: String?) async throws -> CatalogPageOutcome {
+        var components = URLComponents(string: baseURL)
+        var queryItems = [URLQueryItem(name: "limit", value: String(Self.pageSize))]
+        if let after {
+            queryItems.append(URLQueryItem(name: "after", value: after))
+        }
+        components?.queryItems = queryItems
+        guard let url = components?.url else { throw URLError(.badURL) }
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.timeoutInterval = 20
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+
+        let (data, urlResponse) = try await URLSession.shared.data(for: request)
+        if let httpResponse = urlResponse as? HTTPURLResponse,
+           !(200...299).contains(httpResponse.statusCode) {
+            guard httpResponse.statusCode != 429 else {
+                return .rateLimited(retryAfter: Self.retryDelay(from: httpResponse))
+            }
+            let message = String(data: data, encoding: .utf8) ?? "No response body"
+            return .failed("HTTP \(httpResponse.statusCode): \(message)")
+        }
+
+        guard let response = try? JSONDecoder().decode(APIResponse.self, from: data), response.success else {
+            return .failed("unreadable body")
+        }
+
+        return .success(response.data)
+    }
+
+    /// Honours the server's `Retry-After` header, falling back to the delay the API documents.
+    private static func retryDelay(from response: HTTPURLResponse) -> TimeInterval {
+        guard let header = response.value(forHTTPHeaderField: "Retry-After"),
+              let seconds = TimeInterval(header.trimmingCharacters(in: .whitespaces)),
+              seconds > 0 else {
+            return defaultRetryDelay
+        }
+        return min(seconds, maxRetryDelay)
     }
 
     func mergeWithSeeds() -> [Exercise] {
@@ -137,6 +231,17 @@ actor ExerciseRepo {
         }
     }
 
+    /// Media URLs for the given exercise names, deduplicated and skipping names the catalog cannot
+    /// resolve. Used to warm the image cache ahead of the details screen.
+    func gifURLs(forExerciseNames names: [String]) -> [URL] {
+        var seen = Set<String>()
+        return names.compactMap { name in
+            guard let url = getExerciseSeed(named: name)?.gifURL,
+                  seen.insert(url.absoluteString).inserted else { return nil }
+            return url
+        }
+    }
+
     func getExerciseSeedResolvingRemote(named name: String) async -> ExerciseSeed? {
         guard let seed = getExerciseSeed(named: name) else { return nil }
         // A seed always has a gifURL when it carries an id (id-based media fallback), so the gate
@@ -148,7 +253,7 @@ actor ExerciseRepo {
             remoteCache = (remoteCache + [remote]).uniqued(by: \.exerciseId)
             exercises = Self.mergeWithSeeds(remoteExercises: remoteCache)
             mergedSeeds = Self.makeMergedSeeds(remoteExercises: remoteCache)
-            Self.saveCachedRemoteExercises(remoteCache, fileName: Self.cacheFileName)
+            persistCatalog()
             return getExerciseSeed(named: name) ?? seed
         } catch {
             Self.log("ExerciseDB lookup for '\(seed.canonicalName)' failed: \(error.localizedDescription)")
@@ -477,7 +582,14 @@ actor ExerciseRepo {
         "seed-\(name.normalizedExerciseToken)"
     }
 
+    /// Per-seed and per-page tracing. Debug level keeps the ~250 lines a launch produces out of
+    /// release builds.
     static func log(_ message: String) {
-        print("[ExerciseRepo] \(message)")
+        AppLog.exerciseRepo.debug("\(message, privacy: .public)")
+    }
+
+    /// Catalog state worth seeing in a shipped build: rate limiting, completion, partial downloads.
+    static func logNotice(_ message: String) {
+        AppLog.exerciseRepo.notice("\(message, privacy: .public)")
     }
 }

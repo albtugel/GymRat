@@ -51,14 +51,14 @@ final class ExerciseRowViewModel {
 
     private let logService: ExerciseLogServiceType
     private let units: Units
-    private let exerciseStore: ExerciseRepo
+    private let exerciseStore: any ExerciseStoreType
 
     init(
         programExercise: WorkoutExercise,
         selectedDate: Date,
         logService: ExerciseLogServiceType,
         units: Units,
-        exerciseStore: ExerciseRepo
+        exerciseStore: any ExerciseStoreType
     ) {
         self.programExercise = programExercise
         self.selectedDate = selectedDate

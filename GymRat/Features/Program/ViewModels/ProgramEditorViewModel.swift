@@ -34,7 +34,7 @@ final class ProgramEditorViewModel {
     private let programService: ProgramServiceType
     private let exerciseService: ExerciseServiceType
     private let exerciseLogService: ExerciseLogServiceType
-    private let exerciseStore: ExerciseRepo
+    private let exerciseStore: any ExerciseStoreType
     private let programViewModel: ProgramViewModel
 
     init(
@@ -43,7 +43,7 @@ final class ProgramEditorViewModel {
         programService: ProgramServiceType,
         exerciseService: ExerciseServiceType,
         exerciseLogService: ExerciseLogServiceType,
-        exerciseStore: ExerciseRepo,
+        exerciseStore: any ExerciseStoreType,
         programViewModel: ProgramViewModel
     ) {
         self.mode = mode

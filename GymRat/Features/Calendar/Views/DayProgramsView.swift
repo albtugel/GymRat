@@ -8,7 +8,10 @@ struct DayProgramsView: View {
     let onAddProgramTap: () -> Void
     @State private var viewModel: DayProgramsViewModel
 
+    /// `viewModel` seeds `@State`: SwiftUI keeps the first instance and ignores the ones the parent
+    /// builds on later renders, so the parent may create it inline.
     init(
+        viewModel: DayProgramsViewModel,
         selectedDate: Date,
         programViewModel: ProgramViewModel,
         onAddProgramTap: @escaping () -> Void
@@ -16,10 +19,7 @@ struct DayProgramsView: View {
         self.selectedDate = selectedDate
         self.programViewModel = programViewModel
         self.onAddProgramTap = onAddProgramTap
-        _viewModel = State(initialValue: DayProgramsViewModel(
-            selectedDate: selectedDate,
-            programViewModel: programViewModel
-        ))
+        _viewModel = State(initialValue: viewModel)
     }
 
 
@@ -44,6 +44,9 @@ struct DayProgramsView: View {
             )
             .environment(themeStore)
             .accentColor(themeStore.accentColor)
+        }
+        .task {
+            viewModel.prefetchImages()
         }
         .onChange(of: selectedDate) { _, _ in
             viewModel.updateSelectedDate(selectedDate)

@@ -19,7 +19,7 @@ final class Dependencies: ViewModelFactory {
     let calendarService: CalendarServiceType
     let themeStore: ThemeStore
     let units: Units
-    let exerciseStore: ExerciseRepo
+    let exerciseStore: any ExerciseStoreType
     let aiSettingsManager: AISettingsManager
     let aiPlanEditingService: AIPlanEditingService
 
@@ -34,7 +34,7 @@ final class Dependencies: ViewModelFactory {
         storeRecovery = opened.recovery
         modelContext = modelContainer.mainContext
 
-        exerciseStore = ExerciseRepo.shared
+        exerciseStore = ExerciseRepo()
         exerciseService = ExerciseService(modelContext: modelContext, exerciseStore: exerciseStore)
         programService = ProgramService(modelContext: modelContext)
         programAssignmentService = ScheduleService(modelContext: modelContext)
@@ -97,5 +97,17 @@ final class Dependencies: ViewModelFactory {
             editingService: aiPlanEditingService,
             audioRecorder: AudioRecorder()
         )
+    }
+
+    func makeDayProgramsViewModel(selectedDate: Date, programViewModel: ProgramViewModel) -> DayProgramsViewModel {
+        DayProgramsViewModel(
+            selectedDate: selectedDate,
+            programViewModel: programViewModel,
+            imagePrefetcher: ExerciseImagePrefetcher(exerciseStore: exerciseStore)
+        )
+    }
+
+    func makeExerciseDetailsViewModel(seed: ExerciseRepo.ExerciseSeed) -> ExerciseDetailsViewModel {
+        ExerciseDetailsViewModel(seed: seed, exerciseStore: exerciseStore)
     }
 }

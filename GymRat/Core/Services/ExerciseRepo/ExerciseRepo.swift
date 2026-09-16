@@ -1,8 +1,6 @@
 import Foundation
 
 actor ExerciseRepo {
-    static let shared = ExerciseRepo()
-
     nonisolated var seeds: [ExerciseSeed] {
         Self.localSeeds
     }
@@ -27,7 +25,7 @@ actor ExerciseRepo {
     private static let defaultRetryDelay: TimeInterval = 30
     private static let maxRetryDelay: TimeInterval = 120
 
-    private init() {
+    init() {
         Self.removeLegacyCaches()
 
         if let cached = Self.loadCachedCatalog(fileName: Self.cacheFileName), !cached.exercises.isEmpty {
@@ -593,3 +591,5 @@ actor ExerciseRepo {
         AppLog.exerciseRepo.notice("\(message, privacy: .public)")
     }
 }
+
+extension ExerciseRepo: ExerciseStoreType {}

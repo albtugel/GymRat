@@ -4,9 +4,9 @@ import SwiftData
 @MainActor
 final class ExerciseService: ExerciseServiceType {
     private let modelContext: ModelContext
-    private let exerciseStore: ExerciseRepo
+    private let exerciseStore: any ExerciseStoreType
 
-    init(modelContext: ModelContext, exerciseStore: ExerciseRepo) {
+    init(modelContext: ModelContext, exerciseStore: any ExerciseStoreType) {
         self.modelContext = modelContext
         self.exerciseStore = exerciseStore
     }

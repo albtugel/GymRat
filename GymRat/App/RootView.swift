@@ -2,6 +2,7 @@ import SwiftUI
 
 struct RootView: View {
     @Environment(ProgramViewModel.self) private var programViewModel
+    @Environment(\.scenePhase) private var scenePhase
     @State private var showSettings = false
     @State private var weekCalendarViewModel = WeekViewModel()
     @State private var settingsViewModel: SettingsViewModel
@@ -32,6 +33,12 @@ struct RootView: View {
             await programViewModel.seedExercisesIfNeeded()
             programViewModel.loadPrograms()
             programViewModel.loadSchedules()
+        }
+        .onChange(of: scenePhase) { _, phase in
+            // Entries typed into a row are written on focus loss or a day switch; leaving the app
+            // does neither, so flush here before iOS may suspend or terminate the process.
+            guard phase != .active else { return }
+            Task { await weekCalendarViewModel.saveVisibleLogs() }
         }
     }
 

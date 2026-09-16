@@ -14,27 +14,27 @@ final class FakeExerciseLogService: ExerciseLogServiceType {
     var failure: (any Error)?
     var failWrites = false
 
-    func fetchLogs(programExerciseId: UUID, exerciseId: UUID, sharedHistory: Bool) async throws -> [ExerciseLog] {
+    func fetchLogs(programExerciseId: UUID, exerciseId: UUID, sharedHistory: Bool) throws -> [ExerciseLog] {
         try failIfNeeded(isWrite: false)
         return logs.filter { $0.programExercise.id == programExerciseId }
     }
 
-    func fetchLog(programExerciseId: UUID, exerciseId: UUID, sharedHistory: Bool, dayStamp: Int) async throws -> ExerciseLog? {
+    func fetchLog(programExerciseId: UUID, exerciseId: UUID, sharedHistory: Bool, dayStamp: Int) throws -> ExerciseLog? {
         try failIfNeeded(isWrite: false)
         return logs.first { $0.programExercise.id == programExerciseId && $0.dayStamp == dayStamp }
     }
 
-    func insertLog(_ log: ExerciseLog) async throws {
+    func insertLog(_ log: ExerciseLog) throws {
         try failIfNeeded(isWrite: true)
         logs.append(log)
     }
 
-    func deleteLog(_ log: ExerciseLog) async throws {
+    func deleteLog(_ log: ExerciseLog) throws {
         try failIfNeeded(isWrite: true)
         logs.removeAll { $0.id == log.id }
     }
 
-    func saveChanges() async throws {
+    func saveChanges() throws {
         try failIfNeeded(isWrite: true)
     }
 
@@ -99,14 +99,14 @@ struct ExerciseRowFixture {
     }
 
     /// Focuses the first reps field and types into it, leaving the row with unsaved entries.
-    func enterReps(_ text: String, into viewModel: ExerciseRowViewModel) async {
-        await viewModel.handleFocusChange(.reps(programExercise.id, 0))
+    func enterReps(_ text: String, into viewModel: ExerciseRowViewModel) {
+        viewModel.handleFocusChange(.reps(programExercise.id, 0))
         viewModel.updateRepsText(text, index: 0)
     }
 
     /// Mirrors the UI: focus, type, then move focus away, which triggers the save.
-    func typeReps(_ text: String, into viewModel: ExerciseRowViewModel) async {
-        await enterReps(text, into: viewModel)
-        await viewModel.handleFocusChange(nil)
+    func typeReps(_ text: String, into viewModel: ExerciseRowViewModel) {
+        enterReps(text, into: viewModel)
+        viewModel.handleFocusChange(nil)
     }
 }

@@ -233,14 +233,14 @@ final class ProgramEditorViewModel {
         refreshExerciseCatalogInBackground()
 
         do {
-            let exercises = try await exerciseService.fetchExercises()
+            let exercises = try exerciseService.fetchExercises()
             customExercises = exercises.filter { $0.isCustom }
         } catch {
             errorMessage = error.localizedDescription
         }
 
         do {
-            allPrograms = try await programService.fetchPrograms()
+            allPrograms = try programService.fetchPrograms()
         } catch {
             errorMessage = error.localizedDescription
         }
@@ -256,13 +256,13 @@ final class ProgramEditorViewModel {
         }
     }
 
-    func toggleExercise(_ seed: ExerciseRepo.ExerciseSeed) async {
+    func toggleExercise(_ seed: ExerciseRepo.ExerciseSeed) {
         if let index = selectedExercises.firstIndex(where: { $0.exercise.name == seed.name }) {
             selectedExercises.remove(at: index)
             return
         }
 
-        guard let exercise = await fetchOrCreateExercise(seed) else { return }
+        guard let exercise = fetchOrCreateExercise(seed) else { return }
         let existsInOtherPrograms = allPrograms
             .filter { $0.id != program.id }
             .flatMap { $0.exercises }
@@ -276,20 +276,20 @@ final class ProgramEditorViewModel {
         }
     }
 
-    func addPendingExercise(sharedHistory: Bool) async {
+    func addPendingExercise(sharedHistory: Bool) {
         guard let seed = pendingSeed else { return }
-        await addExercise(from: seed, sharedHistory: sharedHistory)
+        addExercise(from: seed, sharedHistory: sharedHistory)
     }
 
-    func createCustomExercise() async {
+    func createCustomExercise() {
         let trimmed = newExerciseName.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmed.isEmpty else {
             return
         }
         let newExercise = Exercise(name: trimmed, categoryRaw: newExerciseCategory.rawValue, isCustom: true)
         do {
-            try await exerciseService.addExercise(newExercise)
-            customExercises = (try await exerciseService.fetchExercises()).filter { $0.isCustom }
+            try exerciseService.addExercise(newExercise)
+            customExercises = (try exerciseService.fetchExercises()).filter { $0.isCustom }
             newExerciseName = ""
             showCreateAlert = false
         } catch {
@@ -306,28 +306,28 @@ final class ProgramEditorViewModel {
         updateWorkoutExercises()
         ProgramMapper.setWeekdays(selectedWeekdays, for: program)
 
-        guard await persistProgram() else { return }
+        guard persistProgram() else { return }
         await finishSave()
     }
 
-    func clearHistory(for exercise: WorkoutExercise) async {
+    func clearHistory(for exercise: WorkoutExercise) {
         do {
-            let logs = try await exerciseLogService.fetchLogs(
+            let logs = try exerciseLogService.fetchLogs(
                 programExerciseId: exercise.id,
                 exerciseId: exercise.exercise.id,
                 sharedHistory: exercise.sharedHistory
             )
             for log in logs {
-                try await exerciseLogService.deleteLog(log)
+                try exerciseLogService.deleteLog(log)
             }
         } catch {
             errorMessage = error.localizedDescription
         }
     }
 
-    func makeAIPlanPreview(from response: AIPlanEditResponse) async throws -> AIPlanEditPreview {
+    func makeAIPlanPreview(from response: AIPlanEditResponse) throws -> AIPlanEditPreview {
         let seedNames = aiAvailableExerciseNames
-        let availableExercises = try await availableExercisesForAI()
+        let availableExercises = try availableExercisesForAI()
         return try AIPlanEditApplier.makePreview(
             response: response,
             availableExercises: availableExercises,
@@ -336,9 +336,9 @@ final class ProgramEditorViewModel {
         )
     }
 
-    func applyAIPlanPreview(_ preview: AIPlanEditPreview) async {
+    func applyAIPlanPreview(_ preview: AIPlanEditPreview) {
         do {
-            let availableExercises = try await availableExercisesForAI()
+            let availableExercises = try availableExercisesForAI()
             let result = AIPlanEditApplier.apply(
                 preview: preview,
                 programType: programType,
@@ -346,16 +346,16 @@ final class ProgramEditorViewModel {
                 availableExercises: availableExercises
             )
             for exercise in result.customExercises {
-                try await exerciseService.addExercise(exercise)
+                try exerciseService.addExercise(exercise)
             }
-            for workoutExercise in result.exercises where try await exerciseService.fetchExercise(named: workoutExercise.exercise.name) == nil {
-                try await exerciseService.addExercise(workoutExercise.exercise)
+            for workoutExercise in result.exercises where try exerciseService.fetchExercise(named: workoutExercise.exercise.name) == nil {
+                try exerciseService.addExercise(workoutExercise.exercise)
             }
             if let programName = result.programName {
                 updateProgramName(programName)
             }
             selectedExercises = result.exercises
-            customExercises = (try await exerciseService.fetchExercises()).filter { $0.isCustom }
+            customExercises = (try exerciseService.fetchExercises()).filter { $0.isCustom }
             errorMessage = nil
         } catch {
             errorMessage = error.localizedDescription
@@ -363,14 +363,14 @@ final class ProgramEditorViewModel {
     }
 
 
-    private func fetchOrCreateExercise(_ seed: ExerciseRepo.ExerciseSeed) async -> Exercise? {
+    private func fetchOrCreateExercise(_ seed: ExerciseRepo.ExerciseSeed) -> Exercise? {
         do {
-            if let existing = try await exerciseService.fetchExercise(named: seed.name) {
+            if let existing = try exerciseService.fetchExercise(named: seed.name) {
                 return existing
             }
             let newExercise = Exercise(name: seed.name, categoryRaw: seed.category.rawValue)
-            try await exerciseService.addExercise(newExercise)
-            customExercises = (try await exerciseService.fetchExercises()).filter { $0.isCustom }
+            try exerciseService.addExercise(newExercise)
+            customExercises = (try exerciseService.fetchExercises()).filter { $0.isCustom }
             return newExercise
         } catch {
             errorMessage = error.localizedDescription
@@ -378,8 +378,8 @@ final class ProgramEditorViewModel {
         }
     }
 
-    private func availableExercisesForAI() async throws -> [Exercise] {
-        var exercises = try await exerciseService.fetchExercises()
+    private func availableExercisesForAI() throws -> [Exercise] {
+        var exercises = try exerciseService.fetchExercises()
         let existingNames = Set(exercises.map { normalizedExerciseName($0.name) })
         let seedExercises = exerciseSeeds
             .filter { !existingNames.contains(normalizedExerciseName($0.name)) }
@@ -395,14 +395,14 @@ final class ProgramEditorViewModel {
     }
 
 
-    private func addExercise(from seed: ExerciseRepo.ExerciseSeed, sharedHistory: Bool) async {
-        guard let exercise = await fetchOrCreateExercise(seed) else { return }
+    private func addExercise(from seed: ExerciseRepo.ExerciseSeed, sharedHistory: Bool) {
+        guard let exercise = fetchOrCreateExercise(seed) else { return }
         guard !isExerciseSelected(exercise) else {
             clearPendingSelection()
             return
         }
         appendSelectedExercise(exercise, sharedHistory: sharedHistory)
-        await updateSharedHistoryIfNeeded(sharedHistory, exercise: exercise)
+        updateSharedHistoryIfNeeded(sharedHistory, exercise: exercise)
         clearPendingSelection()
     }
 
@@ -414,10 +414,10 @@ final class ProgramEditorViewModel {
         selectedExercises.append(WorkoutExercise(exercise: exercise, sharedHistory: sharedHistory))
     }
 
-    private func updateSharedHistoryIfNeeded(_ sharedHistory: Bool, exercise: Exercise) async {
+    private func updateSharedHistoryIfNeeded(_ sharedHistory: Bool, exercise: Exercise) {
         guard sharedHistory else { return }
         applySharedHistory(for: exercise)
-        await saveProgramSilently()
+        saveProgramSilently()
     }
 
     private func applySharedHistory(for exercise: Exercise) {
@@ -428,9 +428,9 @@ final class ProgramEditorViewModel {
             .forEach { $0.sharedHistory = true }
     }
 
-    private func saveProgramSilently() async {
+    private func saveProgramSilently() {
         do {
-            try await programService.save(program)
+            try programService.save(program)
         } catch {
             errorMessage = error.localizedDescription
         }
@@ -496,23 +496,23 @@ final class ProgramEditorViewModel {
         }
     }
 
-    private func persistProgram() async -> Bool {
+    private func persistProgram() -> Bool {
         if mode == .create {
-            await addProgramIfNeeded()
+            addProgramIfNeeded()
             return true
         }
-        return await saveProgramEdits()
+        return saveProgramEdits()
     }
 
-    private func addProgramIfNeeded() async {
+    private func addProgramIfNeeded() {
         if !programViewModel.customPrograms.contains(where: { $0.id == program.id }) {
-            await programViewModel.addProgram(program)
+            programViewModel.addProgram(program)
         }
     }
 
-    private func saveProgramEdits() async -> Bool {
+    private func saveProgramEdits() -> Bool {
         do {
-            try await programService.save(program)
+            try programService.save(program)
             return true
         } catch {
             errorMessage = error.localizedDescription

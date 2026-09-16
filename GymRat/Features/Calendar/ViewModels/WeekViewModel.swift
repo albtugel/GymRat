@@ -73,13 +73,13 @@ final class WeekViewModel {
 
     /// Entries typed into the current day are written before the selection moves, so a row that is
     /// replaced or reloaded for the new day can never drop them.
-    func selectDate(_ date: Date) async {
-        await saveCoordinator.saveAll()
+    func selectDate(_ date: Date) {
+        saveCoordinator.saveAll()
         selectedDate = date
     }
 
-    func moveWeek(by value: Int) async {
-        await saveCoordinator.saveAll()
+    func moveWeek(by value: Int) {
+        saveCoordinator.saveAll()
         guard let newStart = AppCalendar.calendar.date(byAdding: .weekOfYear, value: value, to: weekStartDate) else {
             return
         }
@@ -110,8 +110,8 @@ final class WeekViewModel {
 
     /// Used when the keyboard is dismissed from the toolbar, which may not move focus in a way every
     /// row notices.
-    func saveVisibleLogs() async {
-        await saveCoordinator.saveAll()
+    func saveVisibleLogs() {
+        saveCoordinator.saveAll()
     }
 
     func rows(items: [Event]) -> [DayColumnRow] {

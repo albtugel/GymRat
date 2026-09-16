@@ -63,11 +63,8 @@ final class DayProgramsViewModel {
     func delete(_ program: Program) {
         let programID = program.id
         dayPrograms.removeAll { $0.id == programID }
-        Task { [weak self] in
-            guard let self else { return }
-            await self.programViewModel.deleteProgram(program)
-            self.reloadPrograms()
-        }
+        programViewModel.deleteProgram(program)
+        reloadPrograms()
     }
 
     func applyReorder(_ reordered: [Program]) {

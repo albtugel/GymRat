@@ -28,9 +28,7 @@ struct SettingsView: View {
                 hasPrograms: programViewModel.hasCustomPrograms,
                 onSelect: { selectedProgram = $0 },
                 onDelete: { offsets in
-                    Task {
-                        await viewModel.deletePrograms(at: offsets, programViewModel: programViewModel)
-                    }
+                    viewModel.deletePrograms(at: offsets, programViewModel: programViewModel)
                 },
                 onAdd: { showProgramSheet = true }
             )
@@ -67,7 +65,7 @@ struct SettingsView: View {
         }
         .alert(LocalizedStringKey(Alerts.ResetData.title), isPresented: $showResetAlert) {
             Button("reset_button", role: .destructive) {
-                Task { await viewModel.resetAllData(programViewModel: programViewModel) }
+                viewModel.resetAllData(programViewModel: programViewModel)
                 selectedProgram = nil
             }
             Button("cancel_button", role: .cancel) { }

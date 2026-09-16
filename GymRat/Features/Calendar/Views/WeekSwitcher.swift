@@ -16,7 +16,7 @@ struct WeekSwitcher: View {
             HStack(spacing: layout.daySpacing) {
 
                 Button {
-                    Task { await viewModel.moveWeek(by: -1) }
+                    viewModel.moveWeek(by: -1)
                 } label: {
                     Image(systemName: "chevron.left")
                         .font(.system(size: 22, weight: .bold))
@@ -25,7 +25,7 @@ struct WeekSwitcher: View {
 
                 ForEach(viewModel.weekDays) { day in
                     Button {
-                        Task { await viewModel.selectDate(day.date) }
+                        viewModel.selectDate(day.date)
                     } label: {
                         VStack(spacing: 4) {
                             Text(day.shortName)
@@ -50,7 +50,7 @@ struct WeekSwitcher: View {
                 }
 
                 Button {
-                    Task { await viewModel.moveWeek(by: 1) }
+                    viewModel.moveWeek(by: 1)
                 } label: {
                     Image(systemName: "chevron.right")
                         .font(.system(size: 22, weight: .bold))

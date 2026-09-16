@@ -9,7 +9,7 @@ final class ExerciseLogService: ExerciseLogServiceType {
         self.modelContext = modelContext
     }
 
-    func fetchLogs(programExerciseId: UUID, exerciseId: UUID, sharedHistory: Bool) async throws -> [ExerciseLog] {
+    func fetchLogs(programExerciseId: UUID, exerciseId: UUID, sharedHistory: Bool) throws -> [ExerciseLog] {
         let predicate: Predicate<ExerciseLog>
         if sharedHistory {
             predicate = #Predicate<ExerciseLog> { log in
@@ -24,7 +24,7 @@ final class ExerciseLogService: ExerciseLogServiceType {
         return try modelContext.fetch(descriptor)
     }
 
-    func fetchLog(programExerciseId: UUID, exerciseId: UUID, sharedHistory: Bool, dayStamp: Int) async throws -> ExerciseLog? {
+    func fetchLog(programExerciseId: UUID, exerciseId: UUID, sharedHistory: Bool, dayStamp: Int) throws -> ExerciseLog? {
         let predicate: Predicate<ExerciseLog>
         if sharedHistory {
             predicate = #Predicate<ExerciseLog> { log in
@@ -39,17 +39,17 @@ final class ExerciseLogService: ExerciseLogServiceType {
         return try modelContext.fetch(descriptor).first
     }
 
-    func insertLog(_ log: ExerciseLog) async throws {
+    func insertLog(_ log: ExerciseLog) throws {
         modelContext.insert(log)
         try modelContext.save()
     }
 
-    func deleteLog(_ log: ExerciseLog) async throws {
+    func deleteLog(_ log: ExerciseLog) throws {
         modelContext.delete(log)
         try modelContext.save()
     }
 
-    func saveChanges() async throws {
+    func saveChanges() throws {
         if modelContext.hasChanges {
             try modelContext.save()
         }

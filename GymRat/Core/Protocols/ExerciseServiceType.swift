@@ -2,9 +2,9 @@ import Foundation
 
 @MainActor
 protocol ExerciseServiceType {
-    func fetchExercises() async throws -> [Exercise]
-    func fetchExercise(named name: String) async throws -> Exercise?
-    func addExercise(_ exercise: Exercise) async throws
+    func fetchExercises() throws -> [Exercise]
+    func fetchExercise(named name: String) throws -> Exercise?
+    func addExercise(_ exercise: Exercise) throws
     func seedIfNeeded() async throws
-    func deleteCustomExercises() async throws
+    func deleteCustomExercises() throws
 }

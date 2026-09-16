@@ -17,7 +17,7 @@ struct ExerciseServiceTests {
         try await service.seedIfNeeded()
         try await service.seedIfNeeded()
 
-        let names = try await service.fetchExercises().map(\.name).sorted()
+        let names = try service.fetchExercises().map(\.name).sorted()
         #expect(names == ["Row", "Squat"])
     }
 
@@ -28,11 +28,11 @@ struct ExerciseServiceTests {
             .init(name: "Squat", category: .strength, muscles: [.legs], inputType: .strength)
         ])
         let service = ExerciseService(modelContext: container.mainContext, exerciseStore: store)
-        try await service.addExercise(Exercise(name: "squat", categoryRaw: ExerciseCategory.strength.rawValue, isCustom: true))
+        try service.addExercise(Exercise(name: "squat", categoryRaw: ExerciseCategory.strength.rawValue, isCustom: true))
 
         try await service.seedIfNeeded()
 
-        let exercises = try await service.fetchExercises()
+        let exercises = try service.fetchExercises()
         #expect(exercises.map(\.name) == ["squat"])
         #expect(exercises.first?.isCustom == true)
     }

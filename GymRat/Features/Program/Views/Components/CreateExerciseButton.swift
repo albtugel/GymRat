@@ -27,7 +27,7 @@ struct CreateExerciseButton: View {
                 }
             }
             Button("save_button") {
-                Task { await viewModel.createCustomExercise() }
+                viewModel.createCustomExercise()
             }
             Button("cancel_button", role: .cancel) {
                 viewModel.dismissCreateExerciseAlert()

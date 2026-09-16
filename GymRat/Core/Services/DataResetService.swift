@@ -9,7 +9,7 @@ final class DataResetService: DataResetServiceType {
         self.modelContext = modelContext
     }
 
-    func resetAllData() async throws {
+    func resetAllData() throws {
         try deleteAll(ExerciseLog.self)
         try deleteAll(ScheduleItem.self)
         try deleteAll(DayProgram.self)

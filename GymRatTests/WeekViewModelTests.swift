@@ -13,9 +13,9 @@ struct WeekViewModelTests {
         let row = fixture.makeViewModel()
         await row.load()
         coordinator.register(row)
-        await fixture.enterReps("8", into: row)
+        fixture.enterReps("8", into: row)
 
-        await viewModel.selectDate(fixture.tomorrow)
+        viewModel.selectDate(fixture.tomorrow)
 
         #expect(viewModel.selectedDate == fixture.tomorrow)
         #expect(fixture.service.logs.map(\.dayStamp) == [ExerciseLogHelper.makeDayStamp(for: fixture.today)])
@@ -28,10 +28,10 @@ struct WeekViewModelTests {
         let row = fixture.makeViewModel()
         await row.load()
         coordinator.register(row)
-        await fixture.enterReps("8", into: row)
+        fixture.enterReps("8", into: row)
         let previousWeekStart = viewModel.weekStartDate
 
-        await viewModel.moveWeek(by: 1)
+        viewModel.moveWeek(by: 1)
 
         #expect(viewModel.weekStartDate > previousWeekStart)
         #expect(fixture.service.logs.map(\.repsBySet) == [[8, 0, 0]])

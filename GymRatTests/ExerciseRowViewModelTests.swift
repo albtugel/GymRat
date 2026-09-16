@@ -12,7 +12,7 @@ struct ExerciseRowViewModelTests {
         await viewModel.load()
         fixture.service.failure = TestError.storeUnavailable
 
-        await fixture.typeReps("10", into: viewModel)
+        fixture.typeReps("10", into: viewModel)
 
         #expect(viewModel.errorMessage != nil)
         #expect(viewModel.hasUnsavedChanges)
@@ -25,10 +25,10 @@ struct ExerciseRowViewModelTests {
         let viewModel = fixture.makeViewModel()
         await viewModel.load()
         fixture.service.failure = TestError.storeUnavailable
-        await fixture.typeReps("10", into: viewModel)
+        fixture.typeReps("10", into: viewModel)
 
         fixture.service.failure = nil
-        await viewModel.saveIfNeeded()
+        viewModel.saveIfNeeded()
 
         #expect(viewModel.errorMessage == nil)
         #expect(!viewModel.hasUnsavedChanges)
@@ -41,7 +41,7 @@ struct ExerciseRowViewModelTests {
         let viewModel = fixture.makeViewModel()
         await viewModel.load()
         fixture.service.failure = TestError.storeUnavailable
-        await fixture.typeReps("10", into: viewModel)
+        fixture.typeReps("10", into: viewModel)
 
         fixture.service.failure = nil
         await viewModel.updateSelectedDate(fixture.tomorrow)
@@ -56,7 +56,7 @@ struct ExerciseRowViewModelTests {
         let viewModel = fixture.makeViewModel()
         await viewModel.load()
         fixture.service.failure = TestError.storeUnavailable
-        await fixture.typeReps("10", into: viewModel)
+        fixture.typeReps("10", into: viewModel)
 
         fixture.service.failWrites = true
         fixture.service.failure = nil

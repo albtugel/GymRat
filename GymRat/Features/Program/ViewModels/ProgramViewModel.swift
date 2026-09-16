@@ -65,20 +65,20 @@ final class ProgramViewModel {
     }
 
 
-    func loadPrograms() async {
+    func loadPrograms() {
         isLoading = true
         defer { isLoading = false }
         do {
-            programs = try await programService.fetchPrograms()
+            programs = try programService.fetchPrograms()
             customPrograms = programs
         } catch {
             errorMessage = error.localizedDescription
         }
     }
 
-    func loadSchedules() async {
+    func loadSchedules() {
         do {
-            let assignments = try await assignmentService.fetchAssignments()
+            let assignments = try assignmentService.fetchAssignments()
             dayPrograms = [:]
             for assign in assignments {
                 guard let program = assign.program else { continue }
@@ -101,19 +101,19 @@ final class ProgramViewModel {
     }
 
 
-    func addProgram(_ program: Program) async {
+    func addProgram(_ program: Program) {
         do {
-            try await programService.save(program)
+            try programService.save(program)
             appendProgram(program)
             let assignments = buildSchedule(for: program)
             applySchedule(assignments, program: program)
-            try await saveSchedule(assignments)
+            try saveSchedule(assignments)
         } catch {
             errorMessage = error.localizedDescription
         }
     }
 
-    func deleteProgram(_ program: Program) async {
+    func deleteProgram(_ program: Program) {
         // Purge in-memory copies before the store delete so nothing reads
         // properties of an invalidated model (views re-render on these arrays).
         let programID = program.id
@@ -123,22 +123,22 @@ final class ProgramViewModel {
             dayPrograms[key]?.removeAll { $0.id == programID }
         }
         do {
-            try await programService.deleteProgram(program)
+            try programService.deleteProgram(program)
         } catch {
             errorMessage = error.localizedDescription
         }
     }
 
-    func deletePrograms(at offsets: IndexSet) async {
+    func deletePrograms(at offsets: IndexSet) {
         for index in offsets {
             let program = customPrograms[index]
-            await deleteProgram(program)
+            deleteProgram(program)
         }
     }
 
-    func reorderExercises(in program: Program, from source: IndexSet, to destination: Int) async {
+    func reorderExercises(in program: Program, from source: IndexSet, to destination: Int) {
         do {
-            try await programService.reorderExercises(in: program, from: source, to: destination)
+            try programService.reorderExercises(in: program, from: source, to: destination)
         } catch {
             errorMessage = error.localizedDescription
         }
@@ -150,9 +150,9 @@ final class ProgramViewModel {
         dayPrograms = [:]
     }
 
-    func resetAllData() async {
+    func resetAllData() {
         do {
-            try await dataResetService.resetAllData()
+            try dataResetService.resetAllData()
             
             ImageCache.default.clearMemoryCache()
             ImageCache.default.clearDiskCache {
@@ -209,8 +209,8 @@ final class ProgramViewModel {
         }
     }
 
-    private func saveSchedule(_ assignments: [ScheduleItem]) async throws {
+    private func saveSchedule(_ assignments: [ScheduleItem]) throws {
         guard !assignments.isEmpty else { return }
-        try await assignmentService.saveSchedule(assignments)
+        try assignmentService.saveSchedule(assignments)
     }
 }

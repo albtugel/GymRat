@@ -48,7 +48,7 @@ struct WeekView: View {
             ToolbarItemGroup(placement: .keyboard) {
                 Spacer()
                 Button("ok_button") {
-                    Task { await viewModel.saveVisibleLogs() }
+                    viewModel.saveVisibleLogs()
                     UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder),
                                                     to: nil,
                                                     from: nil,
@@ -90,7 +90,7 @@ struct WeekView: View {
     private var selectedDateBinding: Binding<Date> {
         Binding(
             get: { viewModel.selectedDate },
-            set: { date in Task { await viewModel.selectDate(date) } }
+            set: { viewModel.selectDate($0) }
         )
     }
 }

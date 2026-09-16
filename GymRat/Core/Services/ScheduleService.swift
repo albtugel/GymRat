@@ -9,18 +9,18 @@ final class ScheduleService: ScheduleServiceType {
         self.modelContext = modelContext
     }
 
-    func fetchAssignments() async throws -> [ScheduleItem] {
+    func fetchAssignments() throws -> [ScheduleItem] {
         let descriptor = FetchDescriptor<ScheduleItem>()
         let assignments = try modelContext.fetch(descriptor)
         return assignments.filter { $0.program != nil }
     }
 
-    func saveSchedule(_ assignments: [ScheduleItem]) async throws {
+    func saveSchedule(_ assignments: [ScheduleItem]) throws {
         assignments.forEach { modelContext.insert($0) }
         try modelContext.save()
     }
 
-    func saveChanges() async throws {
+    func saveChanges() throws {
         if modelContext.hasChanges {
             try modelContext.save()
         }

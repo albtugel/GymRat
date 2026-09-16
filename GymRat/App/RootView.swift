@@ -33,8 +33,8 @@ struct RootView: View {
         }
         .task {
             await programViewModel.seedExercisesIfNeeded()
-            await programViewModel.loadPrograms()
-            await programViewModel.loadSchedules()
+            programViewModel.loadPrograms()
+            programViewModel.loadSchedules()
         }
     }
 

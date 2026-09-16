@@ -35,7 +35,7 @@ struct ExerciseLogRowRootView: View {
                 ExerciseRowErrorView(
                     message: message,
                     showsRetry: viewModel.hasUnsavedChanges,
-                    onRetry: { Task { await viewModel.retrySave() } }
+                    onRetry: { Task { await viewModel.saveIfNeeded() } }
                 )
             }
         }

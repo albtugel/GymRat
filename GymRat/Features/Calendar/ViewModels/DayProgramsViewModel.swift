@@ -40,14 +40,6 @@ final class DayProgramsViewModel {
         )
     }
 
-    func startDragging(_ program: Program) {
-        draggingProgram = program
-    }
-
-    func stopDragging() {
-        draggingProgram = nil
-    }
-
     func setDraggingProgram(_ program: Program?) {
         draggingProgram = program
     }

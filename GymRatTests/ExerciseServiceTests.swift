@@ -46,7 +46,7 @@ struct ExerciseServiceTests {
     }
 
     private static func makeContainer() throws -> ModelContainer {
-        let schema = Schema(GymRatSchemaV1.models)
+        let schema = PersistentStore.schema
         return try ModelContainer(
             for: schema,
             configurations: [ModelConfiguration(schema: schema, isStoredInMemoryOnly: true)]

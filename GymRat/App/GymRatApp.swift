@@ -31,7 +31,7 @@ struct GymRatApp: App {
                 .preferredColorScheme(themeStore.selectedTheme.colorScheme)
                 .tint(themeStore.accentColor)
                 .task { [exerciseStore = dependencies.exerciseStore] in
-                    _ = await exerciseStore.refresh()
+                    await exerciseStore.refresh()
                 }
         }
         .modelContainer(dependencies.modelContainer)

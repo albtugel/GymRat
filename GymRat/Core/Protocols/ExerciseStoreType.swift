@@ -3,8 +3,8 @@ import Foundation
 /// The exercise catalog: local seeds merged with whatever has been downloaded from ExerciseDB.
 /// This is the surface the app uses from `ExerciseRepo`, so services and view models can take a fake.
 protocol ExerciseStoreType: Sendable {
-    /// Downloads the part of the remote catalog that is still missing and returns the merged catalog.
-    func refresh() async -> [ExerciseRepo.Exercise]
+    /// Downloads the part of the remote catalog that is still missing.
+    func refresh() async
     func seedSnapshot() async -> [ExerciseRepo.ExerciseSeed]
     func getExerciseSeed(named name: String) async -> ExerciseRepo.ExerciseSeed?
     /// Like `getExerciseSeed`, but fetches the remote metadata (muscles, instructions) if it is missing.

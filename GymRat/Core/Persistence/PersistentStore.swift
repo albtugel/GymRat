@@ -23,6 +23,11 @@ enum PersistentStore {
     static let fileName = "GymRat.sqlite"
     static let backupsFolderName = "StoreBackups"
 
+    /// The current data model; tests build their in-memory containers from it too.
+    static var schema: Schema {
+        Schema(versionedSchema: GymRatSchemaV2.self)
+    }
+
     static func defaultStoreURL(fileManager: FileManager = .default) -> URL {
         guard let appSupport = fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask).first else {
             return fileManager.temporaryDirectory.appendingPathComponent(fileName)
@@ -63,7 +68,7 @@ enum PersistentStore {
     }
 
     private static func makeContainer(at storeURL: URL) throws -> ModelContainer {
-        let schema = Schema(versionedSchema: GymRatSchemaV1.self)
+        let schema = Self.schema
         let config = ModelConfiguration(schema: schema, url: storeURL)
         return try ModelContainer(for: schema, migrationPlan: GymRatMigrationPlan.self, configurations: [config])
     }

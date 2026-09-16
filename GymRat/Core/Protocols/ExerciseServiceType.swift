@@ -6,5 +6,4 @@ protocol ExerciseServiceType {
     func fetchExercise(named name: String) throws -> Exercise?
     func addExercise(_ exercise: Exercise) throws
     func seedIfNeeded() async throws
-    func deleteCustomExercises() throws
 }

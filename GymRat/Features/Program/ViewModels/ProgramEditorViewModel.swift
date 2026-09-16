@@ -248,7 +248,7 @@ final class ProgramEditorViewModel {
 
     private func refreshExerciseCatalogInBackground() {
         Task { [exerciseStore] in
-            _ = await exerciseStore.refresh()
+            await exerciseStore.refresh()
             let refreshedSeeds = await exerciseStore.seedSnapshot()
             await MainActor.run {
                 self.exerciseSeeds = refreshedSeeds

@@ -5,6 +5,7 @@ import Observation
 @MainActor
 final class ExerciseDetailsViewModel {
     private let seed: ExerciseRepo.ExerciseSeed
+    private let exerciseStore: any ExerciseStoreType
 
     let title: String
     private(set) var imageURLs: [URL]
@@ -14,8 +15,9 @@ final class ExerciseDetailsViewModel {
     let instructionsTitle: String
     let placeholderSystemName: String
 
-    init(seed: ExerciseRepo.ExerciseSeed) {
+    init(seed: ExerciseRepo.ExerciseSeed, exerciseStore: any ExerciseStoreType) {
         self.seed = seed
+        self.exerciseStore = exerciseStore
         self.title = seed.name
         self.musclesTitle = String(localized: "muscles_section")
         self.instructionsTitle = String(localized: "instructions_section")
@@ -28,7 +30,7 @@ final class ExerciseDetailsViewModel {
     }
 
     func loadLatestDetails() async {
-        if let latestSeed = await ExerciseRepo.shared.getExerciseSeedResolvingRemote(named: seed.name) {
+        if let latestSeed = await exerciseStore.getExerciseSeedResolvingRemote(named: seed.name) {
             apply(latestSeed)
         }
     }

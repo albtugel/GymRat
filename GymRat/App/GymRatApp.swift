@@ -30,8 +30,8 @@ struct GymRatApp: App {
                 .environment(\.viewModelFactory, dependencies)
                 .preferredColorScheme(themeStore.selectedTheme.colorScheme)
                 .tint(themeStore.accentColor)
-                .task {
-                    _ = await ExerciseRepo.shared.refresh()
+                .task { [exerciseStore = dependencies.exerciseStore] in
+                    _ = await exerciseStore.refresh()
                 }
         }
         .modelContainer(dependencies.modelContainer)

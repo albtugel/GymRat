@@ -8,13 +8,18 @@ import Kingfisher
 /// no network traffic.
 @MainActor
 final class ExerciseImagePrefetcher {
+    private let exerciseStore: any ExerciseStoreType
     private var running: ImagePrefetcher?
+
+    init(exerciseStore: any ExerciseStoreType) {
+        self.exerciseStore = exerciseStore
+    }
 
     func prefetch(exerciseNames: [String]) {
         guard !exerciseNames.isEmpty else { return }
 
-        Task { [weak self] in
-            let urls = await ExerciseRepo.shared.gifURLs(forExerciseNames: exerciseNames)
+        Task { [weak self, exerciseStore] in
+            let urls = await exerciseStore.gifURLs(forExerciseNames: exerciseNames)
             guard let self, !urls.isEmpty else { return }
             self.start(urls: urls)
         }

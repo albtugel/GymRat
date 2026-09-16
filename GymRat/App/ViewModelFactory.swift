@@ -12,6 +12,8 @@ protocol ViewModelFactory {
         programViewModel: ProgramViewModel
     ) -> ProgramEditorViewModel
     func makeAIPlanEditViewModel(programEditorViewModel: ProgramEditorViewModel) -> AIPlanEditViewModel
+    func makeDayProgramsViewModel(selectedDate: Date, programViewModel: ProgramViewModel) -> DayProgramsViewModel
+    func makeExerciseDetailsViewModel(seed: ExerciseRepo.ExerciseSeed) -> ExerciseDetailsViewModel
 }
 
 extension EnvironmentValues {
@@ -39,4 +41,8 @@ extension UnavailableViewModelFactory: ViewModelFactory {
     ) -> ProgramEditorViewModel { missing() }
 
     func makeAIPlanEditViewModel(programEditorViewModel: ProgramEditorViewModel) -> AIPlanEditViewModel { missing() }
+
+    func makeDayProgramsViewModel(selectedDate: Date, programViewModel: ProgramViewModel) -> DayProgramsViewModel { missing() }
+
+    func makeExerciseDetailsViewModel(seed: ExerciseRepo.ExerciseSeed) -> ExerciseDetailsViewModel { missing() }
 }

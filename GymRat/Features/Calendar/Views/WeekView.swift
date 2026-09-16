@@ -6,6 +6,7 @@ struct WeekView: View {
 
     @Environment(ThemeStore.self) private var themeStore
     @Environment(ProgramViewModel.self) private var programViewModel
+    @Environment(\.viewModelFactory) private var viewModelFactory
 
     @State private var viewModel: WeekViewModel
 
@@ -31,6 +32,10 @@ struct WeekView: View {
             .padding(.bottom, 1)
 
             DayProgramsView(
+                viewModel: viewModelFactory.makeDayProgramsViewModel(
+                    selectedDate: viewModel.selectedDate,
+                    programViewModel: programViewModel
+                ),
                 selectedDate: viewModel.selectedDate,
                 programViewModel: programViewModel
             ) {

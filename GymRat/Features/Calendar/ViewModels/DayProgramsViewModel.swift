@@ -13,12 +13,15 @@ final class DayProgramsViewModel {
 
 
     private let programViewModel: ProgramViewModel
-    private let imagePrefetcher = ExerciseImagePrefetcher()
+    private let imagePrefetcher: ExerciseImagePrefetcher
 
-    init(selectedDate: Date, programViewModel: ProgramViewModel) {
+    /// Only resolves the day's programs. Image warm-up starts with `prefetchImages()` once the view is
+    /// on screen, so an instance built and discarded during a render never touches the network.
+    init(selectedDate: Date, programViewModel: ProgramViewModel, imagePrefetcher: ExerciseImagePrefetcher) {
         self.selectedDate = selectedDate
         self.programViewModel = programViewModel
-        reloadPrograms()
+        self.imagePrefetcher = imagePrefetcher
+        dayPrograms = programViewModel.programs(for: selectedDate)
     }
 
 
@@ -29,6 +32,12 @@ final class DayProgramsViewModel {
 
     func reload() {
         reloadPrograms()
+    }
+
+    func prefetchImages() {
+        imagePrefetcher.prefetch(
+            exerciseNames: dayPrograms.flatMap { $0.exercises.map(\.exercise.name) }
+        )
     }
 
     func startDragging(_ program: Program) {
@@ -69,8 +78,6 @@ final class DayProgramsViewModel {
 
     private func reloadPrograms() {
         dayPrograms = programViewModel.programs(for: selectedDate)
-        imagePrefetcher.prefetch(
-            exerciseNames: dayPrograms.flatMap { $0.exercises.map(\.exercise.name) }
-        )
+        prefetchImages()
     }
 }

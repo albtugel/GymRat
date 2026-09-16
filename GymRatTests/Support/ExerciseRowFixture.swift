@@ -44,6 +44,25 @@ final class FakeExerciseLogService: ExerciseLogServiceType {
     }
 }
 
+/// Catalog stand-in: answers only from the seeds it was given and never touches the network.
+struct FakeExerciseStore: ExerciseStoreType {
+    var seeds: [ExerciseRepo.ExerciseSeed] = []
+
+    func refresh() async -> [ExerciseRepo.Exercise] { [] }
+
+    func seedSnapshot() async -> [ExerciseRepo.ExerciseSeed] { seeds }
+
+    func getExerciseSeed(named name: String) async -> ExerciseRepo.ExerciseSeed? {
+        seeds.first { $0.name == name }
+    }
+
+    func getExerciseSeedResolvingRemote(named name: String) async -> ExerciseRepo.ExerciseSeed? {
+        await getExerciseSeed(named: name)
+    }
+
+    func gifURLs(forExerciseNames names: [String]) async -> [URL] { [] }
+}
+
 /// One exercise in an in-memory model container plus a fake log service, ready to drive
 /// `ExerciseRowViewModel` the way the row view does.
 @MainActor
@@ -75,7 +94,7 @@ struct ExerciseRowFixture {
             selectedDate: today,
             logService: service,
             units: Units(defaults: UserDefaults(suiteName: "ExerciseRowFixture-\(UUID().uuidString)") ?? .standard),
-            exerciseStore: ExerciseRepo.shared
+            exerciseStore: FakeExerciseStore()
         )
     }
 

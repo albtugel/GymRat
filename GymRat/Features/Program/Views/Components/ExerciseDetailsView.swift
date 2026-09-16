@@ -4,8 +4,8 @@ struct ExerciseDetailsView: View {
     @Environment(\.dismiss) private var dismiss
     @State private var viewModel: ExerciseDetailsViewModel
 
-    init(seed: ExerciseRepo.ExerciseSeed) {
-        _viewModel = State(initialValue: ExerciseDetailsViewModel(seed: seed))
+    init(viewModel: ExerciseDetailsViewModel) {
+        _viewModel = State(initialValue: viewModel)
     }
 
     var body: some View {

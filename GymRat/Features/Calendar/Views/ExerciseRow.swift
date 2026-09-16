@@ -10,6 +10,7 @@ struct ExerciseRow: View {
 
     @Environment(ThemeStore.self) private var themeStore
     @Environment(ProgramViewModel.self) private var programViewModel
+    @Environment(ExerciseLogSaveCoordinator.self) private var saveCoordinator: ExerciseLogSaveCoordinator?
 
     init(
         viewModel: ExerciseRowViewModel,
@@ -31,18 +32,19 @@ struct ExerciseRow: View {
             focusedField: $focusedField,
             accentColor: themeStore.accentColor
         )
-            .onAppear { Task { await viewModel.load() } }
+            .onAppear {
+                saveCoordinator?.register(viewModel)
+                Task { await viewModel.load() }
+            }
             .onChange(of: selectedDate) { _, newValue in
                 Task { await viewModel.updateSelectedDate(newValue) }
-            }
-            .onReceive(NotificationCenter.default.publisher(for: .saveExerciseLogs)) { _ in
-                Task { await viewModel.handleDisappear() }
             }
             .onChange(of: focusedField) { _, newValue in
                 Task { await viewModel.handleFocusChange(newValue) }
             }
             .onDisappear {
-                Task { await viewModel.handleDisappear() }
+                saveCoordinator?.unregister(viewModel)
+                Task { await viewModel.saveIfNeeded() }
             }
             .onDrag {
                 draggingExercise = viewModel.programExercise

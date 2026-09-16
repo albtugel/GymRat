@@ -181,7 +181,9 @@ final class ExerciseRowViewModel {
         wasFocused = isFocused
     }
 
-    func handleDisappear() async {
+    /// Writes any unsaved entries. Called when the row leaves the screen, when the calendar flushes
+    /// all rows, and from the Retry button after a failed save.
+    func saveIfNeeded() async {
         await saveCurrentLogIfNeeded()
     }
 
@@ -192,10 +194,6 @@ final class ExerciseRowViewModel {
     /// True while entries exist that have not reached the store yet.
     var hasUnsavedChanges: Bool {
         pendingSave != nil || isDirty || setsEditedForDay
-    }
-
-    func retrySave() async {
-        await saveCurrentLogIfNeeded()
     }
 
 

@@ -28,8 +28,8 @@ final class SettingsViewModel {
     }
 
 
-    func deletePrograms(at offsets: IndexSet, programViewModel: ProgramViewModel) {
-        programViewModel.deletePrograms(at: offsets)
+    func deletePrograms(at offsets: IndexSet, programViewModel: ProgramViewModel) async {
+        await programViewModel.deletePrograms(at: offsets)
     }
 
     func resetAllData(programViewModel: ProgramViewModel) async {

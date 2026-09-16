@@ -10,9 +10,8 @@ final class Dependencies: ViewModelFactory {
     /// Set when the on-disk store could not be opened on this launch and was replaced with an empty one.
     let storeRecovery: PersistentStore.Recovery?
 
-    let exerciseService: ExerciseServiceType
-    let programService: ProgramServiceType
-    let programAssignmentService: ScheduleServiceType
+    let exerciseService: any ExerciseServiceType
+    let programStore: any ProgramStoreType
     let exerciseLogStore: any ExerciseLogStoreType
     let dataResetService: any DataResetServiceType
     let themeStore: ThemeStore
@@ -33,13 +32,8 @@ final class Dependencies: ViewModelFactory {
         modelContext = modelContainer.mainContext
 
         exerciseStore = ExerciseRepo()
-        exerciseService = ExerciseService(
-            modelContext: modelContext,
-            exerciseStore: exerciseStore,
-            seedStore: ExerciseSeedStore(modelContainer: modelContainer)
-        )
-        programService = ProgramService(modelContext: modelContext)
-        programAssignmentService = ScheduleService(modelContext: modelContext)
+        exerciseService = ExerciseService(modelContainer: modelContainer, exerciseStore: exerciseStore)
+        programStore = ProgramStore(modelContainer: modelContainer)
         exerciseLogStore = ExerciseLogStore(modelContainer: modelContainer)
         dataResetService = DataResetService(modelContainer: modelContainer)
         themeStore = ThemeStore()
@@ -51,30 +45,36 @@ final class Dependencies: ViewModelFactory {
     func makeProgramViewModel() -> ProgramViewModel {
         ProgramViewModel(
             exerciseService: exerciseService,
-            programService: programService,
-            assignmentService: programAssignmentService,
+            programStore: programStore,
             dataResetService: dataResetService
         )
     }
 
     func makeProgramEditorViewModel(
         mode: ProgramEditorMode,
-        program: Program,
+        program: ProgramSnapshot,
         programViewModel: ProgramViewModel
     ) -> ProgramEditorViewModel {
-        ProgramEditorViewModel(
+        let picker = ExercisePickerViewModel(
+            programID: program.id,
+            programType: program.type,
+            isEditing: mode == .edit,
+            selectedExercises: program.exercises,
+            exerciseService: exerciseService,
+            programStore: programStore,
+            logStore: exerciseLogStore,
+            exerciseStore: exerciseStore
+        )
+        return ProgramEditorViewModel(
             mode: mode,
             program: program,
-            programService: programService,
-            exerciseService: exerciseService,
-            logStore: exerciseLogStore,
-            exerciseStore: exerciseStore,
+            picker: picker,
             programViewModel: programViewModel
         )
     }
 
     func makeExerciseRowViewModel(
-        programExercise: WorkoutExercise,
+        programExercise: WorkoutExerciseSnapshot,
         selectedDate: Date
     ) -> ExerciseRowViewModel {
         ExerciseRowViewModel(

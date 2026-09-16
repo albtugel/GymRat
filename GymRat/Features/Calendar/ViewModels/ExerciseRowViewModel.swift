@@ -19,7 +19,7 @@ final class ExerciseRowViewModel {
     }
 
 
-    let programExercise: WorkoutExercise
+    let programExercise: WorkoutExerciseSnapshot
     private(set) var repsBySetText: [String] = []
     private(set) var weightsBySetText: [String] = []
     private(set) var durationsBySetText: [String] = []
@@ -47,7 +47,7 @@ final class ExerciseRowViewModel {
     private let exerciseStore: any ExerciseStoreType
 
     init(
-        programExercise: WorkoutExercise,
+        programExercise: WorkoutExerciseSnapshot,
         selectedDate: Date,
         logStore: any ExerciseLogStoreType,
         units: Units,
@@ -73,7 +73,7 @@ final class ExerciseRowViewModel {
     }
 
     var isCardio: Bool {
-        ExerciseMapper.category(for: programExercise.exercise) == .cardio
+        programExercise.exercise.category == .cardio
     }
 
     var showsDuration: Bool {
@@ -206,7 +206,6 @@ final class ExerciseRowViewModel {
         }
         guard let value = Int(sanitized) else { return }
         setsCountText = String(min(10, max(1, value)))
-        programExercise.sets = setsCount
         setsEditedForDay = true
         markEdited()
         normalizeArrays()

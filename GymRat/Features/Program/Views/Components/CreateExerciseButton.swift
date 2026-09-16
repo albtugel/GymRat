@@ -1,9 +1,9 @@
 import SwiftUI
 
 struct CreateExerciseButton: View {
-    private let viewModel: ProgramEditorViewModel
+    private let viewModel: ExercisePickerViewModel
 
-    init(viewModel: ProgramEditorViewModel) {
+    init(viewModel: ExercisePickerViewModel) {
         self.viewModel = viewModel
     }
 
@@ -27,7 +27,7 @@ struct CreateExerciseButton: View {
                 }
             }
             Button("save_button") {
-                viewModel.createCustomExercise()
+                Task { await viewModel.createCustomExercise() }
             }
             Button("cancel_button", role: .cancel) {
                 viewModel.dismissCreateExerciseAlert()

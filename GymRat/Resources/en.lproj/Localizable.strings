@@ -154,8 +154,6 @@
 "instructions_section" = "Instructions";
 "my_programs_section" = "My Programs";
 "no_programs_yet" = "No programs yet";
-"no_shared_exercise_message" = "This exercise doesn't support shared history yet.";
-"no_shared_exercise_title" = "Can't Share History";
 "ok_button" = "OK";
 "privacy_policy_label" = "Privacy Policy";
 "program_color_label" = "Program color";

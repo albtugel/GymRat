@@ -3,19 +3,19 @@ import UniformTypeIdentifiers
 
 struct ProgramsList: View {
     private let selectedDate: Date
-    @Binding private var dayPrograms: [Program]
-    @Binding private var draggingProgram: Program?
-    private let onEdit: (Program) -> Void
-    private let onDelete: (Program) -> Void
-    private let onReorder: ([Program]) -> Void
+    @Binding private var dayPrograms: [ProgramSnapshot]
+    @Binding private var draggingProgram: ProgramSnapshot?
+    private let onEdit: (ProgramSnapshot) -> Void
+    private let onDelete: (ProgramSnapshot) -> Void
+    private let onReorder: ([ProgramSnapshot]) -> Void
 
     init(
         selectedDate: Date,
-        dayPrograms: Binding<[Program]>,
-        draggingProgram: Binding<Program?>,
-        onEdit: @escaping (Program) -> Void,
-        onDelete: @escaping (Program) -> Void,
-        onReorder: @escaping ([Program]) -> Void
+        dayPrograms: Binding<[ProgramSnapshot]>,
+        draggingProgram: Binding<ProgramSnapshot?>,
+        onEdit: @escaping (ProgramSnapshot) -> Void,
+        onDelete: @escaping (ProgramSnapshot) -> Void,
+        onReorder: @escaping ([ProgramSnapshot]) -> Void
     ) {
         self.selectedDate = selectedDate
         self._dayPrograms = dayPrograms

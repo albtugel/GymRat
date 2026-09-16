@@ -2,23 +2,23 @@ import SwiftUI
 
 struct DayProgramsList: View {
     private let selectedDate: Date
-    @Binding private var dayPrograms: [Program]
-    @Binding private var draggingProgram: Program?
+    @Binding private var dayPrograms: [ProgramSnapshot]
+    @Binding private var draggingProgram: ProgramSnapshot?
     private let accentColor: Color
-    private let onEdit: (Program) -> Void
-    private let onDelete: (Program) -> Void
+    private let onEdit: (ProgramSnapshot) -> Void
+    private let onDelete: (ProgramSnapshot) -> Void
     private let onAddProgramTap: () -> Void
-    private let onReorder: ([Program]) -> Void
+    private let onReorder: ([ProgramSnapshot]) -> Void
 
     init(
         selectedDate: Date,
-        dayPrograms: Binding<[Program]>,
-        draggingProgram: Binding<Program?>,
+        dayPrograms: Binding<[ProgramSnapshot]>,
+        draggingProgram: Binding<ProgramSnapshot?>,
         accentColor: Color,
-        onEdit: @escaping (Program) -> Void,
-        onDelete: @escaping (Program) -> Void,
+        onEdit: @escaping (ProgramSnapshot) -> Void,
+        onDelete: @escaping (ProgramSnapshot) -> Void,
         onAddProgramTap: @escaping () -> Void,
-        onReorder: @escaping ([Program]) -> Void
+        onReorder: @escaping ([ProgramSnapshot]) -> Void
     ) {
         self.selectedDate = selectedDate
         self._dayPrograms = dayPrograms

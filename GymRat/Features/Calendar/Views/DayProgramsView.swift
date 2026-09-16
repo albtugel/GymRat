@@ -51,27 +51,27 @@ struct DayProgramsView: View {
         .onChange(of: selectedDate) { _, _ in
             viewModel.updateSelectedDate(selectedDate)
         }
-        .onChange(of: programViewModel.customProgramIds) { _, _ in
+        .onChange(of: programViewModel.customPrograms) { _, _ in
             viewModel.reload()
         }
     }
 
 
-    private var dayProgramsBinding: Binding<[Program]> {
+    private var dayProgramsBinding: Binding<[ProgramSnapshot]> {
         Binding(
             get: { viewModel.dayPrograms },
             set: { viewModel.setPrograms($0) }
         )
     }
 
-    private var draggingProgramBinding: Binding<Program?> {
+    private var draggingProgramBinding: Binding<ProgramSnapshot?> {
         Binding(
             get: { viewModel.draggingProgram },
             set: { viewModel.setDraggingProgram($0) }
         )
     }
 
-    private var editingProgramBinding: Binding<Program?> {
+    private var editingProgramBinding: Binding<ProgramSnapshot?> {
         Binding(
             get: { viewModel.editingProgram },
             set: { viewModel.edit($0) }

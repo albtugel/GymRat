@@ -39,7 +39,7 @@ struct ProgramEditorContent: View {
                     showsAIEditSheet = true
                 }
 
-                ExercisePickerView(viewModel: viewModel)
+                ExercisePickerView(viewModel: viewModel.picker)
             }
             .safeAreaPadding(.bottom, 50)
             .navigationTitle(viewModel.programTitle)

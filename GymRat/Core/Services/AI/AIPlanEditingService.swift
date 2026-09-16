@@ -18,7 +18,7 @@ final class AIPlanEditingService {
         prompt: String,
         programName: String,
         programType: ProgramType,
-        selectedExercises: [WorkoutExercise],
+        selectedExercises: [WorkoutExerciseSnapshot],
         availableExerciseNames: [String]
     ) async throws -> AIPlanEditResponse {
         let trimmed = prompt.trimmingCharacters(in: .whitespacesAndNewlines)

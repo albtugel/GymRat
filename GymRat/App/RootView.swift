@@ -31,8 +31,7 @@ struct RootView: View {
         }
         .task {
             await programViewModel.seedExercisesIfNeeded()
-            programViewModel.loadPrograms()
-            programViewModel.loadSchedules()
+            await programViewModel.loadPrograms()
         }
         .onChange(of: scenePhase) { _, phase in
             // Entries typed into a row are written on focus loss or a day switch; leaving the app

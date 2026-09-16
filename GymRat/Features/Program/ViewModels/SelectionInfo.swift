@@ -1,6 +1,6 @@
 import Foundation
 
 struct SelectionInfo {
-    let selectedExercise: WorkoutExercise?
+    let selectedExercise: WorkoutExerciseSnapshot?
     let selectionNumber: Int?
 }

@@ -8,7 +8,7 @@ struct ProgramPickerView: View {
 
     @Binding var selectedDate: Date
 
-    @State private var selectedProgram: Program?
+    @State private var selectedProgram: ProgramSnapshot?
     @State private var mode: ProgramEditorMode = .create
 
     var body: some View {
@@ -17,10 +17,7 @@ struct ProgramPickerView: View {
                 Section("templates_section") {
                     ForEach(ProgramTemplate.templates) { template in
                         Button {
-                            selectedProgram = programViewModel.makeProgram(
-                                name: template.name,
-                                typeRaw: template.typeRaw
-                            )
+                            selectedProgram = programViewModel.makeProgram(name: template.name, type: template.type)
                             mode = .create
                         } label: {
                             HStack {
@@ -75,6 +72,6 @@ struct ProgramPickerView: View {
     }
 
     private func deleteProgram(at offsets: IndexSet) {
-        programViewModel.deletePrograms(at: offsets)
+        Task { await programViewModel.deletePrograms(at: offsets) }
     }
 }

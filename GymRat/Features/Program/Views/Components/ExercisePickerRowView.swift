@@ -2,19 +2,19 @@ import SwiftUI
 
 struct ExercisePickerRowView: View {
     private let seed: ExerciseRepo.ExerciseSeed
-    private let selectedExercise: WorkoutExercise?
+    private let selectedExercise: WorkoutExerciseSnapshot?
     private let selectionNumber: Int?
     private let isEditing: Bool
     private let onToggle: (ExerciseRepo.ExerciseSeed) -> Void
-    private let onClearHistory: (WorkoutExercise) -> Void
+    private let onClearHistory: (WorkoutExerciseSnapshot) -> Void
 
     init(
         seed: ExerciseRepo.ExerciseSeed,
-        selectedExercise: WorkoutExercise?,
+        selectedExercise: WorkoutExerciseSnapshot?,
         selectionNumber: Int?,
         isEditing: Bool,
         onToggle: @escaping (ExerciseRepo.ExerciseSeed) -> Void,
-        onClearHistory: @escaping (WorkoutExercise) -> Void
+        onClearHistory: @escaping (WorkoutExerciseSnapshot) -> Void
     ) {
         self.seed = seed
         self.selectedExercise = selectedExercise

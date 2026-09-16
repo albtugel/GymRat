@@ -2,91 +2,51 @@ import Foundation
 import Observation
 import Kingfisher
 
+/// App-wide list of the user's programs. Everything the UI shows comes from snapshots; writes go
+/// through `ProgramStoreType` and the list is refreshed from the store afterwards.
 @Observable
 @MainActor
 final class ProgramViewModel {
-
-
-    private(set) var programs: [Program] = []
-    private(set) var customPrograms: [Program] = []
-    private(set) var dayPrograms: [Date: [Program]] = [:]
+    private(set) var customPrograms: [ProgramSnapshot] = []
     private(set) var isLoading: Bool = false
     private(set) var errorMessage: String?
 
-
-    private let exerciseService: ExerciseServiceType
-    private let programService: ProgramServiceType
-    private let assignmentService: ScheduleServiceType
-    private let dataResetService: DataResetServiceType
+    private let exerciseService: any ExerciseServiceType
+    private let programStore: any ProgramStoreType
+    private let dataResetService: any DataResetServiceType
 
     init(
-        exerciseService: ExerciseServiceType,
-        programService: ProgramServiceType,
-        assignmentService: ScheduleServiceType,
-        dataResetService: DataResetServiceType
+        exerciseService: any ExerciseServiceType,
+        programStore: any ProgramStoreType,
+        dataResetService: any DataResetServiceType
     ) {
         self.exerciseService = exerciseService
-        self.programService = programService
-        self.assignmentService = assignmentService
+        self.programStore = programStore
         self.dataResetService = dataResetService
     }
 
-
-    func programs(for date: Date) -> [Program] {
+    func programs(for date: Date) -> [ProgramSnapshot] {
         guard let weekday = ProgramWeekdayHelper.from(date: date) else { return [] }
-        return customPrograms.filter { ProgramMapper.weekdays(for: $0).contains(weekday) }
+        return customPrograms.filter { $0.weekdays.contains(weekday) }
     }
 
     var hasCustomPrograms: Bool {
         !customPrograms.isEmpty
     }
 
-    var customProgramIds: [UUID] {
-        customPrograms.map(\.id)
-    }
-
-    func makeProgram(for type: ProgramType) -> Program {
-        Program(
-            name: title(for: type),
-            typeRaw: type.rawValue
-        )
-    }
-
-    func makeProgram(name: String, typeRaw: String) -> Program {
-        Program(name: name, typeRaw: typeRaw)
-    }
-
-    func title(for type: ProgramType) -> String {
-        ProgramTypeText.title(for: type)
+    func makeProgram(name: String, type: ProgramType) -> ProgramSnapshot {
+        ProgramSnapshot(name: name, type: type)
     }
 
     func dismissError() {
         errorMessage = nil
     }
 
-
-    func loadPrograms() {
+    func loadPrograms() async {
         isLoading = true
         defer { isLoading = false }
         do {
-            programs = try programService.fetchPrograms()
-            customPrograms = programs
-        } catch {
-            errorMessage = error.localizedDescription
-        }
-    }
-
-    func loadSchedules() {
-        do {
-            let assignments = try assignmentService.fetchAssignments()
-            dayPrograms = [:]
-            for assign in assignments {
-                guard let program = assign.program else { continue }
-                let day = assign.date.startOfDay
-                if day >= Date().startOfDay {
-                    dayPrograms[day, default: []].append(program)
-                }
-            }
+            customPrograms = try await programStore.fetchPrograms()
         } catch {
             errorMessage = error.localizedDescription
         }
@@ -100,60 +60,57 @@ final class ProgramViewModel {
         }
     }
 
+    /// Persists a new or edited program and refreshes the list from the store, so changes the store
+    /// made on the side (shared history in other programs) show up too.
+    func saveProgram(_ program: ProgramSnapshot) async throws {
+        _ = try await programStore.save(program)
+        customPrograms = try await programStore.fetchPrograms()
+    }
 
-    func addProgram(_ program: Program) {
+    func deleteProgram(id: UUID) async {
+        customPrograms.removeAll { $0.id == id }
         do {
-            try programService.save(program)
-            appendProgram(program)
-            let assignments = buildSchedule(for: program)
-            applySchedule(assignments, program: program)
-            try saveSchedule(assignments)
+            try await programStore.deleteProgram(id: id)
         } catch {
             errorMessage = error.localizedDescription
         }
     }
 
-    func deleteProgram(_ program: Program) {
-        // Purge in-memory copies before the store delete so nothing reads
-        // properties of an invalidated model (views re-render on these arrays).
-        let programID = program.id
-        programs.removeAll { $0.id == programID }
-        customPrograms.removeAll { $0.id == programID }
-        for key in dayPrograms.keys {
-            dayPrograms[key]?.removeAll { $0.id == programID }
-        }
-        do {
-            try programService.deleteProgram(program)
-        } catch {
-            errorMessage = error.localizedDescription
+    func deletePrograms(at offsets: IndexSet) async {
+        let ids = offsets.compactMap { customPrograms.indices.contains($0) ? customPrograms[$0].id : nil }
+        for id in ids {
+            await deleteProgram(id: id)
         }
     }
 
-    func deletePrograms(at offsets: IndexSet) {
-        for index in offsets {
-            let program = customPrograms[index]
-            deleteProgram(program)
+    func reorderExercises(programID: UUID, orderedExerciseIDs: [UUID]) async {
+        if let index = customPrograms.firstIndex(where: { $0.id == programID }) {
+            let position = Dictionary(orderedExerciseIDs.enumerated().map { ($1, $0 + 1) }, uniquingKeysWith: { first, _ in first })
+            customPrograms[index].exercises = customPrograms[index].exercises
+                .map { exercise in
+                    var exercise = exercise
+                    if let newIndex = position[exercise.id] {
+                        exercise.selectionIndex = newIndex
+                    }
+                    return exercise
+                }
+                .sorted { $0.selectionIndex < $1.selectionIndex }
         }
-    }
-
-    func reorderExercises(in program: Program, from source: IndexSet, to destination: Int) {
         do {
-            try programService.reorderExercises(in: program, from: source, to: destination)
+            try await programStore.reorderExercises(programID: programID, orderedExerciseIDs: orderedExerciseIDs)
         } catch {
             errorMessage = error.localizedDescription
         }
     }
 
     func resetPrograms() {
-        programs = []
         customPrograms = []
-        dayPrograms = [:]
     }
 
     func resetAllData() async {
         do {
             try await dataResetService.resetAllData()
-            
+
             ImageCache.default.clearMemoryCache()
             ImageCache.default.clearDiskCache {
                 AppLog.imageCache.notice("Kingfisher cache cleared")
@@ -165,7 +122,8 @@ final class ProgramViewModel {
         }
     }
 
-    func reorderPrograms(_ reordered: [Program]) {
+    /// Session-only ordering of the day's cards; positions are not persisted.
+    func reorderPrograms(_ reordered: [ProgramSnapshot]) {
         let ids = reordered.map(\.id)
         var updated = customPrograms
         let indices = updated.enumerated().compactMap { index, element in
@@ -181,36 +139,5 @@ final class ProgramViewModel {
             updated.append(contentsOf: reordered)
             customPrograms = updated
         }
-    }
-
-
-    private func appendProgram(_ program: Program) {
-        programs.append(program)
-        customPrograms.append(program)
-    }
-
-    private func buildSchedule(for program: Program) -> [ScheduleItem] {
-        let calendar = AppCalendar.calendar
-        let startOfWeek = Date().startOfWeek
-        let weekdays = ProgramMapper.weekdays(for: program)
-        return weekdays.compactMap { weekday in
-            calendar.nextDate(
-                after: startOfWeek.addingTimeInterval(-1),
-                matching: DateComponents(weekday: ProgramWeekdayHelper.systemWeekdayNumber(for: weekday)),
-                matchingPolicy: .nextTime
-            ).map { ScheduleItem(program: program, date: $0) }
-        }
-    }
-
-    private func applySchedule(_ assignments: [ScheduleItem], program: Program) {
-        for assignment in assignments {
-            let day = assignment.date.startOfDay
-            dayPrograms[day, default: []].append(program)
-        }
-    }
-
-    private func saveSchedule(_ assignments: [ScheduleItem]) throws {
-        guard !assignments.isEmpty else { return }
-        try assignmentService.saveSchedule(assignments)
     }
 }

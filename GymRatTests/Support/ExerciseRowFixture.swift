@@ -86,13 +86,15 @@ struct FakeExerciseStore: ExerciseStoreType {
 }
 
 /// One saved exercise in an in-memory model container plus a fake log store, ready to drive
-/// `ExerciseRowViewModel` the way the row view does.
+/// `ExerciseRowViewModel` the way the row view does. `programExercise` is the stored model (for
+/// tests that run the real stores); `rowExercise` is the snapshot the row view model works with.
 @MainActor
 struct ExerciseRowFixture {
     let container: ModelContainer
     let logStore = FakeExerciseLogStore()
     let exercise: Exercise
     let programExercise: WorkoutExercise
+    let rowExercise: WorkoutExerciseSnapshot
     let today = Date().startOfDay
 
     var tomorrow: Date {
@@ -114,11 +116,16 @@ struct ExerciseRowFixture {
         container.mainContext.insert(exercise)
         container.mainContext.insert(programExercise)
         try container.mainContext.save()
+        rowExercise = WorkoutExerciseSnapshot(
+            id: programExercise.id,
+            exercise: ExerciseSnapshot(id: exercise.id, name: exercise.name, category: .strength),
+            sets: programExercise.sets
+        )
     }
 
     func makeViewModel() -> ExerciseRowViewModel {
         ExerciseRowViewModel(
-            programExercise: programExercise,
+            programExercise: rowExercise,
             selectedDate: today,
             logStore: logStore,
             units: Units(defaults: UserDefaults(suiteName: "ExerciseRowFixture-\(UUID().uuidString)") ?? .standard),

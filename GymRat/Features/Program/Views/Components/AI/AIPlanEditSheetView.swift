@@ -25,7 +25,7 @@ struct AIPlanEditSheetView: View {
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button("apply_button") {
-                        viewModel.applyPreview()
+                        Task { await viewModel.applyPreview() }
                     }
                     .disabled(viewModel.preview == nil)
                 }

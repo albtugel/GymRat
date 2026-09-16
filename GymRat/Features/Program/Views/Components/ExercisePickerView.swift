@@ -1,9 +1,9 @@
 import SwiftUI
 
 struct ExercisePickerView: View {
-    private let viewModel: ProgramEditorViewModel
+    private let viewModel: ExercisePickerViewModel
 
-    init(viewModel: ProgramEditorViewModel) {
+    init(viewModel: ExercisePickerViewModel) {
         self.viewModel = viewModel
     }
 
@@ -24,7 +24,7 @@ struct ExercisePickerView: View {
                     selectionNumber: info.selectionNumber,
                     isEditing: viewModel.isEditing,
                     onToggle: { selectedSeed in
-                        viewModel.toggleExercise(selectedSeed)
+                        Task { await viewModel.toggleExercise(selectedSeed) }
                     },
                     onClearHistory: { exercise in
                         Task { await viewModel.clearHistory(for: exercise) }

@@ -4,13 +4,10 @@ import Observation
 @Observable
 @MainActor
 final class DayProgramsViewModel {
-
-
-    private(set) var dayPrograms: [Program] = []
-    private(set) var draggingProgram: Program?
-    private(set) var editingProgram: Program?
+    private(set) var dayPrograms: [ProgramSnapshot] = []
+    private(set) var draggingProgram: ProgramSnapshot?
+    private(set) var editingProgram: ProgramSnapshot?
     private(set) var selectedDate: Date
-
 
     private let programViewModel: ProgramViewModel
     private let imagePrefetcher: ExerciseImagePrefetcher
@@ -23,7 +20,6 @@ final class DayProgramsViewModel {
         self.imagePrefetcher = imagePrefetcher
         dayPrograms = programViewModel.programs(for: selectedDate)
     }
-
 
     func updateSelectedDate(_ date: Date) {
         selectedDate = date
@@ -40,30 +36,31 @@ final class DayProgramsViewModel {
         )
     }
 
-    func setDraggingProgram(_ program: Program?) {
+    func setDraggingProgram(_ program: ProgramSnapshot?) {
         draggingProgram = program
     }
 
-    func setPrograms(_ programs: [Program]) {
+    func setPrograms(_ programs: [ProgramSnapshot]) {
         dayPrograms = programs
     }
 
-    func edit(_ program: Program?) {
+    func edit(_ program: ProgramSnapshot?) {
         editingProgram = program
     }
 
-    func delete(_ program: Program) {
-        let programID = program.id
-        dayPrograms.removeAll { $0.id == programID }
-        programViewModel.deleteProgram(program)
-        reloadPrograms()
+    func delete(_ program: ProgramSnapshot) {
+        dayPrograms.removeAll { $0.id == program.id }
+        Task { [weak self] in
+            guard let self else { return }
+            await programViewModel.deleteProgram(id: program.id)
+            reloadPrograms()
+        }
     }
 
-    func applyReorder(_ reordered: [Program]) {
+    func applyReorder(_ reordered: [ProgramSnapshot]) {
         programViewModel.reorderPrograms(reordered)
         dayPrograms = reordered
     }
-
 
     private func reloadPrograms() {
         dayPrograms = programViewModel.programs(for: selectedDate)

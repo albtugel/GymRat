@@ -155,8 +155,6 @@
 "instructions_section" = "Anleitung";
 "my_programs_section" = "Meine Programme";
 "no_programs_yet" = "Noch keine Programme";
-"no_shared_exercise_message" = "Für diese Übung ist eine gemeinsame Historie derzeit nicht verfügbar.";
-"no_shared_exercise_title" = "Verlauf kann nicht geteilt werden";
 "ok_button" = "OK";
 "privacy_policy_label" = "Datenschutzerklärung";
 "program_color_label" = "Programmfarbe";

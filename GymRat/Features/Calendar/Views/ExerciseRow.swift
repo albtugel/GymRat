@@ -3,9 +3,10 @@ import UniformTypeIdentifiers
 
 struct ExerciseRow: View {
     @State private var viewModel: ExerciseRowViewModel
-    let program: Program
+    let programID: UUID
     let selectedDate: Date
-    @Binding var draggingExercise: WorkoutExercise?
+    @Binding var exercises: [WorkoutExerciseSnapshot]
+    @Binding var draggingExercise: WorkoutExerciseSnapshot?
     @FocusState.Binding var focusedField: ExerciseField?
 
     @Environment(ThemeStore.self) private var themeStore
@@ -16,14 +17,16 @@ struct ExerciseRow: View {
     /// the ones the parent builds on later renders, so the parent may create it inline.
     init(
         viewModel: ExerciseRowViewModel,
-        program: Program,
+        programID: UUID,
         selectedDate: Date,
-        draggingExercise: Binding<WorkoutExercise?>,
+        exercises: Binding<[WorkoutExerciseSnapshot]>,
+        draggingExercise: Binding<WorkoutExerciseSnapshot?>,
         focusedField: FocusState<ExerciseField?>.Binding
     ) {
-        self.program = program
+        self.programID = programID
         self.selectedDate = selectedDate
         self._viewModel = State(initialValue: viewModel)
+        self._exercises = exercises
         self._draggingExercise = draggingExercise
         self._focusedField = focusedField
     }
@@ -57,10 +60,10 @@ struct ExerciseRow: View {
                 of: [UTType.data],
                 delegate: WorkoutExerciseDropDelegate(
                     item: viewModel.programExercise,
-                    program: program,
+                    exercises: $exercises,
                     dragging: $draggingExercise,
-                    onReorder: { source, destination in
-                        programViewModel.reorderExercises(in: program, from: source, to: destination)
+                    onReorder: { ordered in
+                        Task { await programViewModel.reorderExercises(programID: programID, orderedExerciseIDs: ordered.map(\.id)) }
                     }
                 )
             )

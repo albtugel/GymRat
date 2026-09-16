@@ -5,10 +5,10 @@ import SwiftUI
 @MainActor
 protocol ViewModelFactory {
     func makeSettingsViewModel() -> SettingsViewModel
-    func makeExerciseRowViewModel(programExercise: WorkoutExercise, selectedDate: Date) -> ExerciseRowViewModel
+    func makeExerciseRowViewModel(programExercise: WorkoutExerciseSnapshot, selectedDate: Date) -> ExerciseRowViewModel
     func makeProgramEditorViewModel(
         mode: ProgramEditorMode,
-        program: Program,
+        program: ProgramSnapshot,
         programViewModel: ProgramViewModel
     ) -> ProgramEditorViewModel
     func makeAIPlanEditViewModel(programEditorViewModel: ProgramEditorViewModel) -> AIPlanEditViewModel
@@ -32,11 +32,11 @@ private struct UnavailableViewModelFactory {
 extension UnavailableViewModelFactory: ViewModelFactory {
     func makeSettingsViewModel() -> SettingsViewModel { missing() }
 
-    func makeExerciseRowViewModel(programExercise: WorkoutExercise, selectedDate: Date) -> ExerciseRowViewModel { missing() }
+    func makeExerciseRowViewModel(programExercise: WorkoutExerciseSnapshot, selectedDate: Date) -> ExerciseRowViewModel { missing() }
 
     func makeProgramEditorViewModel(
         mode: ProgramEditorMode,
-        program: Program,
+        program: ProgramSnapshot,
         programViewModel: ProgramViewModel
     ) -> ProgramEditorViewModel { missing() }
 

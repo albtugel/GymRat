@@ -155,8 +155,6 @@
 "instructions_section" = "Техника выполнения";
 "my_programs_section" = "Мои программы";
 "no_programs_yet" = "Пока нет программ";
-"no_shared_exercise_message" = "Для этого упражнения пока недоступна общая история.";
-"no_shared_exercise_title" = "Нельзя поделиться историей";
 "ok_button" = "ОК";
 "privacy_policy_label" = "Политика конфиденциальности";
 "program_color_label" = "Цвет программы";

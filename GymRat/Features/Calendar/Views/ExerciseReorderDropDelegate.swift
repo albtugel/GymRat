@@ -2,24 +2,23 @@ import SwiftUI
 import UniformTypeIdentifiers
 
 struct WorkoutExerciseDropDelegate: DropDelegate {
-    let item: WorkoutExercise
-    let program: Program
-    @Binding var dragging: WorkoutExercise?
-    let onReorder: (IndexSet, Int) -> Void
+    let item: WorkoutExerciseSnapshot
+    @Binding var exercises: [WorkoutExerciseSnapshot]
+    @Binding var dragging: WorkoutExerciseSnapshot?
+    let onReorder: ([WorkoutExerciseSnapshot]) -> Void
 
     func dropEntered(info: DropInfo) {
-        guard let dragging, dragging != item else { return }
-        guard let fromIndex = program.exercises.firstIndex(of: dragging),
-              let toIndex = program.exercises.firstIndex(of: item) else { return }
+        guard let dragging, dragging.id != item.id else { return }
+        guard let fromIndex = exercises.firstIndex(where: { $0.id == dragging.id }),
+              let toIndex = exercises.firstIndex(where: { $0.id == item.id }) else { return }
 
-        let destination = toIndex > fromIndex ? toIndex + 1 : toIndex
         withAnimation(.easeInOut(duration: 0.2)) {
-            program.exercises.move(
+            exercises.move(
                 fromOffsets: IndexSet(integer: fromIndex),
-                toOffset: destination
+                toOffset: toIndex > fromIndex ? toIndex + 1 : toIndex
             )
         }
-        onReorder(IndexSet(integer: fromIndex), destination)
+        onReorder(exercises)
     }
 
     func dropUpdated(info: DropInfo) -> DropProposal? {
@@ -28,6 +27,7 @@ struct WorkoutExerciseDropDelegate: DropDelegate {
 
     func performDrop(info: DropInfo) -> Bool {
         dragging = nil
+        onReorder(exercises)
         return true
     }
 }

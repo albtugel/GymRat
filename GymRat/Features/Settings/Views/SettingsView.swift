@@ -7,7 +7,7 @@ struct SettingsView: View {
     @Environment(AISettingsManager.self) private var aiSettingsManager
     @Environment(\.viewModelFactory) private var viewModelFactory
     @State private var viewModel: SettingsViewModel
-    @State private var selectedProgram: Program?
+    @State private var selectedProgram: ProgramSnapshot?
     @State private var showResetAlert = false
     @State private var showProgramSheet = false
     init(viewModel: SettingsViewModel) {
@@ -28,7 +28,7 @@ struct SettingsView: View {
                 hasPrograms: programViewModel.hasCustomPrograms,
                 onSelect: { selectedProgram = $0 },
                 onDelete: { offsets in
-                    viewModel.deletePrograms(at: offsets, programViewModel: programViewModel)
+                    Task { await viewModel.deletePrograms(at: offsets, programViewModel: programViewModel) }
                 },
                 onAdd: { showProgramSheet = true }
             )

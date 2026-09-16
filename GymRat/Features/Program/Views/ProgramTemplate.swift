@@ -3,26 +3,15 @@ import Foundation
 struct ProgramTemplate: Identifiable {
     let id: UUID
     let name: String
-    let typeRaw: String
+    let type: ProgramType
 
-    init(id: UUID = UUID(), name: String, typeRaw: String) {
+    init(id: UUID = UUID(), name: String, type: ProgramType) {
         self.id = id
         self.name = name
-        self.typeRaw = typeRaw
+        self.type = type
     }
 
-    static let templates: [ProgramTemplate] = [
-        ProgramTemplate(
-            name: ProgramTypeText.title(for: .strength),
-            typeRaw: ProgramType.strength.rawValue
-        ),
-        ProgramTemplate(
-            name: ProgramTypeText.title(for: .cardio),
-            typeRaw: ProgramType.cardio.rawValue
-        ),
-        ProgramTemplate(
-            name: ProgramTypeText.title(for: .crossfit),
-            typeRaw: ProgramType.crossfit.rawValue
-        )
-    ]
+    static let templates: [ProgramTemplate] = ProgramType.allCases.map {
+        ProgramTemplate(name: ProgramTypeText.title(for: $0), type: $0)
+    }
 }

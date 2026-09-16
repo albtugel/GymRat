@@ -12,7 +12,11 @@ struct ExerciseServiceTests {
             .init(name: "Squat", category: .strength, muscles: [.legs], inputType: .strength),
             .init(name: "Row", category: .strength, muscles: [.back], inputType: .strength)
         ])
-        let service = ExerciseService(modelContext: container.mainContext, exerciseStore: store)
+        let service = ExerciseService(
+            modelContext: container.mainContext,
+            exerciseStore: store,
+            seedStore: ExerciseSeedStore(modelContainer: container)
+        )
 
         try await service.seedIfNeeded()
         try await service.seedIfNeeded()
@@ -27,7 +31,11 @@ struct ExerciseServiceTests {
         let store = FakeExerciseStore(seeds: [
             .init(name: "Squat", category: .strength, muscles: [.legs], inputType: .strength)
         ])
-        let service = ExerciseService(modelContext: container.mainContext, exerciseStore: store)
+        let service = ExerciseService(
+            modelContext: container.mainContext,
+            exerciseStore: store,
+            seedStore: ExerciseSeedStore(modelContainer: container)
+        )
         try service.addExercise(Exercise(name: "squat", categoryRaw: ExerciseCategory.strength.rawValue, isCustom: true))
 
         try await service.seedIfNeeded()

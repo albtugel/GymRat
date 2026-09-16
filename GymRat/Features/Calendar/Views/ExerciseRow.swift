@@ -42,11 +42,11 @@ struct ExerciseRow: View {
                 Task { await viewModel.updateSelectedDate(newValue) }
             }
             .onChange(of: focusedField) { _, newValue in
-                viewModel.handleFocusChange(newValue)
+                Task { await viewModel.handleFocusChange(newValue) }
             }
             .onDisappear {
                 saveCoordinator?.unregister(viewModel)
-                viewModel.saveIfNeeded()
+                Task { await viewModel.saveIfNeeded() }
             }
             .onDrag {
                 draggingExercise = viewModel.programExercise

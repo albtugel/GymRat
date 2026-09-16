@@ -6,36 +6,58 @@ enum TestError: Error {
     case storeUnavailable
 }
 
-/// In-memory stand-in for the SwiftData-backed log service. `failure` makes every call throw;
-/// `failWrites` fails only writes so reads (and therefore `load()`) keep working.
+/// In-memory stand-in for the log store. `failure` makes every call throw; `failWrites` fails only
+/// writes so reads (and therefore `load()`) keep working.
 @MainActor
-final class FakeExerciseLogService: ExerciseLogServiceType {
-    var logs: [ExerciseLog] = []
+final class FakeExerciseLogStore: ExerciseLogStoreType {
+    struct Entry: Equatable {
+        let scope: ExerciseLogScope
+        let snapshot: ExerciseLogSnapshot
+    }
+
+    private(set) var entries: [Entry] = []
+    private(set) var programExerciseSets: [UUID: Int] = [:]
     var failure: (any Error)?
     var failWrites = false
 
-    func fetchLogs(programExerciseId: UUID, exerciseId: UUID, sharedHistory: Bool) throws -> [ExerciseLog] {
+    var logs: [ExerciseLogSnapshot] { entries.map(\.snapshot) }
+
+    func fetchLogs(in scope: ExerciseLogScope) throws -> [ExerciseLogSnapshot] {
         try failIfNeeded(isWrite: false)
-        return logs.filter { $0.programExercise.id == programExerciseId }
+        return entries
+            .filter { Self.matches($0.scope, scope) }
+            .map(\.snapshot)
+            .sorted { $0.dayStamp < $1.dayStamp }
     }
 
-    func fetchLog(programExerciseId: UUID, exerciseId: UUID, sharedHistory: Bool, dayStamp: Int) throws -> ExerciseLog? {
-        try failIfNeeded(isWrite: false)
-        return logs.first { $0.programExercise.id == programExerciseId && $0.dayStamp == dayStamp }
-    }
-
-    func insertLog(_ log: ExerciseLog) throws {
+    func saveLog(
+        in scope: ExerciseLogScope,
+        day: Date,
+        sets: Int?,
+        values: ExerciseLogValues,
+        keepEmpty: Bool
+    ) throws -> ExerciseLogSnapshot? {
         try failIfNeeded(isWrite: true)
-        logs.append(log)
+        let dayStamp = ExerciseLogHelper.makeDayStamp(for: day)
+        entries.removeAll { Self.matches($0.scope, scope) && $0.snapshot.dayStamp == dayStamp }
+        if let sets {
+            programExerciseSets[scope.programExerciseID] = sets
+        }
+        guard values.hasValues || keepEmpty else { return nil }
+        let snapshot = ExerciseLogSnapshot(id: UUID(), dayStamp: dayStamp, values: values)
+        entries.append(Entry(scope: scope, snapshot: snapshot))
+        return snapshot
     }
 
-    func deleteLog(_ log: ExerciseLog) throws {
+    func deleteLogs(in scope: ExerciseLogScope) throws {
         try failIfNeeded(isWrite: true)
-        logs.removeAll { $0.id == log.id }
+        entries.removeAll { Self.matches($0.scope, scope) }
     }
 
-    func saveChanges() throws {
-        try failIfNeeded(isWrite: true)
+    private static func matches(_ stored: ExerciseLogScope, _ requested: ExerciseLogScope) -> Bool {
+        requested.sharedHistory
+            ? stored.exerciseID == requested.exerciseID
+            : stored.programExerciseID == requested.programExerciseID
     }
 
     private func failIfNeeded(isWrite: Bool) throws {
@@ -63,17 +85,22 @@ struct FakeExerciseStore: ExerciseStoreType {
     func gifURLs(forExerciseNames names: [String]) async -> [URL] { [] }
 }
 
-/// One exercise in an in-memory model container plus a fake log service, ready to drive
+/// One saved exercise in an in-memory model container plus a fake log store, ready to drive
 /// `ExerciseRowViewModel` the way the row view does.
 @MainActor
 struct ExerciseRowFixture {
     let container: ModelContainer
-    let service = FakeExerciseLogService()
+    let logStore = FakeExerciseLogStore()
+    let exercise: Exercise
     let programExercise: WorkoutExercise
     let today = Date().startOfDay
 
     var tomorrow: Date {
         AppCalendar.calendar.date(byAdding: .day, value: 1, to: today) ?? today
+    }
+
+    var scope: ExerciseLogScope {
+        ExerciseLogScope(programExerciseID: programExercise.id, exerciseID: exercise.id, sharedHistory: false)
     }
 
     init() throws {
@@ -82,31 +109,32 @@ struct ExerciseRowFixture {
             for: schema,
             configurations: [ModelConfiguration(schema: schema, isStoredInMemoryOnly: true)]
         )
-        let exercise = Exercise(name: "Test press", categoryRaw: ExerciseCategory.strength.rawValue)
+        exercise = Exercise(name: "Test press", categoryRaw: ExerciseCategory.strength.rawValue)
         programExercise = WorkoutExercise(exercise: exercise, sets: 3)
         container.mainContext.insert(exercise)
         container.mainContext.insert(programExercise)
+        try container.mainContext.save()
     }
 
     func makeViewModel() -> ExerciseRowViewModel {
         ExerciseRowViewModel(
             programExercise: programExercise,
             selectedDate: today,
-            logService: service,
+            logStore: logStore,
             units: Units(defaults: UserDefaults(suiteName: "ExerciseRowFixture-\(UUID().uuidString)") ?? .standard),
             exerciseStore: FakeExerciseStore()
         )
     }
 
     /// Focuses the first reps field and types into it, leaving the row with unsaved entries.
-    func enterReps(_ text: String, into viewModel: ExerciseRowViewModel) {
-        viewModel.handleFocusChange(.reps(programExercise.id, 0))
+    func enterReps(_ text: String, into viewModel: ExerciseRowViewModel) async {
+        await viewModel.handleFocusChange(.reps(programExercise.id, 0))
         viewModel.updateRepsText(text, index: 0)
     }
 
     /// Mirrors the UI: focus, type, then move focus away, which triggers the save.
-    func typeReps(_ text: String, into viewModel: ExerciseRowViewModel) {
-        enterReps(text, into: viewModel)
-        viewModel.handleFocusChange(nil)
+    func typeReps(_ text: String, into viewModel: ExerciseRowViewModel) async {
+        await enterReps(text, into: viewModel)
+        await viewModel.handleFocusChange(nil)
     }
 }

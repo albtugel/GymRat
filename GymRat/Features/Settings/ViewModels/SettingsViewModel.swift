@@ -32,9 +32,9 @@ final class SettingsViewModel {
         programViewModel.deletePrograms(at: offsets)
     }
 
-    func resetAllData(programViewModel: ProgramViewModel) {
+    func resetAllData(programViewModel: ProgramViewModel) async {
         do {
-            try dataResetService.resetAllData()
+            try await dataResetService.resetAllData()
             programViewModel.resetPrograms()
         } catch {
             errorMessage = error.localizedDescription

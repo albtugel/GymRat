@@ -150,9 +150,9 @@ final class ProgramViewModel {
         dayPrograms = [:]
     }
 
-    func resetAllData() {
+    func resetAllData() async {
         do {
-            try dataResetService.resetAllData()
+            try await dataResetService.resetAllData()
             
             ImageCache.default.clearMemoryCache()
             ImageCache.default.clearDiskCache {

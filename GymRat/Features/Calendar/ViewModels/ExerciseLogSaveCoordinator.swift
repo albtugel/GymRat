@@ -27,10 +27,10 @@ final class ExerciseLogSaveCoordinator {
     }
 
     /// Saves every registered row and returns once all writes have finished.
-    func saveAll() {
+    func saveAll() async {
         rows = rows.filter { $0.value.row != nil }
         for row in rows.values.compactMap(\.row) {
-            row.saveIfNeeded()
+            await row.saveIfNeeded()
         }
     }
 }

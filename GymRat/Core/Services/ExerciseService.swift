@@ -5,10 +5,12 @@ import SwiftData
 final class ExerciseService: ExerciseServiceType {
     private let modelContext: ModelContext
     private let exerciseStore: any ExerciseStoreType
+    private let seedStore: ExerciseSeedStore
 
-    init(modelContext: ModelContext, exerciseStore: any ExerciseStoreType) {
+    init(modelContext: ModelContext, exerciseStore: any ExerciseStoreType, seedStore: ExerciseSeedStore) {
         self.modelContext = modelContext
         self.exerciseStore = exerciseStore
+        self.seedStore = seedStore
     }
 
     func fetchExercises() throws -> [Exercise] {
@@ -29,22 +31,8 @@ final class ExerciseService: ExerciseServiceType {
     }
 
     func seedIfNeeded() async throws {
-        let existing = try fetchExercises()
-        let existingNames = Set(existing.map { $0.name.lowercased() })
-
-        var didInsert = false
         let seeds = await exerciseStore.seedSnapshot()
-        for seed in seeds {
-            let key = seed.name.lowercased()
-            if !existingNames.contains(key) {
-                modelContext.insert(Exercise(name: seed.name, categoryRaw: seed.category.rawValue))
-                didInsert = true
-            }
-        }
-
-        if didInsert {
-            try modelContext.save()
-        }
+        _ = try await seedStore.insertMissing(seeds: seeds)
     }
 
     func deleteCustomExercises() throws {

@@ -65,7 +65,7 @@ struct SettingsView: View {
         }
         .alert(LocalizedStringKey(Alerts.ResetData.title), isPresented: $showResetAlert) {
             Button("reset_button", role: .destructive) {
-                viewModel.resetAllData(programViewModel: programViewModel)
+                Task { await viewModel.resetAllData(programViewModel: programViewModel) }
                 selectedProgram = nil
             }
             Button("cancel_button", role: .cancel) { }

@@ -33,7 +33,7 @@ final class ProgramEditorViewModel {
 
     private let programService: ProgramServiceType
     private let exerciseService: ExerciseServiceType
-    private let exerciseLogService: ExerciseLogServiceType
+    private let logStore: any ExerciseLogStoreType
     private let exerciseStore: any ExerciseStoreType
     private let programViewModel: ProgramViewModel
 
@@ -42,7 +42,7 @@ final class ProgramEditorViewModel {
         program: Program,
         programService: ProgramServiceType,
         exerciseService: ExerciseServiceType,
-        exerciseLogService: ExerciseLogServiceType,
+        logStore: any ExerciseLogStoreType,
         exerciseStore: any ExerciseStoreType,
         programViewModel: ProgramViewModel
     ) {
@@ -54,7 +54,7 @@ final class ProgramEditorViewModel {
         self.selectedWeekdays = ProgramMapper.weekdays(for: program)
         self.programService = programService
         self.exerciseService = exerciseService
-        self.exerciseLogService = exerciseLogService
+        self.logStore = logStore
         self.exerciseStore = exerciseStore
         self.programViewModel = programViewModel
     }
@@ -310,16 +310,14 @@ final class ProgramEditorViewModel {
         await finishSave()
     }
 
-    func clearHistory(for exercise: WorkoutExercise) {
+    func clearHistory(for exercise: WorkoutExercise) async {
+        let scope = ExerciseLogScope(
+            programExerciseID: exercise.id,
+            exerciseID: exercise.exercise.id,
+            sharedHistory: exercise.sharedHistory
+        )
         do {
-            let logs = try exerciseLogService.fetchLogs(
-                programExerciseId: exercise.id,
-                exerciseId: exercise.exercise.id,
-                sharedHistory: exercise.sharedHistory
-            )
-            for log in logs {
-                try exerciseLogService.deleteLog(log)
-            }
+            try await logStore.deleteLogs(in: scope)
         } catch {
             errorMessage = error.localizedDescription
         }

@@ -27,7 +27,7 @@ struct ExercisePickerView: View {
                         viewModel.toggleExercise(selectedSeed)
                     },
                     onClearHistory: { exercise in
-                        viewModel.clearHistory(for: exercise)
+                        Task { await viewModel.clearHistory(for: exercise) }
                     }
                 )
             }

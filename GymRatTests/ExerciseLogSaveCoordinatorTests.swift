@@ -11,12 +11,12 @@ struct ExerciseLogSaveCoordinatorTests {
         let row = fixture.makeViewModel()
         await row.load()
         coordinator.register(row)
-        fixture.enterReps("8", into: row)
-        #expect(fixture.service.logs.isEmpty)
+        await fixture.enterReps("8", into: row)
+        #expect(fixture.logStore.logs.isEmpty)
 
-        coordinator.saveAll()
+        await coordinator.saveAll()
 
-        #expect(fixture.service.logs.map(\.repsBySet) == [[8, 0, 0]])
+        #expect(fixture.logStore.logs.map(\.values.repsBySet) == [[8, 0, 0]])
         #expect(!row.hasUnsavedChanges)
     }
 
@@ -27,11 +27,11 @@ struct ExerciseLogSaveCoordinatorTests {
         await row.load()
         coordinator.register(row)
         coordinator.unregister(row)
-        fixture.enterReps("8", into: row)
+        await fixture.enterReps("8", into: row)
 
-        coordinator.saveAll()
+        await coordinator.saveAll()
 
-        #expect(fixture.service.logs.isEmpty)
+        #expect(fixture.logStore.logs.isEmpty)
         #expect(row.hasUnsavedChanges)
     }
 
@@ -44,7 +44,7 @@ struct ExerciseLogSaveCoordinatorTests {
             #expect(coordinator.registeredRowCount == 1)
         }
 
-        coordinator.saveAll()
+        await coordinator.saveAll()
 
         #expect(coordinator.registeredRowCount == 0)
     }

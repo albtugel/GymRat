@@ -22,7 +22,7 @@ struct GymRatApp: App {
 
     var body: some Scene {
         WindowGroup {
-            RootView()
+            RootView(storeRecovery: dependencies.storeRecovery)
                 .environment(themeStore)
                 .environment(units)
                 .environment(aiSettingsManager)

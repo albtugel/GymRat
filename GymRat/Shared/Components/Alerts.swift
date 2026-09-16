@@ -25,4 +25,9 @@ enum Alerts {
         static let title = "program_days_required_title"
         static let message = "program_days_required_message"
     }
+
+    enum StoreRecovery {
+        static let title = "store_recovery_title"
+        static let message = "store_recovery_message"
+    }
 }

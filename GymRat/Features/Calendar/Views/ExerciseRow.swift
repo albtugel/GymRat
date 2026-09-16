@@ -12,6 +12,8 @@ struct ExerciseRow: View {
     @Environment(ProgramViewModel.self) private var programViewModel
     @Environment(ExerciseLogSaveCoordinator.self) private var saveCoordinator: ExerciseLogSaveCoordinator?
 
+    /// `viewModel` seeds `@State`: SwiftUI keeps the first instance for this row identity and ignores
+    /// the ones the parent builds on later renders, so the parent may create it inline.
     init(
         viewModel: ExerciseRowViewModel,
         program: Program,

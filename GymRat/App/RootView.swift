@@ -5,13 +5,14 @@ struct RootView: View {
     @Environment(ProgramViewModel.self) private var programViewModel
     @State private var showSettings = false
     @State private var weekCalendarViewModel = WeekViewModel()
-    @State private var settingsViewModel = Dependencies.shared.makeSettingsViewModel()
+    @State private var settingsViewModel: SettingsViewModel
     @State private var isStoreRecoveryAlertPresented: Bool
 
     private let storeRecovery: PersistentStore.Recovery?
 
-    init(storeRecovery: PersistentStore.Recovery?) {
+    init(storeRecovery: PersistentStore.Recovery?, viewModelFactory: any ViewModelFactory) {
         self.storeRecovery = storeRecovery
+        _settingsViewModel = State(initialValue: viewModelFactory.makeSettingsViewModel())
         _isStoreRecoveryAlertPresented = State(initialValue: storeRecovery != nil)
     }
 

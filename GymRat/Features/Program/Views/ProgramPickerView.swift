@@ -4,6 +4,7 @@ struct ProgramPickerView: View {
 
     @Environment(ProgramViewModel.self) private var programViewModel
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.viewModelFactory) private var viewModelFactory
 
     @Binding var selectedDate: Date
 
@@ -63,7 +64,7 @@ struct ProgramPickerView: View {
             }
             .sheet(item: $selectedProgram) { program in
                 ProgramEditorView(
-                    viewModel: ProgramEditorFactory.make(
+                    viewModel: viewModelFactory.makeProgramEditorViewModel(
                         mode: mode,
                         program: program,
                         programViewModel: programViewModel

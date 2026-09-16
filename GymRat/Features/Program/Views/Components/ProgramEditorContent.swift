@@ -6,6 +6,7 @@ struct ProgramEditorContent: View {
     private let accentColor: Color
     private let onCancel: () -> Void
     @State private var showsAIEditSheet = false
+    @Environment(\.viewModelFactory) private var viewModelFactory
 
     init(
         viewModel: ProgramEditorViewModel,
@@ -51,7 +52,7 @@ struct ProgramEditorContent: View {
             }
             .sheet(isPresented: $showsAIEditSheet) {
                 AIPlanEditSheetView(
-                    viewModel: Dependencies.shared.makeAIPlanEditViewModel(programEditorViewModel: viewModel)
+                    viewModel: viewModelFactory.makeAIPlanEditViewModel(programEditorViewModel: viewModel)
                 )
             }
         }

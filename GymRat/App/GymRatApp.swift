@@ -13,7 +13,7 @@ struct GymRatApp: App {
 
     init() {
         Self.configureImageCache()
-        dependencies = Dependencies.shared
+        dependencies = Dependencies()
         _themeStore = State(initialValue: dependencies.themeStore)
         _units = State(initialValue: dependencies.units)
         _aiSettingsManager = State(initialValue: dependencies.aiSettingsManager)
@@ -22,11 +22,12 @@ struct GymRatApp: App {
 
     var body: some Scene {
         WindowGroup {
-            RootView(storeRecovery: dependencies.storeRecovery)
+            RootView(storeRecovery: dependencies.storeRecovery, viewModelFactory: dependencies)
                 .environment(themeStore)
                 .environment(units)
                 .environment(aiSettingsManager)
                 .environment(programViewModel)
+                .environment(\.viewModelFactory, dependencies)
                 .preferredColorScheme(themeStore.selectedTheme.colorScheme)
                 .tint(themeStore.accentColor)
                 .task {

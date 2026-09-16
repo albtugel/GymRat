@@ -4,6 +4,7 @@ struct DayProgramsView: View {
     private let selectedDate: Date
     private let programViewModel: ProgramViewModel
     @Environment(ThemeStore.self) private var themeStore
+    @Environment(\.viewModelFactory) private var viewModelFactory
     let onAddProgramTap: () -> Void
     @State private var viewModel: DayProgramsViewModel
 
@@ -35,7 +36,7 @@ struct DayProgramsView: View {
         )
         .sheet(item: editingProgramBinding) { program in
             ProgramEditorView(
-                viewModel: ProgramEditorFactory.make(
+                viewModel: viewModelFactory.makeProgramEditorViewModel(
                     mode: .edit,
                     program: program,
                     programViewModel: programViewModel

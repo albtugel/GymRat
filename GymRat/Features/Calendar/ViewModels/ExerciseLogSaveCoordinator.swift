@@ -29,7 +29,9 @@ final class ExerciseLogSaveCoordinator {
     /// Saves every registered row and returns once all writes have finished.
     func saveAll() async {
         rows = rows.filter { $0.value.row != nil }
-        for row in rows.values.compactMap(\.row) {
+        let live = rows.values.compactMap(\.row)
+        AppLog.exerciseLogs.debug("Flushing \(live.count) visible rows")
+        for row in live {
             await row.saveIfNeeded()
         }
     }

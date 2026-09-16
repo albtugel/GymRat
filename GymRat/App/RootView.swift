@@ -1,7 +1,6 @@
 import SwiftUI
 
 struct RootView: View {
-    @Environment(ThemeStore.self) private var themeStore
     @Environment(ProgramViewModel.self) private var programViewModel
     @State private var showSettings = false
     @State private var weekCalendarViewModel = WeekViewModel()
@@ -23,8 +22,6 @@ struct RootView: View {
                     SettingsView(viewModel: settingsViewModel)
                 }
         }
-        .tint(themeStore.accentColor)
-        .preferredColorScheme(themeStore.selectedTheme.colorScheme)
         .alert(LocalizedStringKey(Alerts.StoreRecovery.title), isPresented: $isStoreRecoveryAlertPresented) {
             Button(LocalizedStringKey("ok_button"), role: .cancel) {}
                 .accessibilityIdentifier("storeRecoveryOkButton")

@@ -2,15 +2,16 @@ import Foundation
 
 /// Thin async client for the WorkoutX exercise API (https://workoutxapp.com).
 ///
-/// The API key is injected at construction (e.g. `WorkoutXClient(apiKey: Secrets.workoutXAPIKey)`),
-/// so this type stays decoupled from where secrets are stored. Endpoints, headers and JSON shape
+/// The API key is injected at construction (e.g. `WorkoutXClient(apiKey: Secrets.workoutXAPIKey ?? "")`),
+/// so this type stays decoupled from where secrets are stored; an empty key makes every request
+/// throw `ClientError.missingAPIKey`. Endpoints, headers and JSON shape
 /// follow WorkoutX's published docs; the exact field names and whether the GIF endpoint needs the
 /// key are verified against the live API once a real key is wired in.
 ///
 /// - Note: **Not wired in yet.** The app currently sources exercise media and metadata from
 ///   `exercisedb.dev` (no auth) via `ExerciseRepo`, so nothing instantiates this client and the
 ///   `WORKOUTX_API_KEY` secret is unused. This is intentional groundwork — when
-///   WorkoutX is adopted, create it as `WorkoutXClient(apiKey: Secrets.workoutXAPIKey)` and first
+///   WorkoutX is adopted, create it as `WorkoutXClient(apiKey: Secrets.workoutXAPIKey ?? "")` and first
 ///   validate the endpoints, headers and JSON shape below against the live API.
 struct WorkoutXClient: Sendable {
     struct Exercise: Codable, Sendable, Identifiable {

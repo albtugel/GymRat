@@ -17,10 +17,10 @@ struct ProgramAlerts: ViewModifier {
             }
             .alert(LocalizedStringKey(Alerts.SharedHistory.title), isPresented: sharedHistoryAlertBinding) {
                 Button("shared_history_button") {
-                    Task { await viewModel.addPendingExercise(sharedHistory: true) }
+                    viewModel.addPendingExercise(sharedHistory: true)
                 }
                 Button("separate_history_button") {
-                    Task { await viewModel.addPendingExercise(sharedHistory: false) }
+                    viewModel.addPendingExercise(sharedHistory: false)
                 }
                 Button("cancel_button", role: .cancel) {
                     viewModel.dismissSharedHistoryAlert()

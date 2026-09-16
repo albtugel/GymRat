@@ -5,49 +5,37 @@ import SwiftData
 final class ExerciseService: ExerciseServiceType {
     private let modelContext: ModelContext
     private let exerciseStore: any ExerciseStoreType
+    private let seedStore: ExerciseSeedStore
 
-    init(modelContext: ModelContext, exerciseStore: any ExerciseStoreType) {
+    init(modelContext: ModelContext, exerciseStore: any ExerciseStoreType, seedStore: ExerciseSeedStore) {
         self.modelContext = modelContext
         self.exerciseStore = exerciseStore
+        self.seedStore = seedStore
     }
 
-    func fetchExercises() async throws -> [Exercise] {
+    func fetchExercises() throws -> [Exercise] {
         let descriptor = FetchDescriptor<Exercise>()
         return try modelContext.fetch(descriptor)
     }
 
-    func fetchExercise(named name: String) async throws -> Exercise? {
+    func fetchExercise(named name: String) throws -> Exercise? {
         let descriptor = FetchDescriptor<Exercise>(
             predicate: #Predicate<Exercise> { $0.name == name }
         )
         return try modelContext.fetch(descriptor).first
     }
 
-    func addExercise(_ exercise: Exercise) async throws {
+    func addExercise(_ exercise: Exercise) throws {
         modelContext.insert(exercise)
         try modelContext.save()
     }
 
     func seedIfNeeded() async throws {
-        let existing = try await fetchExercises()
-        let existingNames = Set(existing.map { $0.name.lowercased() })
-
-        var didInsert = false
         let seeds = await exerciseStore.seedSnapshot()
-        for seed in seeds {
-            let key = seed.name.lowercased()
-            if !existingNames.contains(key) {
-                modelContext.insert(Exercise(name: seed.name, categoryRaw: seed.category.rawValue))
-                didInsert = true
-            }
-        }
-
-        if didInsert {
-            try modelContext.save()
-        }
+        _ = try await seedStore.insertMissing(seeds: seeds)
     }
 
-    func deleteCustomExercises() async throws {
+    func deleteCustomExercises() throws {
         let descriptor = FetchDescriptor<Exercise>(
             predicate: #Predicate<Exercise> { $0.isCustom == true }
         )

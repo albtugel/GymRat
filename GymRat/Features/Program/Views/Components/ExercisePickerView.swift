@@ -24,7 +24,7 @@ struct ExercisePickerView: View {
                     selectionNumber: info.selectionNumber,
                     isEditing: viewModel.isEditing,
                     onToggle: { selectedSeed in
-                        Task { await viewModel.toggleExercise(selectedSeed) }
+                        viewModel.toggleExercise(selectedSeed)
                     },
                     onClearHistory: { exercise in
                         Task { await viewModel.clearHistory(for: exercise) }

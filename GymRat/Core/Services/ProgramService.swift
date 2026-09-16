@@ -9,7 +9,7 @@ final class ProgramService: ProgramServiceType {
         self.modelContext = modelContext
     }
 
-    func fetchPrograms() async throws -> [Program] {
+    func fetchPrograms() throws -> [Program] {
         let descriptor = FetchDescriptor<Program>()
         let programs = try modelContext.fetch(descriptor)
         var didUpdateSelectionIndex = false
@@ -28,7 +28,7 @@ final class ProgramService: ProgramServiceType {
         return programs
     }
 
-    func save(_ program: Program) async throws {
+    func save(_ program: Program) throws {
         if program.modelContext == nil {
             modelContext.insert(program)
         }
@@ -37,14 +37,14 @@ final class ProgramService: ProgramServiceType {
         }
     }
 
-    func deleteProgram(_ program: Program) async throws {
+    func deleteProgram(_ program: Program) throws {
         // Program.scheduleItems cascades, so the program's ScheduleItems are
         // removed in the same save.
         modelContext.delete(program)
         try modelContext.save()
     }
 
-    func reorderExercises(in program: Program, from source: IndexSet, to destination: Int) async throws {
+    func reorderExercises(in program: Program, from source: IndexSet, to destination: Int) throws {
         let _ = (source, destination)
 
         for (index, exercise) in program.exercises.enumerated() {

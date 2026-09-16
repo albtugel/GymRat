@@ -75,6 +75,6 @@ struct ProgramPickerView: View {
     }
 
     private func deleteProgram(at offsets: IndexSet) {
-        Task { await programViewModel.deletePrograms(at: offsets) }
+        programViewModel.deletePrograms(at: offsets)
     }
 }

@@ -28,9 +28,7 @@ struct SettingsView: View {
                 hasPrograms: programViewModel.hasCustomPrograms,
                 onSelect: { selectedProgram = $0 },
                 onDelete: { offsets in
-                    Task {
-                        await viewModel.deletePrograms(at: offsets, programViewModel: programViewModel)
-                    }
+                    viewModel.deletePrograms(at: offsets, programViewModel: programViewModel)
                 },
                 onAdd: { showProgramSheet = true }
             )

@@ -60,7 +60,7 @@ struct ExerciseRow: View {
                     program: program,
                     dragging: $draggingExercise,
                     onReorder: { source, destination in
-                        Task { await programViewModel.reorderExercises(in: program, from: source, to: destination) }
+                        programViewModel.reorderExercises(in: program, from: source, to: destination)
                     }
                 )
             )

@@ -18,24 +18,24 @@ final class CalendarViewModel {
     }
 
 
-    func loadItems() async {
+    func loadItems() {
         isLoading = true
         defer { isLoading = false }
         do {
-            items = try await timelineService.fetchItems()
+            items = try timelineService.fetchItems()
         } catch {
             errorMessage = error.localizedDescription
         }
     }
 
-    func addWorkout(title: String, date: Date) async {
+    func addWorkout(title: String, date: Date) {
         let item = makeWorkoutItem(title: title, date: date)
-        await insertItem(item)
+        insertItem(item)
     }
 
-    func addPersonalEvent(title: String, startDate: Date, endDate: Date) async {
+    func addPersonalEvent(title: String, startDate: Date, endDate: Date) {
         let item = makePersonalItem(title: title, startDate: startDate, endDate: endDate)
-        await insertItem(item)
+        insertItem(item)
     }
 
     func dismissError() {
@@ -54,9 +54,9 @@ final class CalendarViewModel {
         }
     }
 
-    private func insertItem(_ item: Event) async {
+    private func insertItem(_ item: Event) {
         do {
-            try await timelineService.insertItem(item)
+            try timelineService.insertItem(item)
             items.append(item)
         } catch {
             errorMessage = error.localizedDescription

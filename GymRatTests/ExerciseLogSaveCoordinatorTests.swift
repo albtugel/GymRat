@@ -12,11 +12,11 @@ struct ExerciseLogSaveCoordinatorTests {
         await row.load()
         coordinator.register(row)
         await fixture.enterReps("8", into: row)
-        #expect(fixture.service.logs.isEmpty)
+        #expect(fixture.logStore.logs.isEmpty)
 
         await coordinator.saveAll()
 
-        #expect(fixture.service.logs.map(\.repsBySet) == [[8, 0, 0]])
+        #expect(fixture.logStore.logs.map(\.values.repsBySet) == [[8, 0, 0]])
         #expect(!row.hasUnsavedChanges)
     }
 
@@ -31,7 +31,7 @@ struct ExerciseLogSaveCoordinatorTests {
 
         await coordinator.saveAll()
 
-        #expect(fixture.service.logs.isEmpty)
+        #expect(fixture.logStore.logs.isEmpty)
         #expect(row.hasUnsavedChanges)
     }
 

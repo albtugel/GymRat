@@ -18,7 +18,7 @@ struct WeekViewModelTests {
         await viewModel.selectDate(fixture.tomorrow)
 
         #expect(viewModel.selectedDate == fixture.tomorrow)
-        #expect(fixture.service.logs.map(\.dayStamp) == [ExerciseLogHelper.makeDayStamp(for: fixture.today)])
+        #expect(fixture.logStore.logs.map(\.dayStamp) == [ExerciseLogHelper.makeDayStamp(for: fixture.today)])
     }
 
     @Test func movingTheWeekFlushesVisibleRowsFirst() async throws {
@@ -34,6 +34,6 @@ struct WeekViewModelTests {
         await viewModel.moveWeek(by: 1)
 
         #expect(viewModel.weekStartDate > previousWeekStart)
-        #expect(fixture.service.logs.map(\.repsBySet) == [[8, 0, 0]])
+        #expect(fixture.logStore.logs.map(\.values.repsBySet) == [[8, 0, 0]])
     }
 }

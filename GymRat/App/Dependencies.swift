@@ -13,9 +13,9 @@ final class Dependencies: ViewModelFactory {
     let exerciseService: ExerciseServiceType
     let programService: ProgramServiceType
     let programAssignmentService: ScheduleServiceType
-    let programExerciseLogService: ExerciseLogServiceType
+    let exerciseLogStore: any ExerciseLogStoreType
     let timelineItemService: TimelineServiceType
-    let dataResetService: DataResetServiceType
+    let dataResetService: any DataResetServiceType
     let calendarService: CalendarServiceType
     let themeStore: ThemeStore
     let units: Units
@@ -35,12 +35,16 @@ final class Dependencies: ViewModelFactory {
         modelContext = modelContainer.mainContext
 
         exerciseStore = ExerciseRepo()
-        exerciseService = ExerciseService(modelContext: modelContext, exerciseStore: exerciseStore)
+        exerciseService = ExerciseService(
+            modelContext: modelContext,
+            exerciseStore: exerciseStore,
+            seedStore: ExerciseSeedStore(modelContainer: modelContainer)
+        )
         programService = ProgramService(modelContext: modelContext)
         programAssignmentService = ScheduleService(modelContext: modelContext)
-        programExerciseLogService = ExerciseLogService(modelContext: modelContext)
+        exerciseLogStore = ExerciseLogStore(modelContainer: modelContainer)
         timelineItemService = TimelineService(modelContext: modelContext)
-        dataResetService = DataResetService(modelContext: modelContext)
+        dataResetService = DataResetService(modelContainer: modelContainer)
         calendarService = CalendarService()
         themeStore = ThemeStore()
         units = Units()
@@ -67,7 +71,7 @@ final class Dependencies: ViewModelFactory {
             program: program,
             programService: programService,
             exerciseService: exerciseService,
-            exerciseLogService: programExerciseLogService,
+            logStore: exerciseLogStore,
             exerciseStore: exerciseStore,
             programViewModel: programViewModel
         )
@@ -80,7 +84,7 @@ final class Dependencies: ViewModelFactory {
         ExerciseRowViewModel(
             programExercise: programExercise,
             selectedDate: selectedDate,
-            logService: programExerciseLogService,
+            logStore: exerciseLogStore,
             units: units,
             exerciseStore: exerciseStore
         )

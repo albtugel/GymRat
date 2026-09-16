@@ -11,4 +11,5 @@ enum AppLog {
 
     static let exerciseRepo = Logger(subsystem: subsystem, category: "ExerciseRepo")
     static let imageCache = Logger(subsystem: subsystem, category: "ImageCache")
+    static let persistence = Logger(subsystem: subsystem, category: "Persistence")
 }

@@ -7,6 +7,8 @@ final class Dependencies {
 
     let modelContainer: ModelContainer
     let modelContext: ModelContext
+    /// Set when the on-disk store could not be opened on this launch and was replaced with an empty one.
+    let storeRecovery: PersistentStore.Recovery?
 
     let exerciseService: ExerciseServiceType
     let programService: ProgramServiceType
@@ -22,28 +24,14 @@ final class Dependencies {
     let aiPlanEditingService: AIPlanEditingService
 
     private init() {
-        let storeURL = Self.makeStoreURL()
-        let schema = Schema([
-            Program.self,
-            WorkoutExercise.self,
-            Exercise.self,
-            ExerciseLog.self,
-            ScheduleItem.self,
-            DayProgram.self,
-            Event.self
-        ])
-        let config = ModelConfiguration(schema: schema, url: storeURL)
-
-        if let created = try? ModelContainer(for: schema, configurations: [config]) {
-            modelContainer = created
-        } else {
-            Self.resetStoreFiles(at: storeURL)
-            guard let retry = try? ModelContainer(for: schema, configurations: [config]) else {
-                fatalError("Failed to initialize SwiftData store even after reset.")
-            }
-            modelContainer = retry
+        let opened: PersistentStore.Opened
+        do {
+            opened = try PersistentStore.open(at: PersistentStore.defaultStoreURL())
+        } catch {
+            fatalError("Failed to create a SwiftData store even after moving the old one aside: \(error)")
         }
-
+        modelContainer = opened.container
+        storeRecovery = opened.recovery
         modelContext = modelContainer.mainContext
 
         exerciseStore = ExerciseRepo.shared
@@ -109,26 +97,5 @@ final class Dependencies {
             editingService: aiPlanEditingService,
             audioRecorder: AudioRecorder()
         )
-    }
-
-    private static func makeStoreURL() -> URL {
-        let fileManager = FileManager.default
-        guard let appSupport = fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask).first else {
-            return fileManager.temporaryDirectory.appendingPathComponent("GymRat.sqlite")
-        }
-        try? fileManager.createDirectory(at: appSupport, withIntermediateDirectories: true)
-        return appSupport.appendingPathComponent("GymRat.sqlite")
-    }
-
-    private static func resetStoreFiles(at storeURL: URL) {
-        let fm = FileManager.default
-        let base = storeURL.deletingPathExtension()
-        let wal = base.appendingPathExtension("sqlite-wal")
-        let shm = base.appendingPathExtension("sqlite-shm")
-        [storeURL, wal, shm].forEach { url in
-            if fm.fileExists(atPath: url.path) {
-                try? fm.removeItem(at: url)
-            }
-        }
     }
 }

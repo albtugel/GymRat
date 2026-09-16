@@ -205,6 +205,8 @@
 "shared_history_alert_message" = "'%@' already exists in another program. Use shared progress history?";
 "shared_history_alert_title" = "Shared History";
 "shared_history_button" = "Shared history";
+"store_recovery_message" = "Your saved programs and logs couldn't be opened, so they were moved to a backup (%@) and the app starts empty. Contact support to restore them.";
+"store_recovery_title" = "Data Couldn't Be Opened";
 "support_email_label" = "Support";
 "templates_section" = "Templates";
 "theme_label" = "Theme";

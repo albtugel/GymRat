@@ -34,15 +34,4 @@ final class ExerciseService: ExerciseServiceType {
         let seeds = await exerciseStore.seedSnapshot()
         _ = try await seedStore.insertMissing(seeds: seeds)
     }
-
-    func deleteCustomExercises() throws {
-        let descriptor = FetchDescriptor<Exercise>(
-            predicate: #Predicate<Exercise> { $0.isCustom == true }
-        )
-        let items = try modelContext.fetch(descriptor)
-        items.forEach { modelContext.delete($0) }
-        if modelContext.hasChanges {
-            try modelContext.save()
-        }
-    }
 }

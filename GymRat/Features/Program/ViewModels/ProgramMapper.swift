@@ -5,10 +5,6 @@ enum ProgramMapper {
         ProgramType(rawValue: program.typeRaw) ?? .strength
     }
 
-    static func setType(_ type: ProgramType, for program: Program) {
-        program.typeRaw = type.rawValue
-    }
-
     static func weekdays(for program: Program) -> Set<ProgramWeekday> {
         Set(program.weekdaysRaw.compactMap { ProgramWeekday(rawValue: $0) })
     }

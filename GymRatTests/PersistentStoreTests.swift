@@ -5,9 +5,9 @@ import Testing
 
 struct PersistentStoreTests {
 
-    /// Installs before the versioned schema wrote their store through a plain `Schema`. Opening it
-    /// through the migration plan must succeed with the data intact, otherwise the next update wipes every user.
-    @Test func opensStoreWrittenWithoutMigrationPlan() throws {
+    /// A store written with the V1 entity set (including the since-removed `DayProgram` and `Event`)
+    /// must open through the migration plan with its data intact; that is what every existing install goes through.
+    @Test func migratesAStoreWrittenWithSchemaV1() throws {
         let storeURL = Self.makeTemporaryStoreURL()
         defer { Self.removeFolder(containing: storeURL) }
         try Self.writeLegacyStore(at: storeURL, programName: "Legacy push day")
@@ -69,10 +69,10 @@ struct PersistentStoreTests {
     }
 
     private static func writeLegacyStore(at storeURL: URL, programName: String) throws {
-        let schema = Schema(GymRatSchemaV1.models)
+        let schema = Schema(versionedSchema: GymRatSchemaV1.self)
         let container = try ModelContainer(for: schema, configurations: [ModelConfiguration(schema: schema, url: storeURL)])
         let context = ModelContext(container)
-        context.insert(Program(name: programName, typeRaw: ProgramType.strength.rawValue))
+        context.insert(GymRatSchemaV1.Program(name: programName, typeRaw: ProgramType.strength.rawValue))
         try context.save()
     }
 }

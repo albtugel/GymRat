@@ -19,10 +19,4 @@ final class ScheduleService: ScheduleServiceType {
         assignments.forEach { modelContext.insert($0) }
         try modelContext.save()
     }
-
-    func saveChanges() throws {
-        if modelContext.hasChanges {
-            try modelContext.save()
-        }
-    }
 }

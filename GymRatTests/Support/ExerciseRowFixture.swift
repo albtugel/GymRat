@@ -70,7 +70,7 @@ final class FakeExerciseLogStore: ExerciseLogStoreType {
 struct FakeExerciseStore: ExerciseStoreType {
     var seeds: [ExerciseRepo.ExerciseSeed] = []
 
-    func refresh() async -> [ExerciseRepo.Exercise] { [] }
+    func refresh() async {}
 
     func seedSnapshot() async -> [ExerciseRepo.ExerciseSeed] { seeds }
 
@@ -104,7 +104,7 @@ struct ExerciseRowFixture {
     }
 
     init() throws {
-        let schema = Schema(GymRatSchemaV1.models)
+        let schema = PersistentStore.schema
         container = try ModelContainer(
             for: schema,
             configurations: [ModelConfiguration(schema: schema, isStoredInMemoryOnly: true)]

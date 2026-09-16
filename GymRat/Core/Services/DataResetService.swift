@@ -19,8 +19,6 @@ private actor DataResetStorage {
     func resetAllData() throws {
         try deleteAll(ExerciseLog.self)
         try deleteAll(ScheduleItem.self)
-        try deleteAll(DayProgram.self)
-        try deleteAll(Event.self)
         try deleteAll(WorkoutExercise.self)
         try deleteAll(Program.self)
 

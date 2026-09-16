@@ -8,34 +8,6 @@ extension ExerciseRepo {
         "https://static.exercisedb.dev/media/\(id).gif"
     }
 
-    struct Exercise: Identifiable, Codable, Equatable, Sendable {
-        let id: String
-        let name: String
-        let localizedName: String
-        let category: ExerciseCategory
-        let muscles: [MuscleGroup]
-        let inputType: ExerciseInputType
-        let gifUrl: String?
-        let bodyParts: [String]
-        let targetMuscles: [String]
-        let secondaryMuscles: [String]
-        let equipments: [String]
-        let instructions: [String]
-        let source: Source
-
-        enum Source: String, Codable, Sendable {
-            case api
-            case seed
-        }
-
-        var gifURL: URL? {
-            guard let gifUrl else { return nil }
-            return URL(string: gifUrl)
-        }
-
-        var iconURL: URL? { gifURL }
-    }
-
     struct RemoteExercise: Codable, Equatable, Sendable {
         let exerciseId: String
         let name: String

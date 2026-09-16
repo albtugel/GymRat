@@ -22,12 +22,6 @@ final class WeekViewModel {
         let daySpacing: CGFloat
     }
 
-    struct DayColumnRow: Identifiable {
-        let id: Date
-        let timeLabel: String
-        let items: [(item: Event, color: TimelineColor)]
-    }
-
 
     private(set) var weekStartDate: Date
     private(set) var selectedDate: Date
@@ -112,34 +106,6 @@ final class WeekViewModel {
     /// row notices.
     func saveVisibleLogs() async {
         await saveCoordinator.saveAll()
-    }
-
-    func rows(items: [Event]) -> [DayColumnRow] {
-        let times = items.flatMap { [$0.startDate, $0.endDate] }
-        let uniqueTimes = Array(Set(times)).sorted()
-        let formatter = makeDateFormatter(format: "HH:mm")
-        return uniqueTimes.map { time in
-            let rowItems = items.filter {
-                AppCalendar.calendar.isDate($0.startDate, equalTo: time, toGranularity: .minute)
-            }
-            let displayItems = rowItems.map { item in
-                (item: item, color: CalendarViewModel.makeItemColor(for: item))
-            }
-            return DayColumnRow(
-                id: time,
-                timeLabel: formatter.string(from: time),
-                items: displayItems
-            )
-        }
-    }
-
-    func hourLabels(minHour: Int, maxHour: Int) -> [String] {
-        guard minHour <= maxHour else {
-            return []
-        }
-        return (minHour...maxHour).map { hour in
-            "\(hour):00"
-        }
     }
 
     func layout(for totalWidth: CGFloat) -> WeekdaysLayout {

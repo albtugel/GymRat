@@ -14,9 +14,7 @@ final class Dependencies: ViewModelFactory {
     let programService: ProgramServiceType
     let programAssignmentService: ScheduleServiceType
     let exerciseLogStore: any ExerciseLogStoreType
-    let timelineItemService: TimelineServiceType
     let dataResetService: any DataResetServiceType
-    let calendarService: CalendarServiceType
     let themeStore: ThemeStore
     let units: Units
     let exerciseStore: any ExerciseStoreType
@@ -43,9 +41,7 @@ final class Dependencies: ViewModelFactory {
         programService = ProgramService(modelContext: modelContext)
         programAssignmentService = ScheduleService(modelContext: modelContext)
         exerciseLogStore = ExerciseLogStore(modelContainer: modelContainer)
-        timelineItemService = TimelineService(modelContext: modelContext)
         dataResetService = DataResetService(modelContainer: modelContainer)
-        calendarService = CalendarService()
         themeStore = ThemeStore()
         units = Units()
         aiSettingsManager = AISettingsManager()

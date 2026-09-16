@@ -1,11 +1,6 @@
 import Foundation
 
 actor ExerciseRepo {
-    nonisolated var seeds: [ExerciseSeed] {
-        Self.localSeeds
-    }
-
-    private var exercises: [Exercise] = []
     private var mergedSeeds: [ExerciseSeed] = []
     private var remoteCache: [RemoteExercise] = []
     /// Where bulk paging stopped, so an interrupted download resumes instead of restarting.
@@ -32,20 +27,18 @@ actor ExerciseRepo {
             remoteCache = cached.exercises
             catalogCursor = cached.paginationCursor
             catalogIsComplete = cached.isComplete
-            exercises = Self.mergeWithSeeds(remoteExercises: cached.exercises)
             mergedSeeds = Self.makeMergedSeeds(remoteExercises: cached.exercises)
             Self.log("Restored \(cached.exercises.count) API exercises from cache (complete: \(cached.isComplete)).")
         } else {
-            exercises = Self.mergeWithSeeds(remoteExercises: [])
             mergedSeeds = Self.localSeeds
             Self.log("Started with local seeds; API cache is empty.")
         }
     }
 
-    func refresh() async -> [Exercise] {
+    func refresh() async {
         if catalogIsComplete, !remoteCache.isEmpty {
             Self.log("ExerciseDB refresh skipped: catalog complete with \(remoteCache.count) exercises.")
-            return exercises
+            return
         }
 
         if remoteCache.isEmpty {
@@ -61,17 +54,16 @@ actor ExerciseRepo {
 
         guard !result.exercises.isEmpty || result.isComplete else {
             Self.logNotice("Catalog download made no progress; keeping \(remoteCache.count) cached exercises.")
-            return exercises
+            return
         }
 
         remoteCache = (remoteCache + result.exercises).uniqued(by: \.exerciseId)
         catalogCursor = result.cursor ?? catalogCursor
         catalogIsComplete = result.isComplete
-        exercises = Self.mergeWithSeeds(remoteExercises: remoteCache)
         mergedSeeds = Self.makeMergedSeeds(remoteExercises: remoteCache)
         persistCatalog()
-        Self.logNotice("Refresh finished. API: \(remoteCache.count), merged: \(exercises.count), complete: \(catalogIsComplete).")
-        return exercises
+        Self.logNotice("Refresh finished. API: \(remoteCache.count), merged: \(mergedSeeds.count), complete: \(catalogIsComplete).")
+        return
     }
 
     /// Writes the catalog together with its paging state, so single-id lookups that grow the cache
@@ -204,18 +196,6 @@ actor ExerciseRepo {
         return min(seconds, maxRetryDelay)
     }
 
-    func mergeWithSeeds() -> [Exercise] {
-        Self.mergeWithSeeds(remoteExercises: remoteCache)
-    }
-
-    func getExercises(by category: ExerciseCategory) -> [Exercise] {
-        exercises.filter { $0.category == category }
-    }
-
-    func getExercise(by id: String) -> Exercise? {
-        exercises.first { $0.id == id }
-    }
-
     func seedSnapshot() -> [ExerciseSeed] {
         mergedSeeds.isEmpty ? Self.localSeeds : mergedSeeds
     }
@@ -249,7 +229,6 @@ actor ExerciseRepo {
         do {
             guard let remote = try await fetchRemoteExercise(for: seed) else { return seed }
             remoteCache = (remoteCache + [remote]).uniqued(by: \.exerciseId)
-            exercises = Self.mergeWithSeeds(remoteExercises: remoteCache)
             mergedSeeds = Self.makeMergedSeeds(remoteExercises: remoteCache)
             persistCatalog()
             return getExerciseSeed(named: name) ?? seed
@@ -257,10 +236,6 @@ actor ExerciseRepo {
             Self.log("ExerciseDB lookup for '\(seed.canonicalName)' failed: \(error.localizedDescription)")
             return seed
         }
-    }
-
-    func fetchAndCacheExercises() async {
-        _ = await refresh()
     }
 
     /// Resolves the catalog entry backing a seed, preferring the hand-verified id (an exact,
@@ -358,74 +333,6 @@ actor ExerciseRepo {
         return response.data
     }
 
-    private static func mergeWithSeeds(remoteExercises: [RemoteExercise]) -> [Exercise] {
-        let remoteBySeedKey = makeRemoteBySeedKey(remoteExercises: remoteExercises)
-        let mergedFromSeeds = localSeeds.map { seed -> Exercise in
-            guard let remote = remoteBySeedKey[seed.matchKey] else {
-                return Exercise(
-                    id: stableSeedId(for: seed.name),
-                    name: seed.name,
-                    localizedName: seed.name,
-                    category: seed.category,
-                    muscles: seed.muscles,
-                    inputType: seed.inputType,
-                    gifUrl: seed.exerciseId.map { mediaURLString(forExerciseId: $0) },
-                    bodyParts: [],
-                    targetMuscles: [],
-                    secondaryMuscles: [],
-                    equipments: [],
-                    instructions: [],
-                    source: .seed
-                )
-            }
-
-            let mappedMuscles = mappedMuscles(for: remote, seed: seed)
-
-            return Exercise(
-                id: remote.exerciseId,
-                name: remote.name,
-                localizedName: seed.name,
-                category: seed.category,
-                muscles: mappedMuscles.isEmpty ? seed.muscles : mappedMuscles,
-                inputType: seed.inputType,
-                gifUrl: remote.gifUrl ?? mediaURLString(forExerciseId: remote.exerciseId),
-                bodyParts: remote.bodyParts,
-                targetMuscles: remote.targetMuscles,
-                secondaryMuscles: remote.secondaryMuscles ?? [],
-                equipments: remote.equipments ?? [],
-                instructions: remote.instructions ?? [],
-                source: .api
-            )
-        }
-
-        let matchedRemoteIds = Set(remoteBySeedKey.values.map(\.exerciseId))
-        let apiOnly = remoteExercises
-            .filter { !matchedRemoteIds.contains($0.exerciseId) }
-            .map { remote in
-                Exercise(
-                    id: remote.exerciseId,
-                    name: remote.name,
-                    localizedName: remote.name,
-                    category: category(for: remote),
-                    muscles: MuscleGroup.map(
-                        targetMuscles: remote.targetMuscles,
-                        bodyParts: remote.bodyParts,
-                        secondaryMuscles: remote.secondaryMuscles ?? []
-                    ),
-                    inputType: .strength,
-                    gifUrl: remote.gifUrl ?? mediaURLString(forExerciseId: remote.exerciseId),
-                    bodyParts: remote.bodyParts,
-                    targetMuscles: remote.targetMuscles,
-                    secondaryMuscles: remote.secondaryMuscles ?? [],
-                    equipments: remote.equipments ?? [],
-                    instructions: remote.instructions ?? [],
-                    source: .api
-                )
-            }
-
-        return (mergedFromSeeds + apiOnly).uniqued(by: \.id)
-    }
-
     private static func makeMergedSeeds(remoteExercises: [RemoteExercise]) -> [ExerciseSeed] {
         let remoteBySeedKey = makeRemoteBySeedKey(remoteExercises: remoteExercises)
         return localSeeds.map { seed in
@@ -469,6 +376,13 @@ actor ExerciseRepo {
         }
 
         return resolved
+    }
+
+    private static func category(for remote: RemoteExercise) -> ExerciseCategory {
+        let haystack = (remote.bodyParts + remote.targetMuscles + [remote.name])
+            .joined(separator: " ")
+            .normalizedExerciseToken
+        return haystack.contains("cardio") || haystack.contains("cardiovascular") ? .cardio : .strength
     }
 
     private static func mappedMuscles(for remote: RemoteExercise, seed: ExerciseSeed) -> [MuscleGroup] {
@@ -568,17 +482,6 @@ actor ExerciseRepo {
     }
 
     // MARK: - Helpers
-
-    private static func category(for remote: RemoteExercise) -> ExerciseCategory {
-        let haystack = (remote.bodyParts + remote.targetMuscles + [remote.name])
-            .joined(separator: " ")
-            .normalizedExerciseToken
-        return haystack.contains("cardio") || haystack.contains("cardiovascular") ? .cardio : .strength
-    }
-
-    private static func stableSeedId(for name: String) -> String {
-        "seed-\(name.normalizedExerciseToken)"
-    }
 
     /// Per-seed and per-page tracing. Debug level keeps the ~250 lines a launch produces out of
     /// release builds.

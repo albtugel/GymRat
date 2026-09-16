@@ -120,6 +120,8 @@
 "exercise_leg_extension" = "Leg Extension";
 "exercise_leg_press" = "Leg Press";
 "exercise_leg_raise" = "Leg Raise";
+"exercise_log_load_failed" = "Couldn't load the history for this exercise.";
+"exercise_log_save_failed" = "Couldn't save your entries. They stay here until you retry.";
 "exercise_lunge" = "Lunge";
 "exercise_name_placeholder" = "Exercise name";
 "exercise_overhead_press" = "Overhead Press";
@@ -194,6 +196,7 @@
 "reset_all_data_message" = "This will delete all programs and logs. This action can't be undone.";
 "reset_all_data_title" = "Reset All Data?";
 "reset_button" = "Reset";
+"retry_button" = "Retry";
 "rounds_label" = "Rounds";
 "save_button" = "Save";
 "search_exercises_placeholder" = "Search exercises";

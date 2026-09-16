@@ -121,6 +121,8 @@
 "exercise_leg_extension" = "Разгибание ног";
 "exercise_leg_press" = "Жим ногами";
 "exercise_leg_raise" = "Подъём ног";
+"exercise_log_load_failed" = "Не удалось загрузить историю этого упражнения.";
+"exercise_log_save_failed" = "Не удалось сохранить записи. Они останутся здесь до повторной попытки.";
 "exercise_lunge" = "Выпады";
 "exercise_name_placeholder" = "Название упражнения";
 "exercise_overhead_press" = "Жим над головой";
@@ -195,6 +197,7 @@
 "reset_all_data_message" = "Это удалит все программы и записи. Действие нельзя отменить.";
 "reset_all_data_title" = "Сбросить все данные?";
 "reset_button" = "Сбросить";
+"retry_button" = "Повторить";
 "rounds_label" = "Круги";
 "save_button" = "Сохранить";
 "search_exercises_placeholder" = "Поиск упражнений";

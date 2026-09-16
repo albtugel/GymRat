@@ -18,6 +18,13 @@ final class ExerciseRowViewModel {
         let hasValues: Bool
     }
 
+    /// Entries whose save failed. Kept until a retry succeeds so a reload never silently drops them.
+    private struct PendingSave {
+        let date: Date
+        let payload: LogPayload
+        let setsEdited: Bool
+    }
+
 
     let programExercise: WorkoutExercise
     private(set) var repsBySetText: [String] = []
@@ -39,6 +46,7 @@ final class ExerciseRowViewModel {
     private var editSessionDate: Date?
     private var isDirty: Bool = false
     private var selectedDate: Date
+    private var pendingSave: PendingSave?
 
 
     private let logService: ExerciseLogServiceType
@@ -145,8 +153,16 @@ final class ExerciseRowViewModel {
         isLoadingLog = true
         defer { isLoadingLog = false }
         seed = await exerciseStore.getExerciseSeed(named: programExercise.exercise.name)
-        let context = await buildLogContext()
-        applyLogContext(context)
+        do {
+            let context = try await buildLogContext()
+            applyLogContext(context)
+            restorePendingSaveIfNeeded(for: context.day)
+        } catch {
+            AppLog.exerciseLogs.error(
+                "Failed to load logs for \(self.programExercise.exercise.name, privacy: .public): \(String(describing: error), privacy: .public)"
+            )
+            errorMessage = String(localized: "exercise_log_load_failed")
+        }
     }
 
     func updateSelectedDate(_ date: Date) async {
@@ -171,6 +187,15 @@ final class ExerciseRowViewModel {
 
     func handleDragStart() {
         editSessionDate = dataDate
+    }
+
+    /// True while entries exist that have not reached the store yet.
+    var hasUnsavedChanges: Bool {
+        pendingSave != nil || isDirty || setsEditedForDay
+    }
+
+    func retrySave() async {
+        await saveCurrentLogIfNeeded()
     }
 
 
@@ -237,9 +262,9 @@ final class ExerciseRowViewModel {
     }
 
 
-    private func buildLogContext() async -> LogContext {
+    private func buildLogContext() async throws -> LogContext {
         let day = selectedDate.startOfDay
-        let logs = await fetchLogs()
+        let logs = try await fetchLogs()
         await normalizeLogDatesIfNeeded(logs)
         let dayStamp = ExerciseLogHelper.makeDayStamp(for: day)
         let currentLog = await selectCurrentLog(from: logs, dayStamp: dayStamp)
@@ -247,12 +272,12 @@ final class ExerciseRowViewModel {
         return LogContext(day: day, dayStamp: dayStamp, currentLog: currentLog, previousLog: previousLog)
     }
 
-    private func fetchLogs() async -> [ExerciseLog] {
-        (try? await logService.fetchLogs(
+    private func fetchLogs() async throws -> [ExerciseLog] {
+        try await logService.fetchLogs(
             programExerciseId: programExercise.id,
             exerciseId: programExercise.exercise.id,
             sharedHistory: programExercise.sharedHistory
-        )) ?? []
+        )
     }
 
     private func selectPreviousLog(from logs: [ExerciseLog], dayStamp: Int) -> ExerciseLog? {
@@ -276,9 +301,14 @@ final class ExerciseRowViewModel {
         return keep
     }
 
+    /// Housekeeping: a failure here must not block showing the row, so it is only logged.
     private func deleteDuplicateLogs(_ logs: ArraySlice<ExerciseLog>) async {
         for log in logs {
-            try? await logService.deleteLog(log)
+            do {
+                try await logService.deleteLog(log)
+            } catch {
+                AppLog.exerciseLogs.error("Failed to delete a duplicate log: \(String(describing: error), privacy: .public)")
+            }
         }
     }
 
@@ -346,28 +376,77 @@ final class ExerciseRowViewModel {
             }
         }
         if didChange {
-            try? await logService.saveChanges()
+            do {
+                try await logService.saveChanges()
+            } catch {
+                AppLog.exerciseLogs.error("Failed to normalize log dates: \(String(describing: error), privacy: .public)")
+            }
         }
     }
 
 
     private func saveCurrentLogIfNeeded() async {
+        await retryPendingSave()
         guard isDirty || setsEditedForDay else { return }
         guard let targetDate = editSessionDate else { return }
-        await saveCurrentLog(for: targetDate)
-    }
-
-    private func saveCurrentLog(for date: Date) async {
         normalizeArrays()
         let payload = makeLogPayload()
-        let day = date.startOfDay
-        let dayStamp = ExerciseLogHelper.makeDayStamp(for: day)
-        let logForDay = await fetchLog(for: dayStamp)
-        await updateLog(logForDay, day: day, dayStamp: dayStamp, payload: payload)
-        await syncCurrentLog(dayStamp: dayStamp, logForDay: logForDay)
+        let setsEdited = setsEditedForDay
+        do {
+            try await persist(payload, for: targetDate, setsEdited: setsEdited)
+            // A newer write for the same day supersedes anything still waiting from an earlier failure.
+            if let pending = pendingSave, pending.date.startOfDay == targetDate.startOfDay {
+                pendingSave = nil
+            }
+            errorMessage = nil
+        } catch {
+            pendingSave = PendingSave(date: targetDate, payload: payload, setsEdited: setsEdited)
+            reportSaveFailure(error)
+        }
         isDirty = false
         setsEditedForDay = false
         editSessionDate = nil
+    }
+
+    private func retryPendingSave() async {
+        guard let pending = pendingSave else { return }
+        do {
+            try await persist(pending.payload, for: pending.date, setsEdited: pending.setsEdited)
+            pendingSave = nil
+            errorMessage = nil
+        } catch {
+            reportSaveFailure(error)
+        }
+    }
+
+    private func persist(_ payload: LogPayload, for date: Date, setsEdited: Bool) async throws {
+        let day = date.startOfDay
+        let dayStamp = ExerciseLogHelper.makeDayStamp(for: day)
+        let logForDay = try await fetchLog(for: dayStamp)
+        try await updateLog(logForDay, day: day, dayStamp: dayStamp, payload: payload, setsEdited: setsEdited)
+        await syncCurrentLog(dayStamp: dayStamp, logForDay: logForDay)
+    }
+
+    private func reportSaveFailure(_ error: any Error) {
+        AppLog.exerciseLogs.error(
+            "Failed to save log for \(self.programExercise.exercise.name, privacy: .public): \(String(describing: error), privacy: .public)"
+        )
+        errorMessage = String(localized: "exercise_log_save_failed")
+    }
+
+    /// Puts entries from a failed save back into the fields when the row returns to their day, so the
+    /// user sees exactly what is still unsaved and the next save picks it up again.
+    private func restorePendingSaveIfNeeded(for day: Date) {
+        guard let pending = pendingSave, pending.date.startOfDay == day else { return }
+        pendingSave = nil
+        setsCountText = String(max(1, pending.payload.reps.count))
+        repsBySetText = pending.payload.reps.map { formatRepsValue($0) }
+        weightsBySetText = pending.payload.weights.map { formatWeightValue($0) }
+        durationsBySetText = pending.payload.durations.map { formatDurationValue($0) }
+        normalizeArrays()
+        isDirty = true
+        setsEditedForDay = pending.setsEdited
+        editSessionDate = day
     }
 
     private func makeLogPayload() -> LogPayload {
@@ -378,8 +457,8 @@ final class ExerciseRowViewModel {
         return LogPayload(reps: reps, weights: weights, durations: durations, hasValues: hasValues)
     }
 
-    private func fetchLog(for dayStamp: Int) async -> ExerciseLog? {
-        try? await logService.fetchLog(
+    private func fetchLog(for dayStamp: Int) async throws -> ExerciseLog? {
+        try await logService.fetchLog(
             programExerciseId: programExercise.id,
             exerciseId: programExercise.exercise.id,
             sharedHistory: programExercise.sharedHistory,
@@ -391,12 +470,13 @@ final class ExerciseRowViewModel {
         _ log: ExerciseLog?,
         day: Date,
         dayStamp: Int,
-        payload: LogPayload
-    ) async {
+        payload: LogPayload,
+        setsEdited: Bool
+    ) async throws {
         if let log {
-            await updateExistingLog(log, day: day, dayStamp: dayStamp, payload: payload)
-        } else if payload.hasValues || setsEditedForDay {
-            await createLog(day: day, dayStamp: dayStamp, payload: payload)
+            try await updateExistingLog(log, day: day, dayStamp: dayStamp, payload: payload, setsEdited: setsEdited)
+        } else if payload.hasValues || setsEdited {
+            try await createLog(day: day, dayStamp: dayStamp, payload: payload)
         }
     }
 
@@ -404,9 +484,10 @@ final class ExerciseRowViewModel {
         _ log: ExerciseLog,
         day: Date,
         dayStamp: Int,
-        payload: LogPayload
-    ) async {
-        if payload.hasValues || setsEditedForDay {
+        payload: LogPayload,
+        setsEdited: Bool
+    ) async throws {
+        if payload.hasValues || setsEdited {
             log.date = day
             log.dayStamp = dayStamp
             log.programExercise = programExercise
@@ -414,13 +495,13 @@ final class ExerciseRowViewModel {
             log.repsBySet = payload.reps
             log.weightsBySet = payload.weights
             log.durationsBySet = payload.durations
-            try? await logService.saveChanges()
+            try await logService.saveChanges()
         } else {
-            try? await logService.deleteLog(log)
+            try await logService.deleteLog(log)
         }
     }
 
-    private func createLog(day: Date, dayStamp: Int, payload: LogPayload) async {
+    private func createLog(day: Date, dayStamp: Int, payload: LogPayload) async throws {
         let newLog = ExerciseLog(
             programExercise: programExercise,
             exerciseName: programExercise.exercise.name,
@@ -430,15 +511,21 @@ final class ExerciseRowViewModel {
             weightsBySet: payload.weights,
             durationsBySet: payload.durations
         )
-        try? await logService.insertLog(newLog)
+        try await logService.insertLog(newLog)
     }
 
+    /// Refreshes the cached log after a write. The write already succeeded, so a failed re-read only
+    /// leaves the cache stale until the next load and is not reported as a save failure.
     private func syncCurrentLog(dayStamp: Int, logForDay: ExerciseLog?) async {
         let dataStamp = ExerciseLogHelper.makeDayStamp(for: dataDate)
         if let saved = logForDay, saved.dayStamp == dataStamp {
             currentLog = saved
         } else if dataStamp == dayStamp {
-            currentLog = await fetchLog(for: dayStamp)
+            do {
+                currentLog = try await fetchLog(for: dayStamp)
+            } catch {
+                AppLog.exerciseLogs.error("Failed to re-read the saved log: \(String(describing: error), privacy: .public)")
+            }
         }
     }
 

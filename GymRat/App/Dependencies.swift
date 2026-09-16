@@ -1,10 +1,10 @@
 import Foundation
 import SwiftData
 
+/// Composition root: opens the store, wires the services, and builds view models for the views
+/// (as the app's `ViewModelFactory`). Created once by `GymRatApp`; nothing else should construct it.
 @MainActor
-final class Dependencies {
-    static let shared = Dependencies()
-
+final class Dependencies: ViewModelFactory {
     let modelContainer: ModelContainer
     let modelContext: ModelContext
     /// Set when the on-disk store could not be opened on this launch and was replaced with an empty one.
@@ -23,7 +23,7 @@ final class Dependencies {
     let aiSettingsManager: AISettingsManager
     let aiPlanEditingService: AIPlanEditingService
 
-    private init() {
+    init() {
         let opened: PersistentStore.Opened
         do {
             opened = try PersistentStore.open(at: PersistentStore.defaultStoreURL())

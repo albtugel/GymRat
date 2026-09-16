@@ -10,6 +10,7 @@ struct ProgramCard: View {
     @State private var draggingExercise: WorkoutExercise?
     @FocusState private var focusedField: ExerciseField?
     @Environment(ThemeStore.self) private var themeStore
+    @Environment(\.viewModelFactory) private var viewModelFactory
 
     private var programColor: Color {
         if let hex = program.colorHex, !hex.isEmpty {
@@ -28,7 +29,7 @@ struct ProgramCard: View {
 
             ForEach(program.exercises) { exercise in
                 ExerciseRow(
-                    viewModel: Dependencies.shared.makeExerciseRowViewModel(
+                    viewModel: viewModelFactory.makeExerciseRowViewModel(
                         programExercise: exercise,
                         selectedDate: selectedDate
                     ),

@@ -5,6 +5,7 @@ struct SettingsView: View {
     @Environment(ProgramViewModel.self) private var programViewModel
     @Environment(Units.self) private var units
     @Environment(AISettingsManager.self) private var aiSettingsManager
+    @Environment(\.viewModelFactory) private var viewModelFactory
     @State private var viewModel: SettingsViewModel
     @State private var selectedProgram: Program?
     @State private var showResetAlert = false
@@ -55,7 +56,7 @@ struct SettingsView: View {
         .navigationTitle("settings_title")
         .sheet(item: $selectedProgram) { program in
             ProgramEditorView(
-                viewModel: ProgramEditorFactory.make(
+                viewModel: viewModelFactory.makeProgramEditorViewModel(
                     mode: .edit,
                     program: program,
                     programViewModel: programViewModel

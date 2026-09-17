@@ -7,12 +7,14 @@ protocol ProgramStoreType: Sendable {
     func fetchPrograms() async throws -> [ProgramSnapshot]
 
     /// Creates the program when its id is unknown, otherwise updates it: details, the exercise list
-    /// (added, changed, removed — a removed exercise takes its set history with it) and positions.
+    /// (added, changed, removed) and positions. A removed exercise's set history moves to another
+    /// program that shares history for the same exercise; with none, it is deleted.
     /// A new program also gets schedule entries for this week's selected weekdays.
     /// Returns the stored state.
     func save(_ program: ProgramSnapshot) async throws -> ProgramSnapshot
 
-    /// Removes the program with its exercises, their set history and its schedule entries.
+    /// Removes the program with its exercises and schedule entries. Set history shared with another
+    /// program moves there; the rest is deleted.
     func deleteProgram(id: UUID) async throws
 
     /// Rewrites positions so the program's exercises follow `orderedExerciseIDs`.

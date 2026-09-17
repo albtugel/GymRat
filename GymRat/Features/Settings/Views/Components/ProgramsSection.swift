@@ -1,16 +1,16 @@
 import SwiftUI
 
 struct ProgramsSection: View {
-    private let programs: [Program]
+    private let programs: [ProgramSnapshot]
     private let hasPrograms: Bool
-    private let onSelect: (Program) -> Void
+    private let onSelect: (ProgramSnapshot) -> Void
     private let onDelete: (IndexSet) -> Void
     private let onAdd: () -> Void
 
     init(
-        programs: [Program],
+        programs: [ProgramSnapshot],
         hasPrograms: Bool,
-        onSelect: @escaping (Program) -> Void,
+        onSelect: @escaping (ProgramSnapshot) -> Void,
         onDelete: @escaping (IndexSet) -> Void,
         onAdd: @escaping () -> Void
     ) {

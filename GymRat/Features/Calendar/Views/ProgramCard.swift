@@ -2,14 +2,30 @@ import SwiftUI
 import UniformTypeIdentifiers
 
 struct ProgramCard: View {
-    let program: Program
+    let program: ProgramSnapshot
     let selectedDate: Date
-    let onEdit: ((Program) -> Void)?
-    let onDelete: ((Program) -> Void)?
+    let onEdit: ((ProgramSnapshot) -> Void)?
+    let onDelete: ((ProgramSnapshot) -> Void)?
 
-    @State private var draggingExercise: WorkoutExercise?
+    /// Local order while a row is being dragged; follows `program.exercises` otherwise.
+    @State private var exercises: [WorkoutExerciseSnapshot]
+    @State private var draggingExercise: WorkoutExerciseSnapshot?
     @FocusState private var focusedField: ExerciseField?
     @Environment(ThemeStore.self) private var themeStore
+    @Environment(\.viewModelFactory) private var viewModelFactory
+
+    init(
+        program: ProgramSnapshot,
+        selectedDate: Date,
+        onEdit: ((ProgramSnapshot) -> Void)?,
+        onDelete: ((ProgramSnapshot) -> Void)?
+    ) {
+        self.program = program
+        self.selectedDate = selectedDate
+        self.onEdit = onEdit
+        self.onDelete = onDelete
+        _exercises = State(initialValue: program.exercises)
+    }
 
     private var programColor: Color {
         if let hex = program.colorHex, !hex.isEmpty {
@@ -26,18 +42,22 @@ struct ProgramCard: View {
                 onDelete: onDelete.map { handler in { handler(program) } }
             )
 
-            ForEach(program.exercises) { exercise in
+            ForEach(exercises) { exercise in
                 ExerciseRow(
-                    viewModel: Dependencies.shared.makeExerciseRowViewModel(
+                    viewModel: viewModelFactory.makeExerciseRowViewModel(
                         programExercise: exercise,
                         selectedDate: selectedDate
                     ),
-                    program: program,
+                    programID: program.id,
                     selectedDate: selectedDate,
+                    exercises: $exercises,
                     draggingExercise: $draggingExercise,
                     focusedField: $focusedField
                 )
             }
+        }
+        .onChange(of: program.exercises) { _, updated in
+            exercises = updated
         }
         .overlay(
             RoundedRectangle(cornerRadius: 12)

@@ -101,7 +101,7 @@ enum AIPlanEditPromptBuilder {
         prompt: String,
         programName: String,
         programType: ProgramType,
-        selectedExercises: [WorkoutExercise],
+        selectedExercises: [WorkoutExerciseSnapshot],
         availableExerciseNames: [String]
     ) -> [MistralChatMessage] {
         let current = selectedExercises
@@ -137,11 +137,11 @@ enum AIPlanEditPromptBuilder {
 enum AIPlanEditApplier {
     static func makePreview(
         response: AIPlanEditResponse,
-        availableExercises: [Exercise],
+        availableExercises: [ExerciseSnapshot],
         seedNames: [String],
-        existingSelectedExercises: [WorkoutExercise]
+        existingSelectedExercises: [WorkoutExerciseSnapshot]
     ) throws -> AIPlanEditPreview {
-        var existingByName: [String: WorkoutExercise] = [:]
+        var existingByName: [String: WorkoutExerciseSnapshot] = [:]
         for exercise in existingSelectedExercises {
             existingByName[normalize(exercise.exercise.name), default: exercise] = exercise
         }
@@ -188,11 +188,11 @@ enum AIPlanEditApplier {
     static func apply(
         preview: AIPlanEditPreview,
         programType: ProgramType,
-        existingSelectedExercises: [WorkoutExercise],
-        availableExercises: [Exercise]
-    ) -> (programName: String?, exercises: [WorkoutExercise], customExercises: [Exercise]) {
-        var customExercises: [Exercise] = []
-        var result: [WorkoutExercise] = []
+        existingSelectedExercises: [WorkoutExerciseSnapshot],
+        availableExercises: [ExerciseSnapshot]
+    ) -> (programName: String?, exercises: [WorkoutExerciseSnapshot], customExercises: [ExerciseSnapshot]) {
+        var customExercises: [ExerciseSnapshot] = []
+        var result: [WorkoutExerciseSnapshot] = []
 
         for (index, item) in preview.exercises.enumerated() {
             let exercise = resolveExercise(
@@ -208,7 +208,7 @@ enum AIPlanEditApplier {
             let existing = existingSelectedExercises.first {
                 normalize($0.exercise.name) == normalize(exercise.name)
             }
-            let programExercise = existing ?? WorkoutExercise(exercise: exercise, sharedHistory: false)
+            var programExercise = existing ?? WorkoutExerciseSnapshot(exercise: exercise, sharedHistory: false)
             programExercise.sets = item.sets
             programExercise.reps = item.reps
             programExercise.selectionIndex = index + 1
@@ -218,7 +218,7 @@ enum AIPlanEditApplier {
         return (preview.programName, result, customExercises)
     }
 
-    private static func makeCustomExercise(name: String, programType: ProgramType) -> Exercise {
+    private static func makeCustomExercise(name: String, programType: ProgramType) -> ExerciseSnapshot {
         let category: ExerciseCategory = {
             switch programType {
             case .strength: return .strength
@@ -226,20 +226,20 @@ enum AIPlanEditApplier {
             case .crossfit: return .crossfit
             }
         }()
-        return Exercise(name: name, categoryRaw: category.rawValue, isCustom: true)
+        return ExerciseSnapshot(name: name, category: category, isCustom: true)
     }
 
     private static func resolveExercise(
         name: String,
-        availableExercises: [Exercise],
-        customExercises: [Exercise]
-    ) -> Exercise? {
+        availableExercises: [ExerciseSnapshot],
+        customExercises: [ExerciseSnapshot]
+    ) -> ExerciseSnapshot? {
         (availableExercises + customExercises).first { normalize($0.name) == normalize(name) }
     }
 
     private static func resolveName(
         _ name: String,
-        availableExercises: [Exercise],
+        availableExercises: [ExerciseSnapshot],
         seedNames: [String]
     ) -> String? {
         let key = normalize(name)
@@ -251,7 +251,7 @@ enum AIPlanEditApplier {
 
     private static func resolveChangeKind(
         isUnknown: Bool,
-        existing: WorkoutExercise?,
+        existing: WorkoutExerciseSnapshot?,
         sets: Int,
         reps: Int
     ) -> AIPlanEditPreview.ChangeKind {

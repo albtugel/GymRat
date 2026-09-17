@@ -22,22 +22,18 @@ final class WeekViewModel {
         let daySpacing: CGFloat
     }
 
-    struct DayColumnRow: Identifiable {
-        let id: Date
-        let timeLabel: String
-        let items: [(item: Event, color: TimelineColor)]
-    }
-
 
     private(set) var weekStartDate: Date
     private(set) var selectedDate: Date
     private(set) var isCalendarPresented: Bool = false
     private(set) var isProgramSheetPresented: Bool = false
+    let saveCoordinator: ExerciseLogSaveCoordinator
 
-    init(initialDate: Date = Date()) {
+    init(initialDate: Date = Date(), saveCoordinator: ExerciseLogSaveCoordinator? = nil) {
         let start = initialDate.startOfWeek
         weekStartDate = start
         selectedDate = initialDate
+        self.saveCoordinator = saveCoordinator ?? ExerciseLogSaveCoordinator()
     }
 
 
@@ -69,13 +65,15 @@ final class WeekViewModel {
     }
 
 
-    func selectDate(_ date: Date) {
-        notifySaveLogs()
+    /// Entries typed into the current day are written before the selection moves, so a row that is
+    /// replaced or reloaded for the new day can never drop them.
+    func selectDate(_ date: Date) async {
+        await saveCoordinator.saveAll()
         selectedDate = date
     }
 
-    func moveWeek(by value: Int) {
-        notifySaveLogs()
+    func moveWeek(by value: Int) async {
+        await saveCoordinator.saveAll()
         guard let newStart = AppCalendar.calendar.date(byAdding: .weekOfYear, value: value, to: weekStartDate) else {
             return
         }
@@ -104,32 +102,10 @@ final class WeekViewModel {
         isCalendarPresented = false
     }
 
-    func rows(items: [Event]) -> [DayColumnRow] {
-        let times = items.flatMap { [$0.startDate, $0.endDate] }
-        let uniqueTimes = Array(Set(times)).sorted()
-        let formatter = makeDateFormatter(format: "HH:mm")
-        return uniqueTimes.map { time in
-            let rowItems = items.filter {
-                AppCalendar.calendar.isDate($0.startDate, equalTo: time, toGranularity: .minute)
-            }
-            let displayItems = rowItems.map { item in
-                (item: item, color: CalendarViewModel.makeItemColor(for: item))
-            }
-            return DayColumnRow(
-                id: time,
-                timeLabel: formatter.string(from: time),
-                items: displayItems
-            )
-        }
-    }
-
-    func hourLabels(minHour: Int, maxHour: Int) -> [String] {
-        guard minHour <= maxHour else {
-            return []
-        }
-        return (minHour...maxHour).map { hour in
-            "\(hour):00"
-        }
+    /// Used when the keyboard is dismissed from the toolbar, which may not move focus in a way every
+    /// row notices.
+    func saveVisibleLogs() async {
+        await saveCoordinator.saveAll()
     }
 
     func layout(for totalWidth: CGFloat) -> WeekdaysLayout {
@@ -163,9 +139,5 @@ final class WeekViewModel {
         formatter.locale = .current
         formatter.dateFormat = format
         return formatter
-    }
-
-    private func notifySaveLogs() {
-        NotificationCenter.default.post(name: .saveExerciseLogs, object: nil)
     }
 }

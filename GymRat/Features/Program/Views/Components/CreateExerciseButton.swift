@@ -1,9 +1,9 @@
 import SwiftUI
 
 struct CreateExerciseButton: View {
-    private let viewModel: ProgramEditorViewModel
+    private let viewModel: ExercisePickerViewModel
 
-    init(viewModel: ProgramEditorViewModel) {
+    init(viewModel: ExercisePickerViewModel) {
         self.viewModel = viewModel
     }
 

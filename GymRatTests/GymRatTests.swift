@@ -54,7 +54,7 @@ struct ExerciseCatalogCacheTests {
     /// Prefetching feeds these URLs straight to Kingfisher, so duplicates would queue the same
     /// download twice and unresolved names would produce bogus requests.
     @Test func gifURLsDeduplicateAndSkipUnknownNames() async {
-        let urls = await ExerciseRepo.shared.gifURLs(
+        let urls = await ExerciseRepo().gifURLs(
             forExerciseNames: ["Squat", "Squat", "Definitely Not A Real Exercise"]
         )
 

@@ -6,6 +6,7 @@ struct WeekView: View {
 
     @Environment(ThemeStore.self) private var themeStore
     @Environment(ProgramViewModel.self) private var programViewModel
+    @Environment(\.viewModelFactory) private var viewModelFactory
 
     @State private var viewModel: WeekViewModel
 
@@ -31,6 +32,10 @@ struct WeekView: View {
             .padding(.bottom, 1)
 
             DayProgramsView(
+                viewModel: viewModelFactory.makeDayProgramsViewModel(
+                    selectedDate: viewModel.selectedDate,
+                    programViewModel: programViewModel
+                ),
                 selectedDate: viewModel.selectedDate,
                 programViewModel: programViewModel
             ) {
@@ -38,11 +43,12 @@ struct WeekView: View {
             }
 
         }
+        .environment(viewModel.saveCoordinator)
         .toolbar {
             ToolbarItemGroup(placement: .keyboard) {
                 Spacer()
                 Button("ok_button") {
-                    NotificationCenter.default.post(name: .saveExerciseLogs, object: nil)
+                    Task { await viewModel.saveVisibleLogs() }
                     UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder),
                                                     to: nil,
                                                     from: nil,
@@ -84,7 +90,7 @@ struct WeekView: View {
     private var selectedDateBinding: Binding<Date> {
         Binding(
             get: { viewModel.selectedDate },
-            set: { viewModel.selectDate($0) }
+            set: { date in Task { await viewModel.selectDate(date) } }
         )
     }
 }

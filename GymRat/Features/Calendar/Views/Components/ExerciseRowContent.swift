@@ -30,6 +30,14 @@ struct ExerciseLogRowRootView: View {
                 viewModel: viewModel,
                 focusedField: $focusedField
             )
+
+            if let message = viewModel.errorMessage {
+                ExerciseRowErrorView(
+                    message: message,
+                    showsRetry: viewModel.hasUnsavedChanges,
+                    onRetry: { Task { await viewModel.saveIfNeeded() } }
+                )
+            }
         }
         .contentShape(Rectangle())
         .frame(maxWidth: .infinity, alignment: .leading)

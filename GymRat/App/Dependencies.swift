@@ -1,59 +1,41 @@
 import Foundation
 import SwiftData
 
+/// Composition root: opens the store, wires the services, and builds view models for the views
+/// (as the app's `ViewModelFactory`). Created once by `GymRatApp`; nothing else should construct it.
 @MainActor
-final class Dependencies {
-    static let shared = Dependencies()
-
+final class Dependencies: ViewModelFactory {
     let modelContainer: ModelContainer
     let modelContext: ModelContext
+    /// Set when the on-disk store could not be opened on this launch and was replaced with an empty one.
+    let storeRecovery: PersistentStore.Recovery?
 
-    let exerciseService: ExerciseServiceType
-    let programService: ProgramServiceType
-    let programAssignmentService: ScheduleServiceType
-    let programExerciseLogService: ExerciseLogServiceType
-    let timelineItemService: TimelineServiceType
-    let dataResetService: DataResetServiceType
-    let calendarService: CalendarServiceType
+    let exerciseService: any ExerciseServiceType
+    let programStore: any ProgramStoreType
+    let exerciseLogStore: any ExerciseLogStoreType
+    let dataResetService: any DataResetServiceType
     let themeStore: ThemeStore
     let units: Units
-    let exerciseStore: ExerciseRepo
+    let exerciseStore: any ExerciseStoreType
     let aiSettingsManager: AISettingsManager
     let aiPlanEditingService: AIPlanEditingService
 
-    private init() {
-        let storeURL = Self.makeStoreURL()
-        let schema = Schema([
-            Program.self,
-            WorkoutExercise.self,
-            Exercise.self,
-            ExerciseLog.self,
-            ScheduleItem.self,
-            DayProgram.self,
-            Event.self
-        ])
-        let config = ModelConfiguration(schema: schema, url: storeURL)
-
-        if let created = try? ModelContainer(for: schema, configurations: [config]) {
-            modelContainer = created
-        } else {
-            Self.resetStoreFiles(at: storeURL)
-            guard let retry = try? ModelContainer(for: schema, configurations: [config]) else {
-                fatalError("Failed to initialize SwiftData store even after reset.")
-            }
-            modelContainer = retry
+    init() {
+        let opened: PersistentStore.Opened
+        do {
+            opened = try PersistentStore.open(at: PersistentStore.defaultStoreURL())
+        } catch {
+            fatalError("Failed to create a SwiftData store even after moving the old one aside: \(error)")
         }
-
+        modelContainer = opened.container
+        storeRecovery = opened.recovery
         modelContext = modelContainer.mainContext
 
-        exerciseStore = ExerciseRepo.shared
-        exerciseService = ExerciseService(modelContext: modelContext, exerciseStore: exerciseStore)
-        programService = ProgramService(modelContext: modelContext)
-        programAssignmentService = ScheduleService(modelContext: modelContext)
-        programExerciseLogService = ExerciseLogService(modelContext: modelContext)
-        timelineItemService = TimelineService(modelContext: modelContext)
-        dataResetService = DataResetService(modelContext: modelContext)
-        calendarService = CalendarService()
+        exerciseStore = ExerciseRepo()
+        exerciseService = ExerciseService(modelContainer: modelContainer, exerciseStore: exerciseStore)
+        programStore = ProgramStore(modelContainer: modelContainer)
+        exerciseLogStore = ExerciseLogStore(modelContainer: modelContainer)
+        dataResetService = DataResetService(modelContainer: modelContainer)
         themeStore = ThemeStore()
         units = Units()
         aiSettingsManager = AISettingsManager()
@@ -63,36 +45,42 @@ final class Dependencies {
     func makeProgramViewModel() -> ProgramViewModel {
         ProgramViewModel(
             exerciseService: exerciseService,
-            programService: programService,
-            assignmentService: programAssignmentService,
+            programStore: programStore,
             dataResetService: dataResetService
         )
     }
 
     func makeProgramEditorViewModel(
         mode: ProgramEditorMode,
-        program: Program,
+        program: ProgramSnapshot,
         programViewModel: ProgramViewModel
     ) -> ProgramEditorViewModel {
-        ProgramEditorViewModel(
+        let picker = ExercisePickerViewModel(
+            programID: program.id,
+            programType: program.type,
+            isEditing: mode == .edit,
+            selectedExercises: program.exercises,
+            exerciseService: exerciseService,
+            programStore: programStore,
+            logStore: exerciseLogStore,
+            exerciseStore: exerciseStore
+        )
+        return ProgramEditorViewModel(
             mode: mode,
             program: program,
-            programService: programService,
-            exerciseService: exerciseService,
-            exerciseLogService: programExerciseLogService,
-            exerciseStore: exerciseStore,
+            picker: picker,
             programViewModel: programViewModel
         )
     }
 
     func makeExerciseRowViewModel(
-        programExercise: WorkoutExercise,
+        programExercise: WorkoutExerciseSnapshot,
         selectedDate: Date
     ) -> ExerciseRowViewModel {
         ExerciseRowViewModel(
             programExercise: programExercise,
             selectedDate: selectedDate,
-            logService: programExerciseLogService,
+            logStore: exerciseLogStore,
             units: units,
             exerciseStore: exerciseStore
         )
@@ -111,24 +99,15 @@ final class Dependencies {
         )
     }
 
-    private static func makeStoreURL() -> URL {
-        let fileManager = FileManager.default
-        guard let appSupport = fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask).first else {
-            return fileManager.temporaryDirectory.appendingPathComponent("GymRat.sqlite")
-        }
-        try? fileManager.createDirectory(at: appSupport, withIntermediateDirectories: true)
-        return appSupport.appendingPathComponent("GymRat.sqlite")
+    func makeDayProgramsViewModel(selectedDate: Date, programViewModel: ProgramViewModel) -> DayProgramsViewModel {
+        DayProgramsViewModel(
+            selectedDate: selectedDate,
+            programViewModel: programViewModel,
+            imagePrefetcher: ExerciseImagePrefetcher(exerciseStore: exerciseStore)
+        )
     }
 
-    private static func resetStoreFiles(at storeURL: URL) {
-        let fm = FileManager.default
-        let base = storeURL.deletingPathExtension()
-        let wal = base.appendingPathExtension("sqlite-wal")
-        let shm = base.appendingPathExtension("sqlite-shm")
-        [storeURL, wal, shm].forEach { url in
-            if fm.fileExists(atPath: url.path) {
-                try? fm.removeItem(at: url)
-            }
-        }
+    func makeExerciseDetailsViewModel(seed: ExerciseRepo.ExerciseSeed) -> ExerciseDetailsViewModel {
+        ExerciseDetailsViewModel(seed: seed, exerciseStore: exerciseStore)
     }
 }

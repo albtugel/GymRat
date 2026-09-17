@@ -43,12 +43,3 @@ final class MistralAPIKeyValidator: MistralAPIKeyValidating {
         }
     }
 }
-
-struct AcceptingMistralAPIKeyValidator: MistralAPIKeyValidating {
-    func validate(apiKey: String) async throws { }
-}
-
-
-
-
-

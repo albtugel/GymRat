@@ -6,11 +6,6 @@ enum Alerts {
         static let message = "shared_history_alert_message"
     }
 
-    enum NoSharedExercise {
-        static let title = "no_shared_exercise_title"
-        static let message = "no_shared_exercise_message"
-    }
-
     enum CreateExercise {
         static let title = "create_exercise_title"
         static let message = "create_exercise_message"
@@ -24,5 +19,10 @@ enum Alerts {
     enum ProgramDaysRequired {
         static let title = "program_days_required_title"
         static let message = "program_days_required_message"
+    }
+
+    enum StoreRecovery {
+        static let title = "store_recovery_title"
+        static let message = "store_recovery_message"
     }
 }

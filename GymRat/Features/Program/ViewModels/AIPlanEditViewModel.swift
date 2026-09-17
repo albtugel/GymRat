@@ -106,10 +106,10 @@ final class AIPlanEditViewModel {
                 prompt: prompt,
                 programName: programEditorViewModel.programName,
                 programType: programEditorViewModel.programType,
-                selectedExercises: programEditorViewModel.selectedExercises,
-                availableExerciseNames: programEditorViewModel.aiAvailableExerciseNames
+                selectedExercises: programEditorViewModel.picker.selectedExercises,
+                availableExerciseNames: programEditorViewModel.picker.aiAvailableExerciseNames
             )
-            preview = try await programEditorViewModel.makeAIPlanPreview(from: response)
+            preview = try await programEditorViewModel.picker.makeAIPlanPreview(from: response)
             errorMessage = nil
         } catch {
             errorMessage = error.localizedDescription
@@ -126,10 +126,13 @@ final class AIPlanEditViewModel {
 
     func applyPreview() async {
         guard let preview else { return }
-        await programEditorViewModel.applyAIPlanPreview(preview)
-        if let error = programEditorViewModel.errorMessage {
+        let suggestedName = await programEditorViewModel.picker.applyAIPlanPreview(preview)
+        if let error = programEditorViewModel.picker.errorMessage {
             errorMessage = error
             return
+        }
+        if let suggestedName {
+            programEditorViewModel.updateProgramName(suggestedName)
         }
         didApply = true
     }

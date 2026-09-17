@@ -53,6 +53,16 @@
 			path = GymRat;
 			sourceTree = "<group>";
 		};
+		44DE8F132F0E6CEC008AC986 /* GymRatTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = GymRatTests;
+			sourceTree = "<group>";
+		};
+		44DE8F1D2F0E6CEC008AC986 /* GymRatUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = GymRatUITests;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -92,6 +102,8 @@
 			isa = PBXGroup;
 			children = (
 				44DE8EFE2F0E6CEB008AC986 /* GymRat */,
+				44DE8F132F0E6CEC008AC986 /* GymRatTests */,
+				44DE8F1D2F0E6CEC008AC986 /* GymRatUITests */,
 				44973D3E2F9F72A50098D200 /* Frameworks */,
 				44DE8EFD2F0E6CEB008AC986 /* Products */,
 			);
@@ -146,6 +158,9 @@
 			dependencies = (
 				44DE8F122F0E6CEC008AC986 /* PBXTargetDependency */,
 			);
+			fileSystemSynchronizedGroups = (
+				44DE8F132F0E6CEC008AC986 /* GymRatTests */,
+			);
 			name = GymRatTests;
 			packageProductDependencies = (
 			);
@@ -165,6 +180,9 @@
 			);
 			dependencies = (
 				44DE8F1C2F0E6CEC008AC986 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				44DE8F1D2F0E6CEC008AC986 /* GymRatUITests */,
 			);
 			name = GymRatUITests;
 			packageProductDependencies = (

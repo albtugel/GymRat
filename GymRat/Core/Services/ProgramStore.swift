@@ -71,10 +71,12 @@ private actor ProgramStorage {
 
     func deleteProgram(id: UUID) throws {
         guard let program = try fetchProgram(id: id) else { return }
-        for workout in program.exercises {
-            try deleteLogs(of: workout)
+        let workouts = program.exercises
+        let departingIDs = Set(workouts.map(\.id))
+        for workout in workouts {
+            try retire(workout, alongWith: departingIDs)
         }
-        // Program.exercises and Program.scheduleItems cascade.
+        // Program.scheduleItems cascade.
         modelContext.delete(program)
         try modelContext.save()
     }
@@ -109,14 +111,12 @@ private actor ProgramStorage {
 
     // MARK: - Reconciliation
 
-    /// Brings `program.exercises` in line with the snapshot: removed exercises are deleted together
-    /// with their set history, new ones are created, the rest are updated in place.
+    /// Brings `program.exercises` in line with the snapshot: new exercises are created, kept ones are
+    /// updated in place, and removed ones are retired once the new list is in place (so a shared
+    /// history can move to an exercise added in the same save).
     private func reconcileExercises(of program: Program, with snapshots: [WorkoutExerciseSnapshot]) throws {
         let wantedIDs = Set(snapshots.map(\.id))
-        for existing in program.exercises where !wantedIDs.contains(existing.id) {
-            try deleteLogs(of: existing)
-            modelContext.delete(existing)
-        }
+        let removed = program.exercises.filter { !wantedIDs.contains($0.id) }
         var byID = Dictionary(
             program.exercises.filter { wantedIDs.contains($0.id) }.map { ($0.id, $0) },
             uniquingKeysWith: { first, _ in first }
@@ -149,6 +149,11 @@ private actor ProgramStorage {
             ordered.append(workout)
         }
         program.exercises = ordered
+
+        let departingIDs = Set(removed.map(\.id))
+        for workout in removed {
+            try retire(workout, alongWith: departingIDs)
+        }
     }
 
     /// Programs saved by early releases left `selectionIndex` at 0; give those a stable position.
@@ -180,12 +185,31 @@ private actor ProgramStorage {
         }
     }
 
-    private func deleteLogs(of workout: WorkoutExercise) throws {
+    /// Deletes a program exercise without losing history other programs still show.
+    ///
+    /// A row with shared history reads every log of its exercise, whichever program exercise wrote
+    /// it. So while some other program exercise of the same exercise keeps sharing history, the
+    /// departing one's logs move to it and stay visible there. Otherwise nothing could reach those
+    /// logs any more, and they are deleted with it.
+    ///
+    /// - Parameter departingIDs: program exercises leaving in the same operation; never heirs.
+    private func retire(_ workout: WorkoutExercise, alongWith departingIDs: Set<UUID>) throws {
         let workoutID = workout.id
+        let exerciseID = workout.exercise.id
         let logs = try modelContext.fetch(
             FetchDescriptor<ExerciseLog>(predicate: #Predicate { $0.programExercise.id == workoutID })
         )
-        logs.forEach { modelContext.delete($0) }
+        // Filtered in memory: sharedHistory may have changed earlier in this save.
+        let heir = try modelContext
+            .fetch(FetchDescriptor<WorkoutExercise>(predicate: #Predicate { $0.exercise.id == exerciseID }))
+            .first { $0.sharedHistory && !departingIDs.contains($0.id) }
+
+        if let heir {
+            logs.forEach { $0.programExercise = heir }
+        } else {
+            logs.forEach { modelContext.delete($0) }
+        }
+        modelContext.delete(workout)
     }
 
     private func fetchProgram(id: UUID) throws -> Program? {

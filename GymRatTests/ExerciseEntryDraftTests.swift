@@ -74,7 +74,8 @@ struct ExerciseEntryDraftTests {
         var draft = Self.makeDraft(defaultSets: 2)
         draft.show(day: Self.today, current: nil, previous: nil)
         draft.updateReps("8", at: 0)
-        let checkout = try #require(draft.checkout())
+        let checkoutResult = draft.checkout()
+        let checkout = try #require(checkoutResult)
 
         draft.markSaveFailed(checkout)
         #expect(draft.hasUnsavedChanges)
@@ -94,11 +95,14 @@ struct ExerciseEntryDraftTests {
         var draft = Self.makeDraft(defaultSets: 1)
         draft.show(day: Self.today, current: nil, previous: nil)
         draft.updateReps("8", at: 0)
-        let failed = try #require(draft.checkout())
+        let failedResult = draft.checkout()
+        let failed = try #require(failedResult)
         draft.markSaveFailed(failed)
         draft.updateReps("9", at: 0)
 
-        let retried = try #require(draft.checkout())
+        let retriedResult = draft.checkout()
+
+        let retried = try #require(retriedResult)
         draft.markSaved(retried)
 
         #expect(draft.pendingSave == nil)

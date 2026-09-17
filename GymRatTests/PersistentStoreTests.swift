@@ -33,7 +33,8 @@ struct PersistentStoreTests {
         let backedUpStore = recovery.backupURL.appendingPathComponent(PersistentStore.fileName)
         #expect(try Data(contentsOf: backedUpStore) == garbage)
         #expect(FileManager.default.fileExists(atPath: recovery.backupURL.appendingPathComponent(walURL.lastPathComponent).path))
-        #expect(!FileManager.default.fileExists(atPath: walURL.path))
+        // The fresh store opens its own WAL at the same path, so check the old sidecar is not what is there.
+        #expect((try? Data(contentsOf: walURL)) != Data("wal".utf8))
 
         let context = ModelContext(opened.container)
         context.insert(Program(name: "Fresh start", typeRaw: ProgramType.strength.rawValue))

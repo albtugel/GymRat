@@ -97,7 +97,7 @@ struct ProgramStoreTests {
         let programs = try await fixture.store.fetchPrograms()
         let squats = programs.flatMap(\.exercises).filter { $0.exercise.id == fixture.squat.id }
         #expect(squats.count == 2)
-        #expect(squats.allSatisfy(\.sharedHistory))
+        #expect(squats.allSatisfy { $0.sharedHistory })
         let rows = programs.flatMap(\.exercises).filter { $0.exercise.id == fixture.row.id }
         #expect(rows.allSatisfy { !$0.sharedHistory })
     }
@@ -113,6 +113,7 @@ struct ProgramStoreTests {
 
     // MARK: - Fixture
 
+    @MainActor
     private struct Fixture {
         let container: ModelContainer
         let store: ProgramStore

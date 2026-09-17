@@ -74,6 +74,66 @@ struct ProgramStoreTests {
         #expect(try fixture.count(Exercise.self) == 2)
     }
 
+    @Test func removingASharedExerciseMovesItsHistoryToTheProgramStillSharingIt() async throws {
+        let fixture = try Fixture()
+        let sharedA = WorkoutExerciseSnapshot(exercise: fixture.squat, selectionIndex: 1, sharedHistory: true)
+        let sharedB = WorkoutExerciseSnapshot(exercise: fixture.squat, selectionIndex: 1, sharedHistory: true)
+        var programA = try await fixture.store.save(ProgramSnapshot(name: "A", type: .strength, exercises: [sharedA]))
+        _ = try await fixture.store.save(ProgramSnapshot(name: "B", type: .strength, exercises: [sharedB]))
+        try await fixture.logSquat(on: sharedA, reps: 5)
+
+        programA.exercises = []
+        _ = try await fixture.store.save(programA)
+
+        let historyInB = try await fixture.logStore.fetchLogs(in: fixture.sharedScope(for: sharedB))
+        #expect(historyInB.map(\.values.repsBySet) == [[5]])
+        #expect(try fixture.logOwners() == [sharedB.id])
+    }
+
+    @Test func deletingAProgramKeepsHistorySharedWithAnotherProgram() async throws {
+        let fixture = try Fixture()
+        let sharedA = WorkoutExerciseSnapshot(exercise: fixture.squat, selectionIndex: 1, sharedHistory: true)
+        let sharedB = WorkoutExerciseSnapshot(exercise: fixture.squat, selectionIndex: 1, sharedHistory: true)
+        let programA = try await fixture.store.save(ProgramSnapshot(name: "A", type: .strength, exercises: [sharedA]))
+        _ = try await fixture.store.save(ProgramSnapshot(name: "B", type: .strength, exercises: [sharedB]))
+        try await fixture.logSquat(on: sharedA, reps: 7)
+
+        try await fixture.store.deleteProgram(id: programA.id)
+
+        let historyInB = try await fixture.logStore.fetchLogs(in: fixture.sharedScope(for: sharedB))
+        #expect(historyInB.map(\.values.repsBySet) == [[7]])
+        #expect(try fixture.logOwners() == [sharedB.id])
+    }
+
+    /// Another program using the same exercise without sharing history never showed these logs.
+    @Test func historyIsDroppedWhenNoOtherProgramSharesIt() async throws {
+        let fixture = try Fixture()
+        let squatA = WorkoutExerciseSnapshot(exercise: fixture.squat, selectionIndex: 1, sharedHistory: false)
+        let squatB = WorkoutExerciseSnapshot(exercise: fixture.squat, selectionIndex: 1, sharedHistory: false)
+        let programA = try await fixture.store.save(ProgramSnapshot(name: "A", type: .strength, exercises: [squatA]))
+        _ = try await fixture.store.save(ProgramSnapshot(name: "B", type: .strength, exercises: [squatB]))
+        try await fixture.logSquat(on: squatA, reps: 3)
+
+        try await fixture.store.deleteProgram(id: programA.id)
+
+        #expect(try fixture.count(ExerciseLog.self) == 0)
+        #expect(try fixture.count(WorkoutExercise.self) == 1)
+    }
+
+    /// Two sharing program exercises leaving together must not hand the history to each other.
+    @Test func sharedExercisesLeavingTogetherTakeTheirHistoryAlong() async throws {
+        let fixture = try Fixture()
+        let first = WorkoutExerciseSnapshot(exercise: fixture.squat, selectionIndex: 1, sharedHistory: true)
+        let second = WorkoutExerciseSnapshot(exercise: fixture.squat, selectionIndex: 2, sharedHistory: true)
+        let program = try await fixture.store.save(ProgramSnapshot(name: "A", type: .strength, exercises: [first, second]))
+        try await fixture.logSquat(on: first, reps: 4)
+
+        try await fixture.store.deleteProgram(id: program.id)
+
+        #expect(try fixture.count(ExerciseLog.self) == 0)
+        #expect(try fixture.count(WorkoutExercise.self) == 0)
+    }
+
     @Test func reorderingRewritesPositions() async throws {
         let fixture = try Fixture()
         let squat = WorkoutExerciseSnapshot(exercise: fixture.squat, selectionIndex: 1)
@@ -137,6 +197,24 @@ struct ProgramStoreTests {
 
         func count<T: PersistentModel>(_ type: T.Type) throws -> Int {
             try ModelContext(container).fetch(FetchDescriptor<T>()).count
+        }
+
+        func sharedScope(for workout: WorkoutExerciseSnapshot) -> ExerciseLogScope {
+            ExerciseLogScope(programExerciseID: workout.id, exerciseID: workout.exercise.id, sharedHistory: true)
+        }
+
+        func logSquat(on workout: WorkoutExerciseSnapshot, reps: Int) async throws {
+            _ = try await logStore.saveLog(
+                in: ExerciseLogScope(programExerciseID: workout.id, exerciseID: workout.exercise.id, sharedHistory: false),
+                day: Date(), sets: nil,
+                values: ExerciseLogValues(repsBySet: [reps], weightsBySet: [0], durationsBySet: [0]),
+                keepEmpty: false
+            )
+        }
+
+        /// Program exercise ids the stored logs belong to.
+        func logOwners() throws -> [UUID] {
+            try ModelContext(container).fetch(FetchDescriptor<ExerciseLog>()).map(\.programExercise.id)
         }
     }
 }

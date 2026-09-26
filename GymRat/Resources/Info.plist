@@ -4,6 +4,8 @@
 <dict>
 	<key>CFBundleGetInfoString</key>
 	<string></string>
+	<key>NSCameraUsageDescription</key>
+	<string>GymRat uses the camera to analyze a photo of your pose on this device.</string>
 	<key>UIBackgroundModes</key>
 	<array/>
 	<key>WORKOUTX_API_KEY</key>

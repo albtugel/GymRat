@@ -19,6 +19,7 @@ final class Dependencies: ViewModelFactory {
     let exerciseStore: any ExerciseStoreType
     let aiSettingsManager: AISettingsManager
     let aiPlanEditingService: AIPlanEditingService
+    let poseDetector: any PoseDetectorType
 
     init() {
         let opened: PersistentStore.Opened
@@ -40,6 +41,7 @@ final class Dependencies: ViewModelFactory {
         units = Units()
         aiSettingsManager = AISettingsManager()
         aiPlanEditingService = AIPlanEditingService()
+        poseDetector = PoseDetector()
     }
 
     func makeProgramViewModel() -> ProgramViewModel {
@@ -84,6 +86,10 @@ final class Dependencies: ViewModelFactory {
             units: units,
             exerciseStore: exerciseStore
         )
+    }
+
+    func makePoseTestViewModel() -> PoseTestViewModel {
+        PoseTestViewModel(detector: poseDetector)
     }
 
     func makeSettingsViewModel() -> SettingsViewModel {

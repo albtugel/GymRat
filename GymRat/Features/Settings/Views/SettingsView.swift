@@ -40,6 +40,15 @@ struct SettingsView: View {
 
             AISection(aiSettingsManager: aiSettingsManager)
 
+            Section("pose_section") {
+                NavigationLink {
+                    PoseTestView(viewModel: viewModelFactory.makePoseTestViewModel())
+                } label: {
+                    Label("pose_title", systemImage: "figure.stand")
+                }
+                .accessibilityIdentifier("poseDemoLink")
+            }
+
             AboutSection(
                 appVersion: viewModel.appVersion,
                 developerHandle: viewModel.developerHandle,

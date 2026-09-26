@@ -196,3 +196,20 @@
 "weekday_tue_short" = "Tue";
 "weekday_wed_short" = "Wed";
 "weight_unit_label" = "Weight";
+
+// Pose proof of concept
+"pose_section" = "Pose lab";
+"pose_title" = "Pose on a photo";
+"pose_choose_photo" = "Choose a photo";
+"pose_take_photo" = "Take a photo";
+"pose_camera_unavailable" = "Camera unavailable";
+"pose_photo_hint" = "Use a clear, full-body photo with one person.";
+"pose_intro" = "Choose a photo to see the body landmarks.";
+"pose_loading" = "Loading photo…";
+"pose_analyzing" = "Finding body landmarks…";
+"pose_not_found" = "Person not found. Try a clear, full-body photo.";
+"pose_found" = "Found 33 body landmarks";
+"pose_model_missing" = "The pose model is missing. Rebuild the app with the bundled model.";
+"pose_failed" = "Could not analyze this photo. Please try another image.";
+"pose_privacy_note" = "Photos are processed on this device and are not saved.";
+"pose_skeleton" = "Body landmark overlay";

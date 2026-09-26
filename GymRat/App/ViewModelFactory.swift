@@ -5,6 +5,7 @@ import SwiftUI
 @MainActor
 protocol ViewModelFactory {
     func makeSettingsViewModel() -> SettingsViewModel
+    func makePoseTestViewModel() -> PoseTestViewModel
     func makeExerciseRowViewModel(programExercise: WorkoutExerciseSnapshot, selectedDate: Date) -> ExerciseRowViewModel
     func makeProgramEditorViewModel(
         mode: ProgramEditorMode,
@@ -31,6 +32,7 @@ private struct UnavailableViewModelFactory {
 
 extension UnavailableViewModelFactory: ViewModelFactory {
     func makeSettingsViewModel() -> SettingsViewModel { missing() }
+    func makePoseTestViewModel() -> PoseTestViewModel { missing() }
 
     func makeExerciseRowViewModel(programExercise: WorkoutExerciseSnapshot, selectedDate: Date) -> ExerciseRowViewModel { missing() }
 

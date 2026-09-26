@@ -25,6 +25,7 @@ struct CalendarHeader: View {
                     .font(.title2)
                     .foregroundColor(accentColor)
             }
+            .accessibilityIdentifier("settingsButton")
         }
         .padding(.horizontal, 16)
         .padding(.top, 16)

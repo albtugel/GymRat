@@ -201,8 +201,6 @@
 "pose_section" = "Pose lab";
 "pose_title" = "Pose on a photo";
 "pose_choose_photo" = "Choose a photo";
-"pose_take_photo" = "Take a photo";
-"pose_camera_unavailable" = "Camera unavailable";
 "pose_photo_hint" = "Use a clear, full-body photo with one person.";
 "pose_intro" = "Choose a photo to see the body landmarks.";
 "pose_loading" = "Loading photo…";

@@ -202,8 +202,6 @@
 "pose_section" = "Лаборатория движений";
 "pose_title" = "Поза на фото";
 "pose_choose_photo" = "Выбрать фото";
-"pose_take_photo" = "Снять фото";
-"pose_camera_unavailable" = "Камера недоступна";
 "pose_photo_hint" = "Подойдёт чёткое фото одного человека в полный рост.";
 "pose_intro" = "Выберите фото, чтобы увидеть точки тела.";
 "pose_loading" = "Загружаем фото…";

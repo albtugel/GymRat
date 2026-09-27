@@ -202,8 +202,6 @@
 "pose_section" = "Bewegungslabor";
 "pose_title" = "Pose auf einem Foto";
 "pose_choose_photo" = "Foto auswählen";
-"pose_take_photo" = "Foto aufnehmen";
-"pose_camera_unavailable" = "Kamera nicht verfügbar";
 "pose_photo_hint" = "Verwende ein klares Ganzkörperfoto mit einer Person.";
 "pose_intro" = "Wähle ein Foto, um die Körperpunkte zu sehen.";
 "pose_loading" = "Foto wird geladen…";

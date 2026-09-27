@@ -1,13 +1,9 @@
-import AVFoundation
 import PhotosUI
 import SwiftUI
 
 struct PoseTestView: View {
     @State var viewModel: PoseTestViewModel
     @State private var selectedPhoto: PhotosPickerItem?
-    @State private var showCamera = false
-    @State private var cameraAvailable = false
-    @Environment(\.scenePhase) private var scenePhase
 
     var body: some View {
         GeometryReader { geometry in
@@ -38,68 +34,25 @@ struct PoseTestView: View {
             }
         }
         .safeAreaInset(edge: .bottom) {
-            VStack(spacing: 4) {
-                HStack(spacing: 12) {
-                    PhotosPicker(selection: $selectedPhoto, matching: .images) {
-                        Label("pose_choose_photo", systemImage: "photo.on.rectangle")
-                            .frame(maxWidth: .infinity)
-                            .frame(height: 56)
-                    }
-                    .buttonStyle(.borderedProminent)
-                    .accessibilityIdentifier("posePhotoPicker")
-                    .disabled(viewModel.isBusy)
-
-                    Button {
-                        showCamera = true
-                    } label: {
-                        Label("pose_take_photo", systemImage: "camera")
-                            .frame(maxWidth: .infinity)
-                            .frame(height: 56)
-                    }
-                    .buttonStyle(.bordered)
-                    .accessibilityIdentifier("poseCameraButton")
-                    .disabled(viewModel.isBusy || !cameraAvailable)
-                }
-                .controlSize(.large)
-
-                if !cameraAvailable {
-                    Text("pose_camera_unavailable")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                }
+            PhotosPicker(selection: $selectedPhoto, matching: .images) {
+                Label("pose_choose_photo", systemImage: "photo.on.rectangle")
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 56)
             }
+            .buttonStyle(.borderedProminent)
+            .controlSize(.large)
+            .accessibilityIdentifier("posePhotoPicker")
+            .disabled(viewModel.isBusy)
             .padding(.horizontal, 16)
             .padding(.vertical, 12)
             .background(.regularMaterial)
         }
         .navigationTitle("pose_title")
         .navigationBarTitleDisplayMode(.inline)
-        .onAppear(perform: updateCameraAvailability)
-        .onChange(of: scenePhase) { _, phase in
-            if phase == .active { updateCameraAvailability() }
-        }
         .task(id: selectedPhoto) {
             guard let selectedPhoto else { return }
             await viewModel.load { try await selectedPhoto.loadTransferable(type: Data.self) }
         }
-        .sheet(isPresented: $showCamera, onDismiss: updateCameraAvailability) {
-            PoseCameraPicker { image in
-                Task {
-                    await viewModel.load {
-                        await Task.detached(priority: .userInitiated) {
-                            image.jpegData(compressionQuality: 0.9)
-                        }.value
-                    }
-                }
-            }
-        }
-    }
-
-    private func updateCameraAvailability() {
-        let status = AVCaptureDevice.authorizationStatus(for: .video)
-        cameraAvailable = UIImagePickerController.isSourceTypeAvailable(.camera)
-            && AVCaptureDevice.default(for: .video) != nil
-            && status != .denied && status != .restricted
     }
 
     private func photoPreview(_ image: UIImage, availableSize: CGSize) -> some View {
@@ -114,40 +67,6 @@ struct PoseTestView: View {
             .overlay { PoseSkeletonOverlay(landmarks: viewModel.landmarks) }
             .clipShape(RoundedRectangle(cornerRadius: 16))
             .frame(maxWidth: .infinity)
-    }
-}
-
-private struct PoseCameraPicker: UIViewControllerRepresentable {
-    @Environment(\.dismiss) private var dismiss
-    let onPhoto: (UIImage) -> Void
-
-    func makeUIViewController(context: Context) -> UIImagePickerController {
-        let picker = UIImagePickerController()
-        picker.sourceType = .camera
-        picker.delegate = context.coordinator
-        return picker
-    }
-
-    func updateUIViewController(_ controller: UIImagePickerController, context: Context) {}
-
-    func makeCoordinator() -> Coordinator { Coordinator(self) }
-
-    final class Coordinator: NSObject, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
-        private let parent: PoseCameraPicker
-
-        init(_ parent: PoseCameraPicker) { self.parent = parent }
-
-        func imagePickerController(_ picker: UIImagePickerController,
-                                   didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
-            if let image = info[.originalImage] as? UIImage {
-                parent.onPhoto(image)
-            }
-            parent.dismiss()
-        }
-
-        func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-            parent.dismiss()
-        }
     }
 }
 

@@ -29,10 +29,10 @@ struct PoseDetectorTests {
         #expect(prepared.size.height == 120)
     }
 
-    @Test func cameraJPEGPreservesOrientation() async throws {
+    @Test func rotatedJPEGPreservesOrientation() async throws {
         let raw = try #require(Self.blankImage(size: CGSize(width: 120, height: 80)).cgImage)
-        let cameraImage = UIImage(cgImage: raw, scale: 1, orientation: .right)
-        let data = try #require(cameraImage.jpegData(compressionQuality: 0.9))
+        let rotatedImage = UIImage(cgImage: raw, scale: 1, orientation: .right)
+        let data = try #require(rotatedImage.jpegData(compressionQuality: 0.9))
         let prepared = try await PoseAnalysisWorker(detector: PoseDetector()).prepare(data)
         #expect(prepared.imageOrientation == .up)
         #expect(prepared.size.width == 80)

@@ -5,6 +5,17 @@ import UniformTypeIdentifiers
 @testable import GymRat
 
 struct PoseDetectorTests {
+    @Test func personPhotoReturns33Landmarks() throws {
+        // Support/pose_person.jpg: CC0 photo by BodyBendYoga (nappy.co/photo/2432) via Wikimedia Commons.
+        let url = try #require(Bundle(for: BundleToken.self).url(forResource: "pose_person", withExtension: "jpg"))
+        let image = try #require(UIImage(contentsOfFile: url.path))
+        let landmarks = try PoseDetector().detect(in: image)
+        try #require(landmarks.count == 33)
+        // MediaPipe indices: 0 nose, 23/24 hips, 27/28 ankles; y grows downward.
+        #expect(landmarks[0].y < min(landmarks[23].y, landmarks[24].y))
+        #expect(max(landmarks[27].y, landmarks[28].y) > max(landmarks[23].y, landmarks[24].y))
+    }
+
     @Test func blankImageReturnsNoPerson() throws {
         #expect(try PoseDetector().detect(in: Self.blankImage()).isEmpty)
     }
@@ -65,3 +76,5 @@ struct PoseDetectorTests {
 private struct EmptyPoseDetector: PoseDetectorType {
     func detect(in image: UIImage) throws -> [PoseLandmark] { [] }
 }
+
+private final class BundleToken {}

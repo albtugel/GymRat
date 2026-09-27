@@ -18,12 +18,13 @@ It includes a weekly timeline, a program builder, exercise logs, and AI-assisted
 - SwiftUI
 - SwiftData
 - Kingfisher (image loading and caching)
+- MediaPipe Tasks Vision (on-device pose landmarks)
 - iOS 18.2+
 
 ## Project Structure
 - `GymRat/App` — app entry point
 - `GymRat/Core` — services and protocols (exercise catalog, AI) and `Persistence` (versioned schemas, migration plan, store opening)
-- `GymRat/Features` — feature modules: `Calendar`, `Exercise`, `Program`, `Settings`
+- `GymRat/Features` — feature modules: `Calendar`, `Exercise`, `Pose`, `Program`, `Settings`
 - `GymRat/Shared` — reusable components, extensions, managers and theming
 - `GymRat/Resources` — assets, `Info.plist` and localizations
 
@@ -47,6 +48,20 @@ Settings → AI. It is stored in the Keychain, not in the repository.
   the user is told once at launch. Data is never deleted on a failed open.
 - Exercise metadata and GIFs come from [exercisedb.dev](https://exercisedb.dev).
   The catalog is downloaded once, cached on disk, and resumed if interrupted.
+
+## Pose detection
+`PoseDetector` (`GymRat/Core/Services`) wraps MediaPipe's Pose Landmarker and
+returns one person's 33 landmarks from a photo, or an empty array if nobody is
+found. It runs on the device in image mode; nothing is uploaded.
+
+- `MediaPipeTasksVision` comes from Swift Package Manager
+  ([google-ai-edge/mediapipe](https://github.com/google-ai-edge/mediapipe)). It
+  is pinned to a commit because no tagged release includes `Package.swift` yet;
+  switch the requirement to a version once one does. No CocoaPods needed.
+- The model `GymRat/Resources/pose_landmarker_lite.task` ships in the app
+  bundle. Without it, `detect` throws `PoseError.modelMissing`.
+- Settings → Pose lab is a temporary demo screen: pick a photo and see the
+  skeleton drawn over it.
 
 ## Changing the data model
 Every store on a user's device was written with some version of the model, and
@@ -80,6 +95,6 @@ All user-facing strings use snake_case keys in `GymRat/Resources/<lang>.lproj/Lo
 
 ## Tests
 Unit tests live in `GymRatTests` and run with ⌘U in Xcode. They cover the
-stores, the set save flow, entry formatting, store recovery and migration from
-every shipped schema. `SchemaGuardTests` guards the data model (see
+stores, the set save flow, entry formatting, store recovery, migration from
+every shipped schema and pose detection on a bundled test photo. `SchemaGuardTests` guards the data model (see
 [Changing the data model](#changing-the-data-model)).

@@ -1,5 +1,5 @@
 {
-  "originHash" : "917a2b512148612347b307b5f8d624e74df48af36fa322c80901a86fc0e1317f",
+  "originHash" : "2d12d9df1a500ec771a76bc05a78771ffc3bdbbf46ab5caddcff6cda43ff23f9",
   "pins" : [
     {
       "identity" : "kingfisher",
@@ -8,6 +8,14 @@
       "state" : {
         "revision" : "c152c1915f60c51e4afa0752656993ee5b3c63db",
         "version" : "8.8.1"
+      }
+    },
+    {
+      "identity" : "mediapipe",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/google-ai-edge/mediapipe.git",
+      "state" : {
+        "revision" : "6756ba4d59bdd8ac44173df8d4ab4069c0a747ec"
       }
     }
   ],

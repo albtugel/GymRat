@@ -197,3 +197,18 @@
 "weekday_tue_short" = "Di";
 "weekday_wed_short" = "Mi";
 "weight_unit_label" = "Gewicht";
+
+// Pose proof of concept
+"pose_section" = "Bewegungslabor";
+"pose_title" = "Pose auf einem Foto";
+"pose_choose_photo" = "Foto auswählen";
+"pose_photo_hint" = "Verwende ein klares Ganzkörperfoto mit einer Person.";
+"pose_intro" = "Wähle ein Foto, um die Körperpunkte zu sehen.";
+"pose_loading" = "Foto wird geladen…";
+"pose_analyzing" = "Körperpunkte werden erkannt…";
+"pose_not_found" = "Keine Person gefunden. Versuche ein klares Ganzkörperfoto.";
+"pose_found" = "33 Körperpunkte erkannt";
+"pose_model_missing" = "Das Modell fehlt. Erstelle die App erneut mit der Modelldatei.";
+"pose_failed" = "Das Foto konnte nicht analysiert werden. Versuche ein anderes Bild.";
+"pose_privacy_note" = "Fotos werden auf diesem Gerät verarbeitet und nicht gespeichert.";
+"pose_skeleton" = "Skelett über dem Foto";

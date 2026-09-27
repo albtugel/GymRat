@@ -63,6 +63,13 @@ found. It runs on the device in image mode; nothing is uploaded.
 - Settings → Pose lab is a temporary demo screen: pick a photo and see the
   skeleton drawn over it.
 
+<p>
+  <img src="docs/screenshots/pose-person.jpg" width="260" alt="Pose lab: 33 landmarks and skeleton drawn over a photo of a person">
+  <img src="docs/screenshots/pose-no-person.jpg" width="260" alt="Pose lab: person not found on a photo of flowers">
+</p>
+
+Photo in the first screenshot: CC0, by BodyBendYoga ([nappy.co](https://nappy.co/photo/2432)).
+
 ## Changing the data model
 Every store on a user's device was written with some version of the model, and
 SwiftData only opens it if that version is listed in `GymRatMigrationPlan`.
